@@ -78,4 +78,19 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string-array name="party_type_arrays">
+        <item>House Party</item>
+        <item>Backyard Party</item>
+        <item>Bar Party</item>
+    </string-array>
+    <string-array name="party_capacity_arrays">
+        <item>under 10</item>
+        <item>11-30</item>
+        <item>31-60</item>
+        <item>61-100</item>
+        <item>101-200</item>
+        <item>above 200</item>
+    </string-array>
+    <string name="prompt_choose_a_party_type">Choose the party type</string>
+    <string name="title_activity_settings_sample">Settings</string>
 </resources>

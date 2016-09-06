@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 /**
  * Created by Ming on 8/10/16.
  */
@@ -14,12 +16,21 @@ import org.json.JSONObject;
 public class Party extends ParseObject {
     private String name;
     private int scaleType; // house party
-    private boolean is21;
+    private int ageRangeStart;
+    private int ageRangeEnd;
     private String coverImg;
     private int accessType; // private, public, invite only
     private String description;//
     private String[] hostIDs;
     private String locationID;
+    private Date StartDateTime;
+    private Date EndDateTime;
+    private int capacityRangeStart;
+    private int capacityRangeEnd;
+    private String[] drinkTypes;
+    private int state;
+//    private String parking;
+
 
     public String getName() {
         return getString("name");
@@ -27,7 +38,6 @@ public class Party extends ParseObject {
 
     public void setName(String name) {
         put("name", name);
-//        this.name = name;
     }
 
     public int getScaleType() {
@@ -35,17 +45,9 @@ public class Party extends ParseObject {
     }
 
     public void setScaleType(int scaleType) {
-//        this.scaleType = scaleType;
         put("scaleType",scaleType);
     }
 
-    public boolean is21() {
-        return getBoolean("is21");
-    }
-
-    public void setIs21(boolean is21) {
-        put("is21",is21);
-    }
 
     public String getCoverImg() {
         return getString("coverImg");
@@ -60,7 +62,6 @@ public class Party extends ParseObject {
     }
 
     public void setAccessType(int accessType) {
-//        this.accessType = accessType;
         put("accessType",accessType);
     }
 
@@ -69,7 +70,6 @@ public class Party extends ParseObject {
     }
 
     public void setDescription(String description) {
-//        this.description = description;
         put("description",description);
     }
 
@@ -89,7 +89,6 @@ public class Party extends ParseObject {
 
     public void setHostIDs(String[] hostIDs) {
         put("hostIDs",hostIDs);
-//        this.hostIDs = hostIDs;
     }
 
     public String getLocationID() {
@@ -98,6 +97,77 @@ public class Party extends ParseObject {
 
     public void setLocationID(String locationID) {
         put("locationID",locationID);
-//        this.locationID = locationID;
+    }
+
+    public int getAgeRangeStart() {
+
+        return getInt("ageRangeStart");
+    }
+
+    public void setAgeRangeStart(int ageRangeStart) {
+        this.put("ageRangeStart",ageRangeStart);
+    }
+
+    public int getAgeRangeEnd() {
+        return getInt("ageRangeEnd");
+    }
+
+    public void setAgeRangeEnd(int ageRangeEnd) {
+        this.put("ageRangeEnd",ageRangeEnd);
+    }
+
+    public Date getStartDateTime() {
+        return getDate("startDateTime");
+    }
+
+    public void setStartDateTime(Date startDateTime) {
+        put("startDateTime", startDateTime);
+    }
+
+    public Date getEndDateTime() {
+        return getDate("endDateTime");
+    }
+
+    public void setEndDateTime(Date endDateTime) {
+        put("endDateTime",endDateTime);
+    }
+
+    public int getCapacityRangeStart() {
+        return getInt("capacityRangeStart");
+    }
+
+    public void setCapacityRangeStart(int capacityRangeStart) {
+        this.put("capacityRangeStart",capacityRangeStart);
+    }
+
+    public int getCapacityRangeEnd() {
+        return getInt("capacityRangeEnd");
+    }
+
+    public void setCapacityRangeEnd(int capacityRangeEnd) {
+        put("capacityRangeEnd",capacityRangeEnd);
+    }
+
+    public String[] getDrinkTypes() {
+        JSONArray jsonArray = getJSONArray("drinkTypes");
+        String[] stringsArray = new String[jsonArray.length()];
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                stringsArray[i] = jsonArray.getString(i);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return stringsArray;
+    }
+
+    public void setDrinkTypes(String[] drinkTypes) {
+        this.put("drinkTypes",drinkTypes);
+    }
+    public void setState(int state){
+        put("state",state);
+    }
+    public int getState(){
+        return getInt("state");
     }
 }

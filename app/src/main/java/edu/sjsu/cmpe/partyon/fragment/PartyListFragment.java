@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Party;
 
 /**
@@ -98,28 +99,32 @@ public class PartyListFragment extends Fragment {
         p2.setName("Friday Party1");
         Party p3 = new Party();
         p3.setName("Friday Party2");
-        partyList.add(p1);
-        partyList.add(p2);
-        partyList.add(p3);
-        partyList.add(p1);
-        partyList.add(p2);
-        partyList.add(p3);
-        partyList.add(p1);
-        partyList.add(p2);
-        ParseQuery query = ParseQuery.getQuery("Party");
+
+        ParseQuery query = ParseQuery.getQuery(AppData.OBJ_NAME_PARTY);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 if (e == null) {
-                    System.out.println("the parties size from server:" + objects.size());
+                    Log.v(TAG,"the parties size from server:" + objects.size());
                     for(Object o : objects){
+                        Log.v(TAG,((Party)o).getName());
                         partyList.add((Party)o);
+                        mPartyListAdapter.notifyDataSetChanged();
                     }
                 } else {
                     // something went wrong
                 }
             }
         });
+
+        partyList.add(p1);
+        partyList.add(p2);
+        partyList.add(p3);
+        partyList.add(p1);
+        partyList.add(p2);
+        partyList.add(p3);
+        partyList.add(p1);
+        partyList.add(p2);
     }
 
 

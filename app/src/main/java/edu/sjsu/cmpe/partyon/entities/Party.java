@@ -23,6 +23,7 @@ public class Party extends ParseObject {
     private String description;//
     private String[] hostIDs;
     private String locationID;
+    private String address;
     private Date StartDateTime;
     private Date EndDateTime;
     private int capacityRangeStart;
@@ -37,6 +38,7 @@ public class Party extends ParseObject {
     }
 
     public void setName(String name) {
+        this.name = name;
         put("name", name);
     }
 
@@ -169,5 +171,11 @@ public class Party extends ParseObject {
     }
     public int getState(){
         return getInt("state");
+    }
+    public void setAddress(String address){
+        put("address",address);
+    }
+    public String getAddress(){
+        return getString("address");
     }
 }

@@ -3,18 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="0dp"
     android:paddingLeft="0dp"
     android:paddingRight="0dp"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="0dp"
+    android:orientation="vertical"
     tools:context="edu.sjsu.cmpe.partyon.activities.NewPartyActivity">
-    <ProgressBar
-        android:id="@+id/create_party_progress"
-        style="?android:attr/progressBarStyleLarge"
+    <!--<com.wang.avi.AVLoadingIndicatorView
+        android:id="@+id/loadingSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        style="@style/AVLoadingIndicatorView"
+        app:indicatorName="BallPulseIndicator"
+        app:indicatorColor="#ed0b0b"
+        />-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -60,27 +63,100 @@
                 android:hint="Private party(Invitation only)"
                 android:clickable="true"
                 android:contentDescription="Invitatoin only" />
+            <!--time start-->
             <View
                 style="@style/form_divider"/>
             <TextView
                 style="@style/form_component_label"
-                android:text="Start from"
+                android:text="Duration"
                 />
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="from "
+                    android:layout_marginLeft="@dimen/main_margin"
+                    />
+                <EditText
+                    android:layout_weight="2"
+                    android:id="@+id/startDateTimeField"
+                    style="@style/form_component"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:hint="pick a date"></EditText>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="to "
 
-                <DatePicker
-                    android:layout_weight="3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></DatePicker>
-                <TimePicker
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></TimePicker>
+                    />
+                <EditText
+                    android:layout_marginLeft="0dp"
+                    android:layout_weight="2"
+                    android:id="@+id/endDateTimeField"
+                    style="@style/form_component"
+                    android:hint="pick a date"></EditText>
+            </LinearLayout>
+            <!--address-->
+            <View
+                style="@style/form_divider"/>
+            <TextView
+                style="@style/form_component_label"
+                android:text="Address" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/addressField"
+                    style="@style/form_component"
+                    android:hint="Street."
+                    android:layout_weight="4"
+                    android:layout_marginRight="0dp"
+                    />
+                <ImageButton
+                    android:id="@+id/placePickerBtn"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:contentDescription="Pick a place on Map"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="@dimen/main_margin"
+                    android:background="@drawable/icon_locate" />
             </LinearLayout>
 
+            <!--age range-->
+            <View
+                style="@style/form_divider"/>
+            <TextView
+                style="@style/form_component_label"
+                android:text="Age Limit"
+                />
+            <Spinner
+                android:id="@+id/ageGroupSpinner"
+                style="@style/form_component"
+                android:entries="@array/age_group_arrays"
+                android:prompt="@string/prompt_choose_a_age_group"
+                android:spinnerMode="dialog"
+                />
+            <!--capacity range-->
+            <View
+                style="@style/form_divider"/>
+            <TextView
+                style="@style/form_component_label"
+                android:text="Capacity"
+                />
+            <Spinner
+                android:id="@+id/capacityRangeSpinner"
+                style="@style/form_component"
+                android:entries="@array/capacity_range_arrays"
+                android:prompt="@string/prompt_choose_a_capacity_range"
+                android:spinnerMode="dialog"
+                />
+
+            <!--description-->
             <View
                 style="@style/form_divider"/>
             <TextView

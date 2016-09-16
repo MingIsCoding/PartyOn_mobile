@@ -1,6 +1,8 @@
 package edu.sjsu.cmpe.partyon.fragment;
 
 
+import android.content.Intent;
+import android.database.Observable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.FindCallback;
 import com.parse.GetCallback;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.activities.PartyDetailActivity;
 import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Party;
 
@@ -95,12 +99,15 @@ public class PartyListFragment extends Fragment {
         partyList = new ArrayList<Party>();
         Party p1 = new Party();
         p1.setName("Friday Party");
+        p1.setDescription("a friday party.");
         Party p2 = new Party();
         p2.setName("Friday Party1");
+
         Party p3 = new Party();
         p3.setName("Friday Party2");
 
         ParseQuery query = ParseQuery.getQuery(AppData.OBJ_NAME_PARTY);
+        query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
@@ -117,27 +124,24 @@ public class PartyListFragment extends Fragment {
             }
         });
 
-        partyList.add(p1);
-        partyList.add(p2);
-        partyList.add(p3);
-        partyList.add(p1);
-        partyList.add(p2);
-        partyList.add(p3);
-        partyList.add(p1);
-        partyList.add(p2);
+//        partyList.add(p1);
+//        partyList.add(p2);
     }
 
 
     private class PartyItemViewHolder extends RecyclerView.ViewHolder{
         public TextView mTitleTextView;
         private TextView mPartyNameView;
-        public PartyItemViewHolder(View itemView){
-            super(itemView);
-            mPartyNameView = (TextView)itemView.findViewById(R.id.party_item_name);
+        private TextView mDescriptionView;
+        public PartyItemViewHolder(View v){
+            super(v);
+            mPartyNameView = (TextView)v.findViewById(R.id.party_item_name);
+            mDescriptionView = (TextView)v.findViewById(R.id.party_item_descip);
             //mTitleTextView = (TextView)itemView;
         }
         public void bindParty(Party p){
             mPartyNameView.setText(p.getName());
+            mDescriptionView.setText(p.getDescription());
         }
     }
 
@@ -161,8 +165,22 @@ public class PartyListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(PartyItemViewHolder holder, int position) {
-            Party party = partyList.get(position);
+            final Party party = partyList.get(position);
             holder.bindParty(party);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    Toast.makeText(getActivity(),
+//                            party.getName(),
+//                            Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), PartyDetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(AppData.OBJ_PARTY_ID,party.getObjectId().toString());
+                    bundle.putString(AppData.OBJ_PARTY_NAME,party.getName().toString());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
         }
 
         @Override

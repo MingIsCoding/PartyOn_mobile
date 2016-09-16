@@ -8,59 +8,64 @@ import com.parse.ParseObject;
  */
 @ParseClassName("Location")
 public class Location extends ParseObject{
-    private long longitude;
-    private long latitude;
+    private double longitude;
+    private double latitude;
     private String country;
     private String city;
     private String street;
-    private String addressName;
+    private String name;
+    private String address;
 
     public long getLongitude() {
         return getLong("longitude");
     }
 
-    public void setLongitude(long longitude) {
-        this.longitude = longitude;
+    public void setLongitude(double longitude) {
         put("longitude",longitude);
     }
 
-    public long getLatitude() {
-        return latitude;
+    public double getLatitude() {
+        return getDouble("latitude");
     }
 
-    public void setLatitude(long latitude) {
-        this.latitude = latitude;
+    public void setLatitude(double latitude) {
+        put("latitude",latitude);
     }
 
     public String getCountry() {
-        return country;
+        return getString("country");
     }
 
     public void setCountry(String country) {
-        this.country = country;
+        put("country",country);
     }
 
     public String getCity() {
-        return city;
+        return getString("city");
     }
 
     public void setCity(String city) {
-        this.city = city;
+        put("city",city);
     }
 
     public String getStreet() {
-        return street;
+        return getString("street");
     }
 
     public void setStreet(String street) {
-        this.street = street;
+        put("street",street);
     }
 
-    public String getAddressName() {
-        return addressName;
+    public String getName() {
+        return getString("name");
     }
-
-    public void setAddressName(String addressName) {
-        this.addressName = addressName;
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setAddress(String address){
+        put("address",address);
+    }
+    public String getAddress(){
+        return getString("address");
     }
 }

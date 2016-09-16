@@ -17,6 +17,8 @@ public class AppData {
 
     public static Map<Object,String> objectPersistNameMap;
     public static final String OBJ_NAME_PARTY = "Party";
+    public static final String OBJ_PARTY_ID = "party_id";
+    public static final String OBJ_PARTY_NAME = "party_name";
     public AppData(){
 //        initObjectPersistNameMap();
 

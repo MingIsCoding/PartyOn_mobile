@@ -1,4 +1,4 @@
-package edu.sjsu.cmpe.partyon;
+package edu.sjsu.cmpe.partyon.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +24,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.sjsu.cmpe.partyon.activities.NewPartyActivity;
+import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.ViewPagerIndicator;
+import edu.sjsu.cmpe.partyon.VpSimpleFragment;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
 //    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private List<String> mTitles = Arrays.asList("Tab1","Tab2","Tab3","Tab4");
+    private List<String> mTitles = Arrays.asList("Post","Party","Contact","Info");
     private List<Fragment> mContents = new ArrayList<Fragment>();
     private FragmentPagerAdapter mAdapter;
 
@@ -116,11 +118,17 @@ public class MainActivity extends AppCompatActivity {
 
         initParseAdapter();
         PartyListFragment partyListFragment = PartyListFragment.newInstance("1","2");
-        for(String title : mTitles){
+/*        for(String title : mTitles){
             VpSimpleFragment newInstance = VpSimpleFragment.newInstance(title);
             mContents.add(newInstance);
-        }
+        }*/
+        VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
+        VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
+        VpSimpleFragment meInstance = VpSimpleFragment.newInstance("Parsonal Information");
+        mContents.add(0,postInstance);
         mContents.add(1,partyListFragment);
+        mContents.add(2,contactInstance);
+        mContents.add(3,meInstance);
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -164,26 +172,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
             return true;
         }else if(id == R.id.action_new_party){
-            Log.v(TAG,"start to request....");
-
-            /*ParseObject gameScore = new ParseObject("GameScore");
-            gameScore.put("score", 1337);
-            gameScore.put("playerName", "Martin");
-            gameScore.put("cheatMode", false);
-            gameScore.saveInBackground();*/
-
-            ParseObject testObject = new ParseObject("TestObject");
-            testObject.put("foo", "bar");
-            testObject.saveInBackground();
-
-
-            System.out.println("started to save");
-
-
-            Toast.makeText(getApplicationContext(),"add new party",Toast.LENGTH_LONG).show();
             Intent i = new Intent(MainActivity.this, NewPartyActivity.class);//NewPartyActivity
             startActivity(i);
         }

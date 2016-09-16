@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="0dp"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp"
+    android:paddingTop="0dp"
+    android:orientation="vertical"
+    tools:context="edu.sjsu.cmpe.partyon.activities.PartyDetailActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        android:background="@drawable/party_cover_holder_1">
+        <TextView
+            android:id="@+id/partyNameView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Party Name"
+            android:textSize="26sp"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:textColor="#ffffff"
+            android:layout_marginTop="75dp"
+            android:textStyle="bold"
+            android:shadowColor="#333333"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="4" />
+        <TextView
+            android:id="@+id/partyAccessTypeView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_vertical_margin"
+            android:layout_marginTop="10dp"
+            android:text="Private"
+            android:textColor="#ffffff"
+            android:shadowColor="#333333"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"/>
+    </LinearLayout>
+
+</LinearLayout>

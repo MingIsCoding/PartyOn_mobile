@@ -23,17 +23,20 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
+import edu.sjsu.cmpe.partyon.entities.User;
 
 public class NewPartyActivity extends AppCompatActivity implements View.OnClickListener, View.OnFocusChangeListener{
 
@@ -50,12 +53,14 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
     private boolean isWorkingOnStartDateTime = false;
     private static int PLACE_PICKER_REQUEST = 1;
     private Place partyPlace;
+    private Location partyLocation;
     private Menu createMenu;
     private Party creatingParty;
 //    private AVLoadingIndicatorView avLoader;
     private ProgressDialog progressBar;
-    private int progressBarStatus = 0;
+    //private int progressBarStatus = 0;
     private Handler progressBarbHandler = new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +84,6 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
         partyTypeSpinner = (Spinner)findViewById(R.id.partyTypeSpinner);
         placePikerBtn = (ImageButton)findViewById(R.id.placePickerBtn);
 //        avLoader = (AVLoadingIndicatorView)findViewById(R.id.loadingSpinner);
-        progressBar = new ProgressDialog(this);
 
     }
 
@@ -139,29 +143,80 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
     private Party convertFormToPartyObj(){
         Party party = new Party();
         party.setName(nameField.getText().toString());
+        // party type
+        int selectedPartyType = partyTypeSpinner.getSelectedItemPosition();
+        party.setScaleType(selectedPartyType);
         if(privatePartySwitch.isChecked())
             party.setAccessType(1);
         else
             party.setAccessType(0);
-
-        party.setAgeRangeStart(18);
-        party.setAgeRangeEnd(30);
+        //age spinner
+        int ageRangeStart = 0, ageRangeEnd = 0;
+        int selectedAgeIndex = ageGroupSpinner.getSelectedItemPosition();
+        switch (selectedAgeIndex){
+            case 0: ageRangeStart = 0;
+                    ageRangeEnd = 200;
+                    break;
+            case 1: ageRangeStart = 0;
+                    ageRangeEnd = 17;
+                    break;
+            case 2: ageRangeStart = 18;
+                    ageRangeEnd = 200;
+                    break;
+            case 3: ageRangeStart = 21;
+                    ageRangeEnd = 200;
+                    break;
+            case 4: ageRangeStart = 30;
+                    ageRangeEnd = 200;
+                    break;
+        }
+        party.setAgeRangeStart(ageRangeStart);
+        party.setAgeRangeEnd(ageRangeEnd);
+        //data spinner
         party.setStartDateTime(startDateTime);
         party.setEndDateTime(endDateTime);
-        party.setCapacityRangeStart(0);
-        party.setCapacityRangeEnd(100);
+        // capacity spinner
+        int capacityStart=0, capacityEnd=0;
+        int selectedCapacityIndex = capacitySpinner.getSelectedItemPosition();
+        switch (selectedAgeIndex){
+            case 0: capacityStart=0;
+                    capacityEnd=10;
+                    break;
+            case 1: capacityStart=11;
+                    capacityEnd=30;
+                    break;
+            case 2: capacityStart=31;
+                    capacityEnd=60;
+                    break;
+            case 3: capacityStart=61;
+                    capacityEnd=100;
+                    break;
+            case 4: capacityStart=101;
+                    capacityEnd=1000;
+                    break;
+        }
+        party.setCapacityRangeStart(capacityStart);
+        party.setCapacityRangeEnd(capacityEnd);
+
         party.setDescription(descriptionField.getText().toString());
         party.setAddress(addressField.getText().toString());
+        party.setLocation(new ParseGeoPoint(partyPlace.getLatLng().latitude, partyPlace.getLatLng().longitude));
+        party.setLocationID(partyLocation.getObjectId());
+        party.setHostIDs(new String[]{User.getCurrentUser().getObjectId()});
+        party.createdBy((User) User.getCurrentUser());
         return party;
         //if(ageGroupSpinner.getSelectedItem().toString().equals(""))
     }
-    private void saveLocation() throws Exception {
+    private void saveLocation(SaveCallback saveCallback ) throws Exception {
         if(partyPlace == null)
             throw new Exception("Address is not valid.");
-        Location location = new Location();
-        location.setName(partyPlace.getName().toString());
-        location.setLatitude(partyPlace.getLatLng().latitude);
-        location.setLongitude(partyPlace.getLatLng().longitude);
+        partyLocation = new Location();
+        partyLocation.setName(partyPlace.getName().toString());
+        partyLocation.setLatitude(partyPlace.getLatLng().latitude);
+        partyLocation.setLongitude(partyPlace.getLatLng().longitude);
+        partyLocation.setAddress(partyPlace.getAddress().toString());
+        partyLocation.saveInBackground(saveCallback);
+
 //        location.setStreet();
     }
     private void saveNewParty(){
@@ -170,6 +225,28 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
                 stopLoadingAnim();
                 return;
             }
+            //save location first
+            saveLocation(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    creatingParty = convertFormToPartyObj();
+                    creatingParty.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            stopLoadingAnim();
+
+                            Toast.makeText(NewPartyActivity.this,
+                                    "New party has been saved."+ creatingParty.getObjectId(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(NewPartyActivity.this, PartyDetailActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(AppData.OBJ_PARTY_ID,creatingParty.getObjectId().toString());
+                            bundle.putString(AppData.OBJ_PARTY_NAME,creatingParty.getName().toString());
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            });
         } catch (Exception e) {
             Toast.makeText(NewPartyActivity.this,
                     e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -177,24 +254,9 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
             stopLoadingAnim();
             return;
         }
-        //save location first
 
-        creatingParty = convertFormToPartyObj();
-        creatingParty.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                stopLoadingAnim();
 
-                Toast.makeText(NewPartyActivity.this,
-                        "New party has been saved."+ creatingParty.getObjectId(), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(NewPartyActivity.this, PartyDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(AppData.OBJ_PARTY_ID,creatingParty.getObjectId().toString());
-                bundle.putString(AppData.OBJ_PARTY_NAME,creatingParty.getName().toString());
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
+
 
     }
     private void showDateTimePicker(Date initDate){
@@ -260,13 +322,16 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
         }
     }
     private void startLoadingAnim(String msg){
+        if(progressBar == null){
+            progressBar = new ProgressDialog(this);
+            progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressBar.setIndeterminate(true);
+            progressBar.setCancelable(false);
+            progressBar.setCanceledOnTouchOutside(false);
+        }
         progressBar.setMessage(msg);
-        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressBar.setIndeterminate(true);
-        progressBar.setCancelable(false);
-        progressBar.setCanceledOnTouchOutside(false);
         progressBar.show();
-        progressBarStatus = 0;
+        //progressBarStatus = 0;
 //        avLoader.show();
     }
     private void stopLoadingAnim(){

@@ -3,6 +3,7 @@ package edu.sjsu.cmpe.partyon.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -19,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -29,10 +31,46 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
+import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.LogInCallback;
+import com.parse.ParseAnonymousUtils;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.entities.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -45,14 +83,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private com.facebook.login.widget.LoginButton mFacebookLoginBtn;
+    private static final int FACEBOOK_LOGIN = 1, GOOGLE_LOGIN = 2;
+    private static final String TAG = "LoginActivity";
+    private CallbackManager mCallbackManager;
+    private static final int RC_GOOGLE_SIGN_IN = 17;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -63,11 +99,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    //facebook api
+    private AccessTokenTracker accessTokenTracker;
+    private ProfileTracker profileTracker;
+    //google api
+    private GoogleApiClient mGoogleApiClient;
+    private String attemptEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -94,6 +137,181 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        initFacebookApi();
+        initGoogleApi();
+        addListeners();
+    }
+    private void initFacebookApi(){
+        mCallbackManager = CallbackManager.Factory.create();
+        mFacebookLoginBtn = (LoginButton)findViewById(R.id.facebook_oauth_btn);
+        mFacebookLoginBtn.setReadPermissions(Arrays.asList(
+                "public_profile", "email", "user_birthday"));
+        mFacebookLoginBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                profileTracker = new ProfileTracker() {
+                    @Override
+                    protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                        Log.d(TAG,"current Facebook Profile: user name: "+currentProfile.getLastName());
+                    }
+                };
+
+                profileTracker.startTracking();
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(final JSONObject object, final GraphResponse response) {
+                                Log.d("LoginActivity", response.toString());
+                                Log.d(TAG,object.toString());
+                                //Profile profile = Profile.getCurrentProfile();
+
+                                // Application code
+
+                                try {
+                                    attemptEmail = object.getString("email");
+                                    String birthday = object.getString("birthday"); // 01/31/1980 format
+                                    if(attemptEmail == null)
+                                        throw new Exception("Email address is not found");
+                                    Log.d(TAG,attemptEmail);
+                                    Log.d(TAG,birthday);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                //if there is a user who owns this facebook account
+                                ParseQuery<User> query = ParseQuery.getQuery("_User");
+                                query.whereEqualTo("email",attemptEmail);
+                                query.whereEqualTo("facebookID",Profile.getCurrentProfile().getId());
+                                Log.d(TAG,"looking for attemptEmail:"+attemptEmail+" facebookID:"+Profile.getCurrentProfile().getId());
+                                query.getFirstInBackground(new GetCallback<User>() {
+                                    public void done(final User userFromDb, ParseException e) {
+                                        if (userFromDb == null) {//no, store this facebook profile to users
+                                            User u = new User();
+                                            try {
+                                                u.setUsername(Profile.getCurrentProfile().getFirstName()
+                                                        +" "+Profile.getCurrentProfile().getLastName());
+                                                u.setFirstName(Profile.getCurrentProfile().getFirstName());
+                                                u.setLastName(Profile.getCurrentProfile().getLastName());
+                                                u.setEmail(attemptEmail);
+                                                u.setBirthday(new Date(object.getString("birthday")));
+                                                u.setFacebookID(Profile.getCurrentProfile().getId());
+                                                if(object.getString("gender").equals("male"))
+                                                    u.setGender(AppData.GENDER_MALE);
+                                                else if (object.getString("gender").equals("female"))
+                                                    u.setGender(AppData.GENDER_FEMALE);
+                                                u.setProfilePicSmall(Profile.getCurrentProfile().getProfilePictureUri(100,100).toString());
+                                                Log.d(TAG,"start to save object:"+u.toString());
+                                                u.setPassword(Profile.getCurrentProfile().getId());
+                                                u.signUp();
+                                                finalizeLoginProcess();
+                                            } catch (JSONException e1) {
+                                                e1.printStackTrace();
+                                            } catch (ParseException e1) {
+                                                e1.printStackTrace();
+                                            }
+                                        } else {//exists, then store this one as current user
+                                            userFromDb.logInInBackground(userFromDb.getUsername(), userFromDb.getFacebookID(), new LogInCallback() {
+                                                @Override
+                                                public void done(ParseUser user, ParseException e) {
+                                                    Log.d(TAG,"user logged in:"+user.getUsername());
+                                                    //e.printStackTrace();
+                                                    finalizeLoginProcess();
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+                //AccessToken accessToken = loginResult.getAccessToken();
+
+                /*accessTokenTracker = new AccessTokenTracker() {
+                    @Override
+                    protected void onCurrentAccessTokenChanged(AccessToken accessToken, AccessToken accessToken1) {
+                        Log.d(TAG,"current Facebook profile changed");
+                    }
+                };
+                accessTokenTracker.startTracking();
+
+                profileTracker = new ProfileTracker() {
+                    @Override
+                    protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                        Log.d(TAG,"current Facebook Profile: user name: "+currentProfile.getLastName());
+                    }
+                };
+                profileTracker.startTracking();*/
+
+
+            }
+
+            @Override
+            public void onCancel() {
+                // App code
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                // App code
+            }
+        });
+    }
+
+
+    private void handleGoogleProfile(Profile pro){
+        //if there is a user who owns this facebook account
+        //no, store this account to facebook profiles
+        //create a user base on this acount
+
+        //yes, login
+
+    }
+    private void finalizeLoginProcess() {
+        AppData.isUserLoggedin = true;
+        Log.d(TAG,"login:"+ User.getCurrentUser().getUsername());
+        Intent in = new Intent(this, MainActivity.class);
+        startActivity(in);
+    }
+
+    private void initGoogleApi(){
+        //google login plug
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail().
+                requestProfile().
+                requestId()
+                .build();
+        //access google api
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this /* FragmentActivity */, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        Log.d(TAG,"google login failed");
+                    }
+                } )//this /* OnConnectionFailedListener */
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        SignInButton mGoogleSignInBtn = (SignInButton) findViewById(R.id.google_oauth_btn);
+        mGoogleSignInBtn.setSize(SignInButton.SIZE_WIDE);
+//        mGoogleSignInBtn.set
+        mGoogleSignInBtn.setScopes(gso.getScopeArray());
+        mGoogleSignInBtn.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
+            }
+        });
+    }
+    private void addListeners(){
+
     }
 
     private void populateAutoComplete() {
@@ -317,13 +535,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+
 
             // TODO: register the new account here.
             return true;
@@ -347,6 +559,70 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+            if (result.isSuccess()) {
+                final GoogleSignInAccount acct = result.getSignInAccount();
+                Log.d(TAG,acct.getDisplayName());
+                attemptEmail = acct.getEmail();
+                ParseQuery<User> query = ParseQuery.getQuery("User");
+                query.whereEqualTo("email",attemptEmail);
+                query.whereEqualTo("googleID",acct.getId());
+                query.getFirstInBackground(new GetCallback<User>() {
+                    @Override
+                    public void done(User object, ParseException e) {
+                        if (object == null) {//no, store this facebook profile to users
+                            User u = new User();
+                            try {
+                                u.setUsername(acct.getDisplayName());
+                                u.setFirstName(acct.getGivenName());
+                                u.setLastName(acct.getFamilyName());
+                                u.setEmail(attemptEmail);
+                                u.setGoogleID(acct.getId());
+                                u.setGender(0);
+                                if(acct.getPhotoUrl() != null)
+                                    u.setProfilePicSmall(acct.getPhotoUrl().toString());
+                                else
+                                    u.setProfilePicSmall("");
+                                Log.d(TAG,"start to save object:"+u.toString());
+                                u.setPassword(acct.getId());
+                                u.signUp();
+                                finalizeLoginProcess();
+                            } catch (ParseException e1) {
+                                e1.printStackTrace();
+                            }
+                        } else {//exists, then store this one as current user
+                            object.logInInBackground(object.getUsername(), object.getGoogleID(), new LogInCallback() {
+                                @Override
+                                public void done(ParseUser user, ParseException e) {
+                                    Log.d(TAG,"user logged in:"+user.getUsername());
+                                    //e.printStackTrace();
+                                    finalizeLoginProcess();
+                                }
+                            });
+                        }
+                    }
+                });
+            } else {
+                // Signed out, show unauthenticated UI.
+//                updateUI(false);
+            }
+        }else {
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        profileTracker.stopTracking();
     }
 }
 

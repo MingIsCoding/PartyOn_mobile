@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "529053482588",
+    "project_id": "partyon-1473286061645"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529053482588:android:d1b904446700fbf0",
+        "android_client_info": {
+          "package_name": "edu.sjsu.cmpe.partyon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529053482588-v1dcqhn3oa1rvp0hht4v9fjb3e5i6dvq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.sjsu.cmpe.partyon",
+            "certificate_hash": "A031AD756E503D369C4DAF4674539BD537120229"
+          }
+        },
+        {
+          "client_id": "529053482588-pge056s47mvgu2q344cckuvk5uvu5el8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuDqZuRJe1ZDRQH3j9GukblhG94i6Gde4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

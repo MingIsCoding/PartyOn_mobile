@@ -87,11 +87,11 @@
         <item>under 10</item>
         <item>11-30</item>
         <item>31-60</item>
-        <item>61-100</item>
-        <item>101-200</item>
-        <item>above 200</item>
+        <item>61-100</item>>
+        <item>above 100</item>
     </string-array>
     <string-array name="age_group_arrays">
+        <item>any age</item>
         <item>under 18</item>
         <item>18 and above</item>
         <item>21 and above</item>
@@ -101,5 +101,11 @@
     <string name="prompt_choose_a_party_type">Choose the party type</string>
     <string name="prompt_choose_a_capacity_range">Choose the capacity</string>
     <string name="title_activity_settings_sample">Settings</string>
-    <string name="google_map_api_key">AIzaSyAxcvCdpMgyDGX4xoAbsHL5uT7Njo8X85E</string>
+
+
+    <string name="google_place_api_key">AIzaSyCuDqZuRJe1ZDRQH3j9GukblhG94i6Gde4</string>
+    <string name="google_map_api_key">AIzaSyCnIvkCi474XlWifmkbsT3zIxvnw7FVv7A</string>
+    <string name="fb_login_protocol_scheme">fb495002207362510</string>
+    <string name="facebook_app_id">495002207362510</string>
+    <string name="title_activity_map_search">Map</string>
 </resources>

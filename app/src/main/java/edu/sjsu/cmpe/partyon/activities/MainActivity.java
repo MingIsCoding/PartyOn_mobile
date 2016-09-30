@@ -89,12 +89,12 @@ public class MainActivity extends AppCompatActivity {
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
         initParseAdapter();
-        if(User.getCurrentUser() == null){
+        if(User.getCurrentUser() == null && !AppData.isDevMode){
             initThirdParties();
             Intent in = new Intent(this, LoginActivity.class);
             startActivity(in);
         }else {
-            printLoggedInUserInfo();
+            //printLoggedInUserInfo();
             initViews();
             initData();
 
@@ -103,8 +103,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void printLoggedInUserInfo() {
-
-        Log.d(TAG,"username:"+User.getCurrentUser().getUsername());
+        if(!AppData.isDevMode)
+            Log.d(TAG,"username:"+User.getCurrentUser().getUsername());
     }
 
     private void initThirdParties() {

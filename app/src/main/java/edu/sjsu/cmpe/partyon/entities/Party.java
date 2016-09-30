@@ -1,7 +1,13 @@
 package edu.sjsu.cmpe.partyon.entities;
 
+import com.google.android.gms.vision.barcode.Barcode;
+import com.parse.GetCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +44,6 @@ public class Party extends ParseObject {
     }
 
     public void setName(String name) {
-        this.name = name;
         put("name", name);
     }
 
@@ -90,7 +95,11 @@ public class Party extends ParseObject {
     }
 
     public void setHostIDs(String[] hostIDs) {
-        put("hostIDs",hostIDs);
+        try {
+            put("hostIDs",new JSONArray(hostIDs));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getLocationID() {
@@ -177,5 +186,19 @@ public class Party extends ParseObject {
     }
     public String getAddress(){
         return getString("address");
+    }
+
+    public void setLocation(ParseGeoPoint location) {
+        put("location",location);
+    }
+    public ParseGeoPoint getLocation(){
+        return getParseGeoPoint("location");
+    }
+
+    public void createdBy(User currentUser) {
+        put("createdBy",currentUser);
+    }
+    public User getCreatedBy(){
+        return (User)getParseObject("createdBy");
     }
 }

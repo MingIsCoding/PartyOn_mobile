@@ -17,8 +17,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +30,9 @@ import java.util.List;
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.ViewPagerIndicator;
 import edu.sjsu.cmpe.partyon.VpSimpleFragment;
+import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
+import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
 
@@ -76,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
     }*/
 
     @Override
@@ -84,10 +88,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        initViews();
-        initData();
-        mViewPager.setAdapter(mAdapter);
+        initParseAdapter();
+        if(User.getCurrentUser() == null && !AppData.isDevMode){
+            initThirdParties();
+            Intent in = new Intent(this, LoginActivity.class);
+            startActivity(in);
+        }else {
+            //printLoggedInUserInfo();
+            initViews();
+            initData();
 
+            mViewPager.setAdapter(mAdapter);
+        }
+    }
+
+    private void printLoggedInUserInfo() {
+        if(!AppData.isDevMode)
+            Log.d(TAG,"username:"+User.getCurrentUser().getUsername());
+    }
+
+    private void initThirdParties() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
     }
 
     private void initViews() {
@@ -116,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
 
-        initParseAdapter();
+
         PartyListFragment partyListFragment = PartyListFragment.newInstance("1","2");
 /*        for(String title : mTitles){
             VpSimpleFragment newInstance = VpSimpleFragment.newInstance(title);
@@ -145,12 +167,15 @@ public class MainActivity extends AppCompatActivity {
     private void initParseAdapter(){
         if(!AppData.isParseAdapterInitiated){
             //Log.v(TAG, "on Creating..................................");
+            Parse.enableLocalDatastore(this);
             Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
                     .applicationId(AppData.backendServerAppID)
                     //.clientKey("test")
                     .server(AppData.backendServerURL).build());
             AppData.isParseAdapterInitiated = true;
             ParseObject.registerSubclass(Party.class);
+            ParseObject.registerSubclass(User.class);
+            ParseObject.registerSubclass(Location.class);
         }
     }
 
@@ -175,6 +200,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_new_party){
             Intent i = new Intent(MainActivity.this, NewPartyActivity.class);//NewPartyActivity
+            startActivity(i);
+        }else if(id == R.id.action_search_on_map){
+            Intent i = new Intent(this, MapSearchActivity.class);
             startActivity(i);
         }
 

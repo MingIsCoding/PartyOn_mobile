@@ -19,6 +19,7 @@ public class AppData implements Serializable{
 
 
     public static Map<Object,String> objectPersistNameMap;
+    public static final String OBJ_NAME_USER = "_User";
     public static final String OBJ_NAME_PARTY = "Party";
     public static final String OBJ_PARTY_ID = "party_id";
     public static final String OBJ_PARTY_NAME = "party_name";

@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     e.printStackTrace();
                                 }
                                 //if there is a user who owns this facebook account
-                                ParseQuery<User> query = ParseQuery.getQuery("_User");
+                                ParseQuery<User> query = ParseQuery.getQuery(AppData.OBJ_NAME_USER);
                                 query.whereEqualTo("email",attemptEmail);
                                 query.whereEqualTo("facebookID",Profile.getCurrentProfile().getId());
                                 Log.d(TAG,"looking for attemptEmail:"+attemptEmail+" facebookID:"+Profile.getCurrentProfile().getId());

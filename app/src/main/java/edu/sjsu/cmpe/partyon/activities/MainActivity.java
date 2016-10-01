@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
             Intent in = new Intent(this, LoginActivity.class);
             startActivity(in);
         }else {
-            //printLoggedInUserInfo();
+            printLoggedInUserInfo();
             initViews();
             initData();
 

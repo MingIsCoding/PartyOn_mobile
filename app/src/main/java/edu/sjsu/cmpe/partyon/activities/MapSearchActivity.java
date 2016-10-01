@@ -3,11 +3,8 @@ package edu.sjsu.cmpe.partyon.activities;
 import android.Manifest;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationManager;
-//import android.location.LocationListener;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -43,7 +40,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     private static final int REQUEST_LOCATION = 5;
     private static final int REQUEST_RESOLVE_ERROR = 6;
     private GoogleMap mMap;
-    private com.google.android.gms.location.LocationListener mGMSLocationListener;
+//    private com.google.android.gms.location.LocationListener mGMSLocationListener;
     private android.location.LocationListener mLocationListener;
     private LocationManager mLocationManager;
     private LocationRequest mLocationRequest;
@@ -173,6 +170,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Log.d(TAG,"onMapReady");
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
@@ -187,14 +185,20 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Log.d(TAG,"shouldShowRequestPermissionRationale");
+
                 // Display UI and wait for user interaction
             } else {
+                Log.d(TAG,"requestPermissions");
+
                 ActivityCompat.requestPermissions(
                         this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         REQUEST_LOCATION);
             }
             Log.d(TAG, "checkSelfPermission1");
         }else {
+            Log.d(TAG, "try to get myLocation");
+
             Location myLocation =
                     LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
             if(myLocation != null)
@@ -268,6 +272,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.d(TAG,"onConnected");
         Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG,"checkSelfPermission");
@@ -296,6 +301,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
                 new com.google.android.gms.location.LocationListener(){
             @Override
             public void onLocationChanged(Location location) {
+                Log.d(TAG,"onLocationChanged 1");
                 //place marker at current position
                 //mGoogleMap.clear();
                 if (currLocationMarker != null) {
@@ -381,5 +387,17 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
             Toast.makeText(this,"onConnectionFailed:"+connectionResult.getErrorCode(),Toast.LENGTH_SHORT).show();
             mResolvingError = true;
         }
+    }
+
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
     }
 }

@@ -234,7 +234,7 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
                         @Override
                         public void done(ParseException e) {
                             stopLoadingAnim();
-
+                            //going to the detail activity
                             Toast.makeText(NewPartyActivity.this,
                                     "New party has been saved."+ creatingParty.getObjectId(), Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(NewPartyActivity.this, PartyDetailActivity.class);

@@ -25,8 +25,10 @@ import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.activities.PartyDetailActivity;
+import edu.sjsu.cmpe.partyon.adapter.PartyListAdapter;
 import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Party;
+import edu.sjsu.cmpe.partyon.holder.PartyItemViewHolder;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -92,30 +94,21 @@ public class PartyListFragment extends Fragment {
 
 
     private void updateUI(){
-        mPartyListAdapter = new PartyListAdapter(partyList);
+        mPartyListAdapter = new PartyListAdapter(getActivity(), partyList);
         mPartyListRecyclerView.setAdapter(mPartyListAdapter);
     }
     private void prepareData() {
         partyList = new ArrayList<Party>();
-        Party p1 = new Party();
-        p1.setName("Friday Party");
-        p1.setDescription("a friday party.");
-        Party p2 = new Party();
-        p2.setName("Friday Party1");
-
-        Party p3 = new Party();
-        p3.setName("Friday Party2");
-
         ParseQuery query = ParseQuery.getQuery(AppData.OBJ_NAME_PARTY);
         query.orderByDescending("createdAt");
-        query.findInBackground(new FindCallback<ParseObject>() {
+        query.findInBackground(new FindCallback<Party>() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
+            public void done(List<Party> objects, ParseException e) {
                 if (e == null) {
                     Log.v(TAG,"the parties size from server:" + objects.size());
-                    for(Object o : objects){
-                        Log.v(TAG,((Party)o).getName());
-                        partyList.add((Party)o);
+                    for(Party p : objects){
+                        Log.v(TAG,p.getName());
+                        partyList.add(p);
                         mPartyListAdapter.notifyDataSetChanged();
                     }
                 } else {
@@ -123,69 +116,6 @@ public class PartyListFragment extends Fragment {
                 }
             }
         });
-
-//        partyList.add(p1);
-//        partyList.add(p2);
     }
 
-
-    private class PartyItemViewHolder extends RecyclerView.ViewHolder{
-        public TextView mTitleTextView;
-        private TextView mPartyNameView;
-        private TextView mDescriptionView;
-        public PartyItemViewHolder(View v){
-            super(v);
-            mPartyNameView = (TextView)v.findViewById(R.id.party_item_name);
-            mDescriptionView = (TextView)v.findViewById(R.id.party_item_descip);
-            //mTitleTextView = (TextView)itemView;
-        }
-        public void bindParty(Party p){
-            mPartyNameView.setText(p.getName());
-            mDescriptionView.setText(p.getDescription());
-        }
-    }
-
-
-
-    private class PartyListAdapter extends RecyclerView.Adapter<PartyItemViewHolder>{
-        private List<Party> partyList;
-
-        public PartyListAdapter(List<Party> list){
-            Log.v(TAG, "the list's size is "+ list.size());
-
-            partyList = list;
-        }
-
-        @Override
-        public PartyItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            View view = layoutInflater.inflate(R.layout.item_party_list,parent,false);
-            return new PartyItemViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(PartyItemViewHolder holder, int position) {
-            final Party party = partyList.get(position);
-            holder.bindParty(party);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-//                    Toast.makeText(getActivity(),
-//                            party.getName(),
-//                            Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getActivity(), PartyDetailActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(AppData.OBJ_PARTY_ID,party.getObjectId().toString());
-                    bundle.putString(AppData.OBJ_PARTY_NAME,party.getName().toString());
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return partyList.size();
-        }
-    }
 }

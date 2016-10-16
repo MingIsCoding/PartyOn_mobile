@@ -33,6 +33,7 @@ import edu.sjsu.cmpe.partyon.VpSimpleFragment;
 import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.entities.User;
+import edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
 
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
         VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
         VpSimpleFragment meInstance = VpSimpleFragment.newInstance("Parsonal Information");
-        mContents.add(0,postInstance);
+        mContents.add(0,new MapPartyListFragment());
         mContents.add(1,partyListFragment);
         mContents.add(2,contactInstance);
         mContents.add(3,meInstance);

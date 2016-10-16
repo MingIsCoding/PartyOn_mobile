@@ -42,6 +42,7 @@ import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ import java.util.Set;
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Party;
+import edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment;
 
 public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
@@ -77,7 +79,8 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     private Map<String, Party> resultPartMap;
     private Button mReSearchBtn;
     private boolean isFirstSearch = true;
-
+    private MapPartyListFragment mResultListFragment;
+    private List<Party> mResultList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +94,8 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
                 .findFragmentById(R.id.map);
         mMapFragment.getMapAsync(this);
         mReSearchBtn = (Button)findViewById(R.id.map_re_search_btn);
+        mResultListFragment = (MapPartyListFragment)getSupportFragmentManager()
+                .findFragmentById(R.id.map_search_result_fragment);
 
     }
 
@@ -421,11 +426,12 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void done(List<Party> objects, ParseException e) {
                 Log.d(TAG,"get parties:"+objects.size());
+                mResultList = objects;
                 mMap.clear();
                 mMap.addMarker(mUserLocationMarkerOptions);
                 resultPartMap = new HashMap<String, Party>();
                 //if(objects != null)
-                for (Party p : objects){
+                for (Party p : mResultList){
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(new LatLng(p.getLocation().getLatitude(), p.getLocation().getLongitude()));
                     markerOptions.title(p.getName());
@@ -442,6 +448,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
 //                    resultPartMap.put(markerOptions.getPosition().latitude+""
 //                            +markerOptions.getPosition().longitude,p);
                 }
+                mResultListFragment.updateResultList(mResultList);
                 mReSearchBtn.setVisibility(View.INVISIBLE);
             }
         });

@@ -5,4 +5,13 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.sjsu.cmpe.partyon.activities.MapSearchActivity" />
+    tools:context="edu.sjsu.cmpe.partyon.activities.MapSearchActivity" >
+    <Button
+        android:text="search this area"
+        android:id="@+id/map_re_search_btn"
+        android:alpha="0.7"
+        android:layout_width="wrap_content"
+        android:layout_height = "wrap_content"
+        android:layout_gravity = "top|center"
+        android:layout_marginTop = "10dp"/>
+</fragment>

@@ -3,7 +3,9 @@ package edu.sjsu.cmpe.partyon.activities;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.parse.GetCallback;
@@ -35,6 +37,21 @@ public class PartyDetailActivity extends AppCompatActivity {
         mPartyName = (TextView)findViewById(R.id.partyNameView);
         mAccessTypeView = (TextView)findViewById(R.id.partyAccessTypeView);
         mPartyName.setText(party.getName());
+        setupToolBar();
+    }
+    private void setupToolBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
+        if (toolbar == null) return;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_white_24dp);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
     }
     private void initData(){
         party = ParseObject.create(Party.class);
@@ -60,5 +77,11 @@ public class PartyDetailActivity extends AppCompatActivity {
             }
         });
 
-}
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

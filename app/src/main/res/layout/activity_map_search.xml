@@ -1,8 +1,32 @@
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.sjsu.cmpe.partyon.activities.MapSearchActivity" />
+    android:orientation="vertical"
+    tools:context="edu.sjsu.cmpe.partyon.activities.MapSearchActivity" >
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_weight="2"
+        android:name="com.google.android.gms.maps.SupportMapFragment">
+        <Button
+            android:text="search this area"
+            android:id="@+id/map_re_search_btn"
+            android:alpha="0.7"
+            android:layout_width="wrap_content"
+            android:layout_height = "wrap_content"
+            android:layout_gravity = "top|center"
+            android:layout_marginTop = "10dp"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/map_search_result_fragment"
+        android:name="edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="200dp"
+        tools:layout="@layout/fragment_map_party_list" />
+</LinearLayout>

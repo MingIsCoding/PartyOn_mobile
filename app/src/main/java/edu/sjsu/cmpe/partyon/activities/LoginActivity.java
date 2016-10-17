@@ -264,15 +264,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
     }
 
-
-    private void handleGoogleProfile(Profile pro){
-        //if there is a user who owns this facebook account
-        //no, store this account to facebook profiles
-        //create a user base on this acount
-
-        //yes, login
-
-    }
     private void finalizeLoginProcess() {
         AppData.isUserLoggedin = true;
         Log.d(TAG,"login:"+ User.getCurrentUser().getUsername());
@@ -300,7 +291,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         SignInButton mGoogleSignInBtn = (SignInButton) findViewById(R.id.google_oauth_btn);
         mGoogleSignInBtn.setSize(SignInButton.SIZE_WIDE);
-//        mGoogleSignInBtn.set
         mGoogleSignInBtn.setScopes(gso.getScopeArray());
         mGoogleSignInBtn.setOnClickListener(new OnClickListener() {
             @Override

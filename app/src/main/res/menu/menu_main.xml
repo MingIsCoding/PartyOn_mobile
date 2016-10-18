@@ -16,4 +16,12 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/logoutUser"
+        android:title="logout"
+        />
+    <item
+        android:id="@+id/updateStatus"
+        android:title="Update"
+        />
 </menu>

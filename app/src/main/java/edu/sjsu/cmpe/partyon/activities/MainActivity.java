@@ -36,6 +36,7 @@ import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.fragment.PostListFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyActivity";
@@ -145,10 +146,14 @@ public class MainActivity extends AppCompatActivity {
             VpSimpleFragment newInstance = VpSimpleFragment.newInstance(title);
             mContents.add(newInstance);
         }*/
-        VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
+        //fragment new instance for the post list
+        PostListFragment postInstance = PostListFragment.newInstance("1","2");
+         //VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
         VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
         VpSimpleFragment meInstance = VpSimpleFragment.newInstance("Parsonal Information");
-        mContents.add(0,new MapPartyListFragment());
+// adding for the post status method(navdeep) change accordingly.
+        mContents.add(0,postInstance);
+        //mContents.add(0,new MapPartyListFragment());
         mContents.add(1,partyListFragment);
         mContents.add(2,contactInstance);
         mContents.add(3,meInstance);
@@ -205,6 +210,23 @@ public class MainActivity extends AppCompatActivity {
         }else if(id == R.id.action_search_on_map){
             Intent i = new Intent(this, MapSearchActivity.class);
             startActivity(i);
+        }// for user logout(nav)
+        else if(id == R.id.logoutUser){
+            User user = new User();
+            user.logOut();
+            // for flushing out facebook user session
+//            com.facebook.Session fbs = com.facebook.Session.getActiveSession();
+//            if (fbs == null) {
+//                fbs = new com.facebook.Session(activity);
+//                com.facebook.Session.setActiveSession(fbs);
+//            }
+//            fbs.closeAndClearTokenInformation();
+            Intent intent = new Intent(this, LoginActivity.class);  //redirect to login Activity
+            startActivity(intent);
+        }//update status in the menu(nav)
+        else if(id ==R.id.updateStatus){
+            Intent intent = new Intent(this, UpdateActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

@@ -11,7 +11,7 @@ import edu.sjsu.cmpe.partyon.entities.Party;
  * Created by Ming on 8/29/16.
  */
 public class AppData implements Serializable{
-    public static boolean isDevMode = true;
+    public static boolean isDevMode = false;
     public static boolean isParseAdapterInitiated = false;
     public static String backendServerURL = "https://partyonbackend.herokuapp.com/parse/";//http://10.50.0.21:1337/parse/";
     public static String backendServerAppID = "PartyOn";

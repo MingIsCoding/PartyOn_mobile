@@ -30,6 +30,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -613,6 +614,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     public void onDestroy() {
         super.onDestroy();
         profileTracker.stopTracking();
+    }
+
+    // For the register activity(nav)
+    public void registerMessage(View view){
+        Button mregisterButton1 =(Button)findViewById(R.id.registerButton1);
+        mregisterButton1.setOnClickListener(new View.OnClickListener() {    //responds to click on this activity.
+            @Override
+            public void onClick(View view) {
+                //toast
+
+                Toast.makeText(LoginActivity.this, "register page", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class );
+                startActivity(intent);      //redirect to the register page/activity.
+            }
+        });
     }
 }
 

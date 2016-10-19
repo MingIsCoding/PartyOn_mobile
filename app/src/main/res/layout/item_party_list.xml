@@ -2,39 +2,80 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:orientation="vertical"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/main_margin"
+    android:paddingRight="@dimen/main_margin"
     android:id="@+id/item_party_list">
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/party_list_item_height">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal">
         <ImageView
             android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/icon_glass" />
+            android:src="@drawable/icon_geo_marker_24dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/text_margin"
+        android:paddingRight="@dimen/main_margin"
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:paddingTop="8dp">
+        <TextView
+            android:id="@+id/party_item_name"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Example application"
+            android:textSize="@dimen/font_title_size" />
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="bottom">
             <TextView
-                android:id="@+id/party_item_name"
-                android:layout_width="fill_parent"
+                android:id="@+id/party_item_description"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:text="Example application"
-                android:textSize="16sp" />
-            <TextView
-                android:id="@+id/party_item_descip"
-                android:layout_width="fill_parent"
-                android:layout_height="26dip"
                 android:ellipsize="marquee"
-                android:text="Description"
+                android:text="Today 5pm-10pm 3miles"
                 android:textSize="12sp" />
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginLeft="@dimen/divider_space"
+                android:layout_marginRight="@dimen/divider_narrow_space"
+                android:src="@drawable/ic_people_black_24dp"
+                android:backgroundTint="@color/background_grey"
+                android:foregroundTint="@color/background_grey" />
+            <TextView
+                android:text="23/100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
 
     </LinearLayout>
-
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center_horizontal">
+        <RatingBar
+            android:numStars="4"
+            android:stepSize="0.5"
+            android:isIndicator="true"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rating="2.5" />
+    </LinearLayout>
 
 
 

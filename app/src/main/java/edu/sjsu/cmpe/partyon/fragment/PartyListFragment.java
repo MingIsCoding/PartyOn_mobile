@@ -1,8 +1,6 @@
 package edu.sjsu.cmpe.partyon.fragment;
 
 
-import android.content.Intent;
-import android.database.Observable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,24 +9,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.activities.PartyDetailActivity;
 import edu.sjsu.cmpe.partyon.adapter.PartyListAdapter;
 import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Party;
-import edu.sjsu.cmpe.partyon.holder.PartyItemViewHolder;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -3,11 +3,12 @@
     <!--<color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>-->
-    <color name="colorPrimary">#9C27B0</color>
+    <color name="colorPrimary">#9c27b0</color>
     <color name="colorPrimaryDark">#6A1B9A</color>
     <color name="colorAccent">#68efad</color>
     <!--purple theme-->
     <color name="fontColor">#ffffff</color>
+    <color name="background_grey">#cccccc</color>
 
     <style name="PurpleTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -31,4 +32,9 @@
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:textColor">@color/fontColor</item>
     </style>
+    <!--<style name="PurpleTheme.RatingBar" parent="PurpleTheme">
+        <item name="background">@color/background_grey</item>
+        <item name="secondaryProgress">@color/colorPrimary</item>
+        <item name="progress">@color/colorPrimary</item>
+    </style>-->
 </resources>

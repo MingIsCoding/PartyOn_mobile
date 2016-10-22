@@ -157,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
         mContents.add(1,partyListFragment);
         mContents.add(2,contactInstance);
         mContents.add(3,meInstance);
+
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -166,6 +167,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public int getCount() {
                 return mContents.size();
+            }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mTitles.get(position);
             }
         };
     }

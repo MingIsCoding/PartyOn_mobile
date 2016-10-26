@@ -2,6 +2,7 @@ package edu.sjsu.cmpe.partyon.entities;
 
 import android.icu.text.TimeZoneFormat;
 
+import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
 import java.util.Arrays;
@@ -9,7 +10,7 @@ import java.util.Arrays;
 /**
  * Created by Ming on 10/19/16.
  */
-
+@ParseClassName("Post")
 public class Post extends ParseObject {
     private User author;
     private Party party;

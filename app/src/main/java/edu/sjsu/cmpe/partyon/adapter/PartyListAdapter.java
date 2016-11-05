@@ -1,13 +1,20 @@
 package edu.sjsu.cmpe.partyon.adapter;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -44,15 +51,20 @@ public class PartyListAdapter extends RecyclerView.Adapter<PartyItemViewHolder>{
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                    Toast.makeText(getActivity(),
-//                            party.getName(),
-//                            Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(mContent, PartyDetailActivity.class);
+                Log.d(TAG,party.getName()+" is clicked");
+                    /*Toast.makeText(getActivity(),
+                            party.getName(),
+                            Toast.LENGTH_SHORT).show();*/
+
+                /*Intent intent = new Intent(mContent, PartyDetailActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(AppData.OBJ_PARTY_ID,party.getObjectId().toString());
                 bundle.putString(AppData.OBJ_PARTY_NAME,party.getName().toString());
                 intent.putExtras(bundle);
-                mContent.startActivity(intent);
+                mContent.startActivity(intent);*/
+                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 100);
+                v.setLayoutParams(lp);
+                v.setBackgroundColor(ContextCompat.getColor(mContent,R.color.colorPrimary));
             }
         });
     }

@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         PostListFragment postInstance = PostListFragment.newInstance("1","2");
          //VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
         VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
-        VpSimpleFragment meInstance = VpSimpleFragment.newInstance("Parsonal Information");
+        VpSimpleFragment meInstance = VpSimpleFragment.newInstance("Personal Information");
 // adding for the post status method(navdeep) change accordingly.
         mContents.add(0,postInstance);
         //mContents.add(0,new MapPartyListFragment());

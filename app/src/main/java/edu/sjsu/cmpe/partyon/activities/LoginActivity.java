@@ -60,6 +60,7 @@ import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -395,9 +396,25 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+//            mAuthTask = new UserLoginTask(email, password);
+//            mAuthTask.execute((Void) null);
+            ParseUser.logInInBackground(email, password, new LogInCallback() {
+                @Override
+                public void done(ParseUser user, ParseException e) {
+                    if(e==null){
+                        showProgress(true);
+                        Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }else{
+                        Toast.makeText(LoginActivity.this, "login failed", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+
+
+            });
         }
     }
 
@@ -513,6 +530,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+            //User user = new User();
+            //user.setEmail(mEmail);      // setting the received email and password
+            //user.setPassword(mPassword);
+
+//            User.logInInBackground(mEmail, mPassword, new LogInCallback() {
+//                @Override
+//                public void done(User user, ParseException e) {
+//                    if(e==null){
+//                        Toast.makeText(LoginActivity.this, "login success", Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//                        startActivity(intent);
+//                    }else{
+//                        Toast.makeText(LoginActivity.this, "login failed", Toast.LENGTH_SHORT).show();
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//
+//            });
+
+
         }
 
         @Override
@@ -610,11 +648,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
     }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        profileTracker.stopTracking();
-    }
+
+    // uncomment this when the facebook profile starts working
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        profileTracker.stopTracking();
+//    }
 
     // For the register activity(nav)
     public void registerMessage(View view){

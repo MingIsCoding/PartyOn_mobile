@@ -13,6 +13,7 @@ public class User extends ParseUser {
     private String firstName;
     private String lastName;
     private int gender;
+    private String email;
     private String profilePicSmall;
     private String profilePicLarge;
     private String addressLocationID;

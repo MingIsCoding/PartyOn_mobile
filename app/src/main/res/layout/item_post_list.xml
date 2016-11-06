@@ -2,26 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <!--user info-->
     <LinearLayout
+        android:padding="@dimen/main_margin"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <LinearLayout
-            android:layout_weight="0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal">
             <ImageView
                 android:background="@drawable/ic_account_circle_black_24dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:contentDescription="" />
         </LinearLayout>
         <LinearLayout
-            android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/author_username_view"
@@ -39,7 +39,6 @@
             android:layout_weight="1"
             />
         <LinearLayout
-            android:layout_weight="0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal">
@@ -57,24 +56,28 @@
         <ImageView
             android:background="@drawable/post_pic_holder"
             android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_height="wrap_content" />
         <TextView
+            android:padding="10dp"
             android:id="@+id/content_txt_view"
             android:text="Lets get drunk"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
-
+    <View style="@style/Divider"/>
     <!--comments-->
     <LinearLayout
+        android:padding="@dimen/main_margin"
+        android:background="@color/background_light_grey"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <!--likes-->
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
             <ImageView
                 android:background="@drawable/ic_favorite_black_24dp"
                 android:layout_width="wrap_content"
@@ -84,21 +87,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-        <TextView
-            android:text="Martin: this is awesome."
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:text="Martin: this is awesome."
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:text="Martin: this is awesome."
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:text="Martin: this is awesome."
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="Martin: this is awesome."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="Martin: this is awesome."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="Martin: this is awesome."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="Martin: this is awesome."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
     </LinearLayout>
+    <View style="@style/Divider"/>
 </LinearLayout>

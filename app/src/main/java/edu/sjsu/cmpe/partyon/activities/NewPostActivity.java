@@ -20,6 +20,7 @@ import edu.sjsu.cmpe.partyon.entities.User;
 public class NewPostActivity extends CloseableActivity {
     private String mPostTxt;
     private EditText mPostTxtView;
+
     @Override
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);

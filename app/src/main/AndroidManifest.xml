@@ -86,9 +86,14 @@
             android:parentActivityName=".activities.MainActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.UpdateActivity" />
-        <activity android:name=".activities.NewPostActivity"
+        <activity
+            android:name=".activities.NewPostActivity"
             android:label="New Post"
-            android:theme="@style/PurpleTheme.NoActionBar"></activity>
+            android:theme="@style/PurpleTheme.NoActionBar" />
+        <activity
+            android:name=".activities.PartyDetailScrollingActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/title_activity_party_detail_scrolling"></activity>
     </application>
 
 </manifest>

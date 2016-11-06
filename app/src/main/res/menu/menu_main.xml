@@ -21,6 +21,9 @@
         android:title="logout"
         />
     <item
+        android:id="@+id/action_new_post"
+        android:title="new post"/>
+    <item
         android:id="@+id/updateStatus"
         android:title="Update"
         />

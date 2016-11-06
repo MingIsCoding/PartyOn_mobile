@@ -5,8 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/PartyOn.iml" filepath="$PROJECT_DIR$/PartyOn.iml" />
       <module fileurl="file://$PROJECT_DIR$/PartyOn_mobile.iml" filepath="$PROJECT_DIR$/PartyOn_mobile.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/slideDateTimePicker/slideDateTimePicker.iml" filepath="$PROJECT_DIR$/slideDateTimePicker/slideDateTimePicker.iml" />
       <module fileurl="file://$PROJECT_DIR$/slideDateTimePicker/slideDateTimePicker.iml" filepath="$PROJECT_DIR$/slideDateTimePicker/slideDateTimePicker.iml" />
     </modules>
   </component>

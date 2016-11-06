@@ -20,6 +20,7 @@ import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.activities.PartyDetailActivity;
+import edu.sjsu.cmpe.partyon.activities.PartyDetailScrollingActivity;
 import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.holder.PartyItemViewHolder;
@@ -62,9 +63,15 @@ public class PartyListAdapter extends RecyclerView.Adapter<PartyItemViewHolder>{
                 bundle.putString(AppData.OBJ_PARTY_NAME,party.getName().toString());
                 intent.putExtras(bundle);
                 mContent.startActivity(intent);*/
-                RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 100);
-                v.setLayoutParams(lp);
-                v.setBackgroundColor(ContextCompat.getColor(mContent,R.color.colorPrimary));
+                Intent i = new Intent(mContent, PartyDetailScrollingActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(AppData.OBJ_PARTY_ID,party.getObjectId().toString());
+                bundle.putString(AppData.OBJ_PARTY_NAME,party.getName().toString());
+                i.putExtras(bundle);
+                mContent.startActivity(i);
+                //RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 100);
+                //v.setLayoutParams(lp);
+                //v.setBackgroundColor(ContextCompat.getColor(mContent,R.color.colorPrimary));
             }
         });
     }

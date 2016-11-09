@@ -20,6 +20,8 @@ import java.util.Date;
  */
 @ParseClassName("Party")
 public class Party extends ParseObject {
+    public static final String OBJ_PARTY_ID = "party_id";
+    public static final String OBJ_PARTY_NAME = "party_name";
     private String name;
     private int scaleType; // house party
     private int ageRangeStart;

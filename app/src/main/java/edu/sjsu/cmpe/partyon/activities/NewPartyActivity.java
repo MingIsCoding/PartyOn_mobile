@@ -61,9 +61,48 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
     //private int progressBarStatus = 0;
     private Handler progressBarbHandler = new Handler();
 
+    public static int RESULT_SUCCESS = 102;
+    public static int RESULT_CANCEL = 101;
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG,"onStart");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG,"onRestart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG,"onResume");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG,"onResume");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"onDestroy");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG,"onPause");
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG,"onCreate");
         initViews();
         addListeners();
     }
@@ -237,12 +276,13 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
                             //going to the detail activity
                             Toast.makeText(NewPartyActivity.this,
                                     "New party has been saved."+ creatingParty.getObjectId(), Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(NewPartyActivity.this, PartyDetailActivity.class);
+                            Intent intent = new Intent();
                             Bundle bundle = new Bundle();
-                            bundle.putString(AppData.OBJ_PARTY_ID,creatingParty.getObjectId().toString());
-                            bundle.putString(AppData.OBJ_PARTY_NAME,creatingParty.getName().toString());
+                            bundle.putString(Party.OBJ_PARTY_ID,creatingParty.getObjectId().toString());
+                            bundle.putString(Party.OBJ_PARTY_NAME,creatingParty.getName().toString());
                             intent.putExtras(bundle);
-                            startActivity(intent);
+                            setResult(RESULT_SUCCESS, intent);
+                            finish();
                         }
                     });
                 }

@@ -3,13 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.sjsu.cmpe.partyon.fragment.PostListFragment">
-
-
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/post_list_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/list">
-
-
-    </ListView>
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 </FrameLayout>

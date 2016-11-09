@@ -24,6 +24,10 @@ public class User extends ParseUser {
     private Date birthday;
 
 
+
+
+
+
     public String getFirstName() {
         return getString("firstName");
     }

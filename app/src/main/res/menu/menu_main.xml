@@ -27,4 +27,8 @@
         android:id="@+id/updateStatus"
         android:title="Update"
         />
+    <item
+        android:id="@+id/takePicture"
+        android:title="Take Photo"
+        />
 </menu>

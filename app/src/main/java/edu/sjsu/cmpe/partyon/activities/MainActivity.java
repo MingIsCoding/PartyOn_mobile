@@ -36,10 +36,12 @@ import edu.sjsu.cmpe.partyon.VpSimpleFragment;
 import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.entities.Post;
+import edu.sjsu.cmpe.partyon.entities.Profile;
 import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.fragment.PersonalListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PostListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -162,14 +164,13 @@ public class MainActivity extends AppCompatActivity {
         PostListFragment postInstance = PostListFragment.newInstance("1","2");
          //VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
         VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
-        VpSimpleFragment meInstance = VpSimpleFragment.newInstance("Parsonal Information");
+        PersonalListFragment meInstance = PersonalListFragment.newInstance("1","2");
 // adding for the post status method(navdeep) change accordingly.
         mContents.add(0,postInstance);
         //mContents.add(0,new MapPartyListFragment());
         mContents.add(1,partyListFragment);
         mContents.add(2,contactInstance);
         mContents.add(3,meInstance);
-
         mAdapter = new FragmentPagerAdapter(getSupportFragmentManager()) {
             @Override
             public Fragment getItem(int position) {
@@ -201,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
             ParseObject.registerSubclass(User.class);
             ParseObject.registerSubclass(Location.class);
             ParseObject.registerSubclass(Post.class);
+            ParseObject.registerSubclass(Profile.class);
         }
     }
 
@@ -250,6 +252,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }else if(id == R.id.action_new_post){
             Intent in = new Intent(MainActivity.this, NewPostActivity.class);
+            startActivity(in);
+        }// for clicking a new picture(currently in the menu tab) will be moved according to progress-nav
+        else if(id == R.id.takePicture){
+            Intent in = new Intent(MainActivity.this, NewPictureActivity.class);
             startActivity(in);
         }
 

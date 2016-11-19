@@ -36,7 +36,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<edu.sjsu.cmpe.partyon.ViewPagerIndicator
+   <!-- <edu.sjsu.cmpe.partyon.ViewPagerIndicator
         android:id="@+id/id_indicator"
         android:layout_width = "match_parent"
         android:layout_height="45dp"
@@ -75,7 +75,7 @@
             android:text="Me"
             android:textSize="16sp"
             android:textColor="#ffffff" />
-    </edu.sjsu.cmpe.partyon.ViewPagerIndicator>-->
+    </edu.sjsu.cmpe.partyon.ViewPagerIndicator> -->
     <android.support.v4.view.ViewPager
        android:id="@+id/id_viewpager"
         android:layout_width="match_parent"

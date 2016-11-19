@@ -1,6 +1,6 @@
 package edu.sjsu.cmpe.partyon.entities;
 
-import com.google.android.gms.vision.barcode.Barcode;
+//import com.google.android.gms.vision.barcode.Barcode;
 import com.parse.GetCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;

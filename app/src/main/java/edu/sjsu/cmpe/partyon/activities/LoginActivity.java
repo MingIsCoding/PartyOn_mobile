@@ -232,23 +232,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 parameters.putString("fields", "id,name,email,gender,birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
-                //AccessToken accessToken = loginResult.getAccessToken();
-
-                /*accessTokenTracker = new AccessTokenTracker() {
-                    @Override
-                    protected void onCurrentAccessTokenChanged(AccessToken accessToken, AccessToken accessToken1) {
-                        Log.d(TAG,"current Facebook profile changed");
-                    }
-                };
-                accessTokenTracker.startTracking();
-
-                profileTracker = new ProfileTracker() {
-                    @Override
-                    protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                        Log.d(TAG,"current Facebook Profile: user name: "+currentProfile.getLastName());
-                    }
-                };
-                profileTracker.startTracking();*/
 
 
             }

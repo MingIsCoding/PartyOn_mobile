@@ -259,7 +259,9 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     public void onConnected(@Nullable Bundle bundle) {
         Log.d(TAG,"onConnected");
         Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG,"checkSelfPermission");
             return;
         }
@@ -412,8 +414,6 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     }
     private void searchPartiesInCurrentBounds(){
         LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-        //Log.d(TAG,"looking Ps in " + distance + "from "+latitude+","+longitude);
-        //ParseGeoPoint target = new ParseGeoPoint(latitude, longitude);
         ParseQuery<Party> query = ParseQuery.getQuery(AppData.OBJ_NAME_PARTY);
         query.whereWithinGeoBox("location",
                 new ParseGeoPoint(bounds.southwest.latitude, bounds.southwest.longitude),
@@ -436,17 +436,11 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
                     markerOptions.position(new LatLng(p.getLocation().getLatitude(), p.getLocation().getLongitude()));
                     markerOptions.title(p.getName());
                     markerOptions.snippet(p.getDescription());
-                    //markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
                     Log.d(TAG,p.getName());
                     markerOptions.icon(icon);
-//                    resultPartMap.put(p.getLocation().getLatitude() + "" +
-//                            p.getLocation().getLongitude(),p);
                     currLocationMarker = mMap.addMarker(markerOptions);
                     currLocationMarker.showInfoWindow();
-                    Log.d(TAG,"adding ID:"+currLocationMarker.getId());
                     resultPartMap.put(currLocationMarker.getId(),p);
-//                    resultPartMap.put(markerOptions.getPosition().latitude+""
-//                            +markerOptions.getPosition().longitude,p);
                 }
                 mResultListFragment.updateResultList(mResultList);
                 mReSearchBtn.setVisibility(View.INVISIBLE);

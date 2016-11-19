@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe.partyon.fragment;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -144,10 +145,14 @@ public class PersonalListFragment extends Fragment {
     // To fill the items inside the list
 
     private void populateProfileList(){
+
         mProfile.add(new Profile("My Wallet",R.drawable.ic_card_giftcard_black_24dp));
         mProfile.add(new Profile("My Profile",R.drawable.ic_perm_identity_black_24dp));
         mProfile.add(new Profile("My Photos",R.drawable.ic_perm_media_black_24dp));
         mProfile.add(new Profile("My Posts",R.drawable.ic_picture_in_picture_black_24dp));
+
+    //   int color = Color.parseColor("#AE6118"); //The color u want
+      //  mProfile.setColorFilter(color);
     }
 
 

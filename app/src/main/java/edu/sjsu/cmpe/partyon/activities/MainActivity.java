@@ -253,6 +253,10 @@ public class MainActivity extends AppCompatActivity {
         }else if(id == R.id.action_new_post){
             Intent in = new Intent(MainActivity.this, NewPostActivity.class);
             startActivity(in);
+        }// for clicking a new picture(currently in the menu tab) will be moved according to progress-nav
+        else if(id == R.id.takePicture){
+            Intent in = new Intent(MainActivity.this, NewPictureActivity.class);
+            startActivity(in);
         }
 
         return super.onOptionsItemSelected(item);

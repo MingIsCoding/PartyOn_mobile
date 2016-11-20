@@ -3,11 +3,14 @@
     <!--<color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>-->
-    <color name="colorPrimary">#9C27B0</color>
+    <color name="colorPrimary">#60136e</color>
     <color name="colorPrimaryDark">#6A1B9A</color>
     <color name="colorAccent">#68efad</color>
     <!--purple theme-->
-    <color name="fontColor">#ffffff</color>
+    <color name="font_white_color">#ffffff</color>
+    <color name="background_grey">#cccccc</color>
+    <color name="background_light_grey">#e6e6e6</color>
+
 
     <style name="PurpleTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -29,6 +32,16 @@
     </style>
     <style name="ActionBarStyle">
         <item name="android:background">@color/colorPrimary</item>
-        <item name="android:textColor">@color/fontColor</item>
+        <item name="android:textColor">@color/font_white_color</item>
     </style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/background_grey</item>
+    </style>
+    <!--<style name="PurpleTheme.RatingBar" parent="PurpleTheme">
+        <item name="background">@color/background_grey</item>
+        <item name="secondaryProgress">@color/colorPrimary</item>
+        <item name="progress">@color/colorPrimary</item>
+    </style>-->
 </resources>

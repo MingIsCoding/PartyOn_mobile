@@ -1,12 +1,15 @@
 package edu.sjsu.cmpe.partyon.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,10 +35,13 @@ import edu.sjsu.cmpe.partyon.ViewPagerIndicator;
 import edu.sjsu.cmpe.partyon.VpSimpleFragment;
 import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
+import edu.sjsu.cmpe.partyon.entities.Post;
+import edu.sjsu.cmpe.partyon.entities.Profile;
 import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.fragment.PersonalListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PostListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,12 +58,14 @@ public class MainActivity extends AppCompatActivity {
     private List<String> mTitles = Arrays.asList("Post","Party","Contact","Info");
     private List<Fragment> mContents = new ArrayList<Fragment>();
     private FragmentPagerAdapter mAdapter;
+    private static int REQUEST_CREATE_NEW_PARTY = 1001;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private ViewPagerIndicator mIndicator;
+    //private ViewPagerIndicator mIndicator;
+    private TabLayout mTabLayout;
 
 /*    @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +123,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        mTabLayout = (TabLayout)findViewById(R.id.tabs);
         mViewPager = (ViewPager)findViewById(R.id.id_viewpager);
-        mIndicator = (ViewPagerIndicator)findViewById(R.id.id_indicator);
+//        mIndicator = (ViewPagerIndicator)findViewById(R.id.id_indicator);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mIndicator.scroll(position,positionOffset);
+                //mIndicator.scroll(position,positionOffset);
             }
 
             @Override
@@ -134,6 +145,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setSelectedTabIndicatorColor(Color.WHITE);
+        //mTabLayout.setSelectedTabIndicatorHeight(10);
 
 
     }
@@ -150,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
         PostListFragment postInstance = PostListFragment.newInstance("1","2");
          //VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
         VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
-        VpSimpleFragment meInstance = VpSimpleFragment.newInstance("Parsonal Information");
+        PersonalListFragment meInstance = PersonalListFragment.newInstance("1","2");
 // adding for the post status method(navdeep) change accordingly.
         mContents.add(0,postInstance);
         //mContents.add(0,new MapPartyListFragment());
@@ -167,6 +181,11 @@ public class MainActivity extends AppCompatActivity {
             public int getCount() {
                 return mContents.size();
             }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return mTitles.get(position);
+            }
         };
     }
 
@@ -182,6 +201,8 @@ public class MainActivity extends AppCompatActivity {
             ParseObject.registerSubclass(Party.class);
             ParseObject.registerSubclass(User.class);
             ParseObject.registerSubclass(Location.class);
+            ParseObject.registerSubclass(Post.class);
+            ParseObject.registerSubclass(Profile.class);
         }
     }
 
@@ -193,6 +214,15 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CREATE_NEW_PARTY && resultCode == NewPartyActivity.RESULT_SUCCESS){
+            Intent in = new Intent(MainActivity.this, PartyDetailActivity.class);
+            in.putExtras(data.getExtras());
+            startActivity(in);
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -206,27 +236,27 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_new_party){
             Intent i = new Intent(MainActivity.this, NewPartyActivity.class);//NewPartyActivity
-            startActivity(i);
+            startActivityForResult(i,REQUEST_CREATE_NEW_PARTY);
         }else if(id == R.id.action_search_on_map){
             Intent i = new Intent(this, MapSearchActivity.class);
             startActivity(i);
         }// for user logout(nav)
         else if(id == R.id.logoutUser){
-            User user = new User();
-            user.logOut();
-            // for flushing out facebook user session
-//            com.facebook.Session fbs = com.facebook.Session.getActiveSession();
-//            if (fbs == null) {
-//                fbs = new com.facebook.Session(activity);
-//                com.facebook.Session.setActiveSession(fbs);
-//            }
-//            fbs.closeAndClearTokenInformation();
+            Log.d(TAG, ParseUser.getCurrentUser().getUsername() + "is logging off.");
+            ParseUser.logOut();
             Intent intent = new Intent(this, LoginActivity.class);  //redirect to login Activity
             startActivity(intent);
         }//update status in the menu(nav)
         else if(id ==R.id.updateStatus){
             Intent intent = new Intent(this, UpdateActivity.class);
             startActivity(intent);
+        }else if(id == R.id.action_new_post){
+            Intent in = new Intent(MainActivity.this, NewPostActivity.class);
+            startActivity(in);
+        }// for clicking a new picture(currently in the menu tab) will be moved according to progress-nav
+        else if(id == R.id.takePicture){
+            Intent in = new Intent(MainActivity.this, NewPictureActivity.class);
+            startActivity(in);
         }
 
         return super.onOptionsItemSelected(item);

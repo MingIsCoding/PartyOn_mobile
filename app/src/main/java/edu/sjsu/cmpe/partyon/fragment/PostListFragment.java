@@ -5,6 +5,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +21,13 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.activities.StatusAdapter;
+import edu.sjsu.cmpe.partyon.adapter.PostListAdapter;
+import edu.sjsu.cmpe.partyon.entities.Post;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +42,10 @@ public class PostListFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG ="PostListFragment";
+    private RecyclerView mPostListRecyclerView;
+    private PostListAdapter mPostListAdapter;
+    private List<Post> postList;
     private ListView mPostListView;
     private Button mFragmentButton;
     private List<ParseObject> mStatus;
@@ -83,87 +92,35 @@ public class PostListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){
 
-
+        postList = new ArrayList<>();
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
-        //mFragmentButton = (Button) getActivity().findViewById(R.id.fragmentButton);
-        mPostListView = (ListView) view.findViewById(R.id.list);
+        mPostListRecyclerView = (RecyclerView)view.findViewById(R.id.post_list_recyclerView);
+        mPostListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mPostListAdapter = new PostListAdapter(getActivity(),postList);
+        mPostListRecyclerView.setAdapter(mPostListAdapter);
+        fetchData();
+        return view;
 
-        Log.v(ARG_PARAM1,"this is the post fragment and it works");
+    }
+    private void fetchData(){
 
-//        mFragmentButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.v(ARG_PARAM1,"this is the post fragment and it works");
-//               Toast.makeText(this, "this fragment works", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
-        //Using the adapter for the view
-        //ParseQuery has a generic type of parse object
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("Status");
+        ParseQuery<Post> query = new ParseQuery<Post>("Post");
         query.orderByDescending("CreatedAt");
-        query.findInBackground(new FindCallback<ParseObject>() {
+        query.findInBackground(new FindCallback<Post>() {
             @Override
-            public void done(List<ParseObject> statusObject, ParseException e) {
+            public void done(List<Post> posts, ParseException e) {
+                Log.d(TAG,"post got:"+posts.size());
                 if(e == null){
-                    //successful
-                    mStatus = statusObject;
-                    //call the adapter
-
-                    StatusAdapter adapter = new StatusAdapter(getContext(), mStatus);     //take the context
-                    mPostListView.setAdapter(adapter);
-
+                    for(Post p : posts){
+                        postList.add(p);
+                    }
+                    mPostListAdapter.notifyDataSetChanged();
                 }else{
+                    e.printStackTrace();
                     //Problem detected
                 }
             }
         });
-
-
-
-        return view;
-
     }
-
-
-
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
 }

@@ -35,22 +35,18 @@ public class StatusAdapter extends ArrayAdapter<ParseObject>{
         //if no items to display then create the view
 
         if(view == null ){
-            view = LayoutInflater.from(mContext).inflate(       //inflate the layoutt
+            view = LayoutInflater.from(mContext).inflate(       //inflate the layout
                     R.layout.post_list_custom_layout, null
             );
-
             holder = new ViewHolder();      //initialize the holder
             holder.usernameTextView = (TextView) view.findViewById(R.id.postUsername);
             holder.statusTextView = (TextView) view.findViewById(R.id.postStatus);
-
             //after conversion set the tag to holder as variable
             view.setTag(holder);
         }else{
             holder = (ViewHolder) view.getTag();
         }
-
         ParseObject status = mStatus.get(position);     // for the row that has been clicked
-
         //username
         String username = status.getString("user"); // whatever the column name is in DB
         holder.usernameTextView.setText(username);  //set to whatever you want to display
@@ -59,7 +55,6 @@ public class StatusAdapter extends ArrayAdapter<ParseObject>{
 
         String comment = status.getString("status");
         holder.statusTextView.setText(comment);     //set text to whatever you stored in the string
-
         return view;
     }
 

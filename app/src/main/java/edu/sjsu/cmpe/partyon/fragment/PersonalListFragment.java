@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe.partyon.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.activities.WalletActivity;
 import edu.sjsu.cmpe.partyon.adapter.ProfileAdapter;
 import edu.sjsu.cmpe.partyon.adapter.ProfilePicAdapter;
 import edu.sjsu.cmpe.partyon.entities.Profile;
@@ -135,6 +137,10 @@ public class PersonalListFragment extends Fragment {
                Log.v("TAG", "Clicked row number:" + position);
                Profile currentItem = mProfile.get(position);
                String message = "Clicked on " + position + " item " + currentItem.getTitle();
+               if(position == 0){
+                   Intent in = new Intent(getContext(), WalletActivity.class);
+                   startActivity(in);
+               }
                Toast.makeText(PersonalListFragment.this.getActivity(), message, Toast.LENGTH_LONG).show();
                /*Fragment does not extend context so add getActivity to make it work in a fragment(Fragment is not an activity)*/
            }

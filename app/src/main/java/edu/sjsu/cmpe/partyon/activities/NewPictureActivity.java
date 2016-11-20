@@ -3,14 +3,18 @@ package edu.sjsu.cmpe.partyon.activities;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import java.io.File;
 
 import edu.sjsu.cmpe.partyon.R;
 
@@ -18,6 +22,7 @@ public class NewPictureActivity extends AppCompatActivity {
     // Using permission crashes the app, right now using the default camera app, no permission added
     // only uses-feature is added, need to find a better way -nav
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    public static final String TAG ="New Picture Activity";
     ImageView photoClicked;
 
     @Override
@@ -34,8 +39,9 @@ public class NewPictureActivity extends AppCompatActivity {
         if(!hasCamera()){
             clickPicture.setEnabled(false);
         }else{
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+           Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             //Take picture and pass results(the image) to onActivityResult
+            //Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         }
     }
@@ -63,6 +69,12 @@ public class NewPictureActivity extends AppCompatActivity {
             Bitmap photo =(Bitmap) extras.get("data");
             //set the bitmap in the imageview
             photoClicked.setImageBitmap(photo);
+            //check if the image folder exists
+//            File imageStorage = new File(Environment.getExternalStorageDirectory()+File.separator+"imagesFolder");
+//            if(!imageStorage.exists()){
+//                imageStorage.mkdirs();
+//                Log.d(TAG, "Folder created at "+ imageStorage.toString());
+//            }
 
         }
             }

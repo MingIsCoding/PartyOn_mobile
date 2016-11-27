@@ -40,20 +40,16 @@ import edu.sjsu.cmpe.partyon.entities.Post;
 public class PostListFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String PARTY_ID = "party_id";
+    private static final String LAYOUT_ID = "layout_id";
     private static final String TAG ="PostListFragment";
     private RecyclerView mPostListRecyclerView;
     private PostListAdapter mPostListAdapter;
     private List<Post> postList;
-    private ListView mPostListView;
-    private Button mFragmentButton;
-    private List<ParseObject> mStatus;
-
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String mPartyID;
+    private int mLayoutID;
 
     // private OnFragmentInteractionListener mListener;
 
@@ -65,16 +61,16 @@ public class PostListFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param partyId fetch posts for a specific party.
+     * @param layoutID a specific layout ID.
      * @return A new instance of fragment PostListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PostListFragment newInstance(String param1, String param2) {
+    public static PostListFragment newInstance(String partyId, int layoutID) {
         PostListFragment fragment = new PostListFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(PARTY_ID, partyId);
+        args.putInt(LAYOUT_ID, layoutID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,8 +79,8 @@ public class PostListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mPartyID = getArguments().getString(PARTY_ID);
+            mLayoutID = getArguments().getInt(LAYOUT_ID);
         }
     }
 
@@ -100,6 +96,8 @@ public class PostListFragment extends Fragment {
         mPostListAdapter = new PostListAdapter(getActivity(),postList);
         mPostListRecyclerView.setAdapter(mPostListAdapter);
         fetchData();
+        Log.d(TAG,"onCreateView==========>");
+
         return view;
 
     }

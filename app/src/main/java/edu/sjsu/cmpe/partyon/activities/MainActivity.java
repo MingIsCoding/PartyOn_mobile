@@ -20,8 +20,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.FacebookRequestError;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -33,11 +39,14 @@ import java.util.List;
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.ViewPagerIndicator;
 import edu.sjsu.cmpe.partyon.VpSimpleFragment;
+import edu.sjsu.cmpe.partyon.entities.Like;
 import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.entities.Post;
-import edu.sjsu.cmpe.partyon.entities.Profile;
+import edu.sjsu.cmpe.partyon.entities.Reply;
+import edu.sjsu.cmpe.partyon.entities.Ticket;
 import edu.sjsu.cmpe.partyon.entities.User;
+import edu.sjsu.cmpe.partyon.fragment.ContactListFragment;
 import edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
@@ -161,9 +170,10 @@ public class MainActivity extends AppCompatActivity {
             mContents.add(newInstance);
         }*/
         //fragment new instance for the post list
-        PostListFragment postInstance = PostListFragment.newInstance("1","2");
+        PostListFragment postInstance = PostListFragment.newInstance("1",R.id.post_list_recyclerView);
          //VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
-        VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
+//        VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
+        ContactListFragment contactInstance = ContactListFragment.newInstance("0","1");
         PersonalListFragment meInstance = PersonalListFragment.newInstance("1","2");
 // adding for the post status method(navdeep) change accordingly.
         mContents.add(0,postInstance);
@@ -202,7 +212,9 @@ public class MainActivity extends AppCompatActivity {
             ParseObject.registerSubclass(User.class);
             ParseObject.registerSubclass(Location.class);
             ParseObject.registerSubclass(Post.class);
-            ParseObject.registerSubclass(Profile.class);
+            ParseObject.registerSubclass(Ticket.class);
+            ParseObject.registerSubclass(Reply.class);
+            ParseObject.registerSubclass(Like.class);
         }
     }
 
@@ -244,8 +256,27 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.logoutUser){
             Log.d(TAG, ParseUser.getCurrentUser().getUsername() + "is logging off.");
             ParseUser.logOut();
-            Intent intent = new Intent(this, LoginActivity.class);  //redirect to login Activity
-            startActivity(intent);
+            //log out from facebook
+            LoginManager.getInstance().logOut();
+            GraphRequest delPermRequest
+                    = new GraphRequest(AccessToken.getCurrentAccessToken(),
+                    "/{user-id}/permissions/", null, HttpMethod.DELETE, new GraphRequest.Callback() {
+                @Override
+                public void onCompleted(GraphResponse graphResponse) {
+                    if(graphResponse!=null){
+                        FacebookRequestError error =graphResponse.getError();
+                        if(error!=null){
+                            Log.e(TAG, error.toString());
+                        }else {
+                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);  //redirect to login Activity
+                            startActivity(intent);
+                        }
+                    }
+                }
+            });
+            Log.d(TAG,"Executing revoke permissions with graph path" + delPermRequest.getGraphPath());
+            delPermRequest.executeAsync();
+
         }//update status in the menu(nav)
         else if(id ==R.id.updateStatus){
             Intent intent = new Intent(this, UpdateActivity.class);

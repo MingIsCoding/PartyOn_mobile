@@ -26,6 +26,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
@@ -97,6 +98,9 @@ public class ContactListFragment extends Fragment {
     }
     private void initView(){
         mFollowList = AppData.getUser().getFollows();
+        if(mFollowList == null){
+            mFollowList = new ArrayList<User>();
+        }
         mAdapter = new ContactListAdapter(mFollowList,getActivity());
         mListView.setAdapter(mAdapter);
 

@@ -108,7 +108,7 @@ public class PostListFragment extends Fragment {
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
-                Log.d(TAG,"post got:"+posts.size());
+//                Log.d(TAG,"post got:"+posts.size());
                 if(e == null){
                     for(Post p : posts){
                         postList.add(p);

@@ -1,12 +1,9 @@
 package edu.sjsu.cmpe.partyon.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,9 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -34,16 +28,9 @@ import java.util.List;
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.activities.WalletActivity;
 import edu.sjsu.cmpe.partyon.adapter.ProfileAdapter;
-import edu.sjsu.cmpe.partyon.adapter.ProfilePicAdapter;
 import edu.sjsu.cmpe.partyon.config.AppData;
-import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.utilities.Blur;
 import edu.sjsu.cmpe.partyon.utilities.ProfileItem;
-import jp.wasabeef.blurry.Blurry;
-
-import static android.R.attr.data;
-import static android.R.attr.logo;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.

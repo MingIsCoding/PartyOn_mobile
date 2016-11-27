@@ -31,4 +31,8 @@
         android:id="@+id/takePicture"
         android:title="Take Photo"
         />
+    <item
+        android:id="@+id/horizontalTest"
+        android:title="Test Hori"
+        />
 </menu>

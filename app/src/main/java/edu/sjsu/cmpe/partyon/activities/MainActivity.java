@@ -272,10 +272,10 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.takePicture){
             Intent in = new Intent(MainActivity.this, NewPictureActivity.class);
             startActivity(in);
-        }else if(id == R.id.horizontalTest){
+        }/*else if(id == R.id.horizontalTest){
             Intent intent = new Intent(MainActivity.this, TrademarkActivity.class);
             startActivity(intent);
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

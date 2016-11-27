@@ -148,7 +148,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         initFacebookApi();
         initGoogleApi();
-        addListeners();
+        if(getIntent().getStringExtra(OP_CODE) != null
+                && getIntent().getStringExtra(OP_CODE).equals(OP_LOG_OUT)){
+            Log.d(TAG,"logout operation");
+            callFacebookLogout();
+        }
+
     }
     private void initFacebookApi(){
         mCallbackManager = CallbackManager.Factory.create();
@@ -161,7 +166,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 profileTracker = new ProfileTracker() {
                     @Override
                     protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
-                        Log.d(TAG,"current Facebook Profile: user name: "+currentProfile.getLastName());
+                        if(currentProfile != null){
+                            Log.d(TAG,"current Facebook Profile: user name: "+currentProfile.getLastName());
+                        }else {
+                            Log.d(TAG,"logged out");
+                        }
                     }
                 };
 
@@ -240,7 +249,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 request.setParameters(parameters);
                 request.executeAsync();
 
-
             }
 
             @Override
@@ -311,9 +319,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
     }
-    private void addListeners(){
 
-    }
 
     private void populateAutoComplete() {
         if (!mayRequestContacts()) {

@@ -69,26 +69,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
-                 />
+                android:background="@android:color/holo_orange_light" />
             <Button
+                android:layout_marginTop="@dimen/main_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Register"
                 android:id="@+id/registerButton1"
                 android:layout_gravity="center_horizontal"
-                android:onClick="registerMessage"/>
+                android:onClick="registerMessage"
+                android:background="@android:color/holo_green_light" />
 
+            <View android:layout_marginTop="@dimen/main_margin"
+                style="@style/form_divider"/>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="or Login with"/>
+                android:text="or Login with"
+                android:gravity="center_horizontal" />
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/facebook_oauth_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="30dp" />
             <com.google.android.gms.common.SignInButton
                 android:id="@+id/google_oauth_btn"

@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme.AppBarOverlay">
         <android.support.design.widget.CollapsingToolbarLayout
             android:background="@drawable/party_cover_holder"
-            android:id="@+id/toolbar_layout"
+            android:id="@+id/collasping_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -30,14 +30,54 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/large_text" />
-    </android.support.v4.widget.NestedScrollView>
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="join"
+                    android:id="@+id/quickBtn1"
+                    android:layout_weight="1"
+                    android:onClick="updateConnection"
+                    android:foregroundTint="@color/colorPrimary"
+                    android:textColor="@color/colorPrimary"
+                    android:backgroundTint="@android:color/background_light"
+                    android:background="@color/cardview_light_background" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quickBtn2"
+                    android:layout_weight="1"
+                    android:text="check-in"
+                    android:background="@color/cardview_light_background"
+                    android:textColor="@color/colorPrimary" />
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/quickBtn3"
+                    android:layout_weight="1"
+                    android:text="other"
+                    android:background="@color/cardview_light_background"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+               <fragment
+                android:id="@+id/party_post_list_fragment"
+                android:name="edu.sjsu.cmpe.partyon.fragment.PostListFragment"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                tools:layout="@layout/fragment_map_party_list" />
+        </LinearLayout>
+    </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

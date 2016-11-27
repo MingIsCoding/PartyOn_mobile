@@ -104,7 +104,13 @@
             android:label="@string/title_activity_party_detail_scrolling"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.NewPictureActivity" />
-        <activity android:name=".activities.WalletActivity"
+        <activity
+            android:name=".activities.WalletActivity"
+            android:theme="@style/PurpleTheme.NoActionBar" />
+        <activity
+            android:name=".activities.PostDetailActivity"
+            android:theme="@style/PurpleTheme.NoActionBar" />
+        <activity android:name=".activities.ContactDetailActivity"
             android:theme="@style/PurpleTheme.NoActionBar"/>
     </application>
 

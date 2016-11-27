@@ -2,12 +2,17 @@ package edu.sjsu.cmpe.partyon.entities;
 
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Ming on 9/21/16.
  */
 public class User extends ParseUser {
+    public final static String ATT_USER_ID = "user_id";
+    public final static String ATT_USER_USERNAME = "username";
+
     private String username;
     private String password;
     private String firstName;
@@ -22,10 +27,8 @@ public class User extends ParseUser {
     private String facebookID;
     private String googleID;
     private Date birthday;
-
-
-
-
+    private Party ongoingParty;
+    private List<User> follows;
 
 
     public String getFirstName() {
@@ -116,5 +119,33 @@ public class User extends ParseUser {
     }
     public Date getBirthday(){
         return getDate("birthday");
+    }
+
+    public Party getOngoingParty() {
+        return (Party)getParseObject("ongoingParty");
+    }
+
+    public void setOngoingParty(Party ongoingParty) {
+        put("ongoingParty",ongoingParty);
+    }
+
+    public List<User> getFollows() {
+        return getList("follows");
+    }
+    public void addFollow(User user){
+        List<User> list = getFollows();
+        if(list == null){
+            list = new ArrayList<User>();
+        }
+        list.add(user);
+        setFollows(list);
+    }
+    public void setFollows(List<User> follows) {
+        put("follows",follows);
+    }
+    public void unFollow(int index){
+        List<User> list = getFollows();
+        list.remove(index);
+        setFollows(list);
     }
 }

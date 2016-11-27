@@ -5,13 +5,19 @@ import android.icu.text.TimeZoneFormat;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Ming on 10/19/16.
  */
 @ParseClassName("Post")
 public class Post extends ParseObject {
+    public final static String POST_ID = "post_id";
     private User author;
     private Party party;
     private String partyID;
@@ -20,13 +26,12 @@ public class Post extends ParseObject {
     private String pathPic;
     private String pathVideo;
     private int viewCount;
-    private Like[] likes;
-    private int likeCount;
+    private List<Like> likes;
     private String trademarkID;
     private Trademark trademark;
     private String brandID;
     private int state;
-    private Reply[] replies;
+    private List<Reply> replies;
 
     public User getAuthor() {
         return (User)getParseUser("author");
@@ -92,15 +97,6 @@ public class Post extends ParseObject {
         put("viewCount", viewCount);
     }
 
-    public int getLikeCount() {
-        return getInt("likeCount");
-    }
-
-    public void setLikeCount(int likeCount) {
-        put("likeCount", likeCount);
-    }
-
-
     public String getBrandID() {
         return getString("brandID");
     }
@@ -117,15 +113,26 @@ public class Post extends ParseObject {
         put("state", state);
     }
 
-    public Like[] getLikes() {
+    public List<ParseObject> getLikesAsPObject(){
+        return getList("likes");
+    }
+    public List<Like> getLikes() {
 
-        return (Like[])Arrays.asList(getParseObject("likes")).toArray();
+        return getList("likes");
     }
 
-    public void setLikes(Like[] likes) {
+    public void setLikes(List<Like> likes) {
+        likes.size();
         put("likes", likes);
     }
-
+    public void addLike(Like like){
+        List<Like> likes = getLikes();
+        if(likes == null){
+            likes = new ArrayList<Like>();
+        }
+        likes.add(like);
+        setLikes(likes);
+    }
     public String getTrademarkID() {
         return getString("trademarkID");
     }
@@ -142,11 +149,21 @@ public class Post extends ParseObject {
         put("trademark", trademark);
     }
 
-    public Reply[] getReplies() {
-        return (Reply[])Arrays.asList(getParseObject("replies")).toArray();
+    public List<Reply> getReplies() {
+        return getList("replies");
     }
 
-    public void setReplies(Reply[] replies) {
+    private void setReplies(List<Reply> replies) {
+        System.out.println("save replies:"+ replies.size());
         put("replies", replies);
+    }
+
+    public void addReply(Reply r){
+        List<Reply> replies = getReplies();
+        if(replies == null){
+            replies = new ArrayList<Reply>();
+        }
+        replies.add(r);
+        this.setReplies(replies);
     }
 }

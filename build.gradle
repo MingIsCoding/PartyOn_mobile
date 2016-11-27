@@ -14,7 +14,7 @@ buildscript {
 
 allprojects {
     //uncomment this line for it to work on others,(navdeep specific)
-    buildDir = "C:/tmp/${rootProject.name}/${project.name}"
+    //buildDir = "C:/tmp/${rootProject.name}/${project.name}"
     repositories {
         jcenter()
     }

@@ -26,6 +26,7 @@ public class ContactDetailActivity extends CloseableActivity {
         Bundle bundle = getIntent().getExtras();
         mContactID = bundle.getString(User.ATT_USER_ID);
         mContactUsername = bundle.getString(User.ATT_USER_USERNAME);
+        System.out.println("mContactUsername:"+mContactUsername);
         getSupportActionBar().setTitle(mContactUsername);
     }
 }

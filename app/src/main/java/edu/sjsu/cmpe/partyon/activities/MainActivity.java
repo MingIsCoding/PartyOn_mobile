@@ -256,26 +256,10 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.logoutUser){
             Log.d(TAG, ParseUser.getCurrentUser().getUsername() + "is logging off.");
             ParseUser.logOut();
-            //log out from facebook
-            LoginManager.getInstance().logOut();
-            GraphRequest delPermRequest
-                    = new GraphRequest(AccessToken.getCurrentAccessToken(),
-                    "/{user-id}/permissions/", null, HttpMethod.DELETE, new GraphRequest.Callback() {
-                @Override
-                public void onCompleted(GraphResponse graphResponse) {
-                    if(graphResponse!=null){
-                        FacebookRequestError error =graphResponse.getError();
-                        if(error!=null){
-                            Log.e(TAG, error.toString());
-                        }else {
-                            Intent intent = new Intent(MainActivity.this, LoginActivity.class);  //redirect to login Activity
-                            startActivity(intent);
-                        }
-                    }
-                }
-            });
-            Log.d(TAG,"Executing revoke permissions with graph path" + delPermRequest.getGraphPath());
-            delPermRequest.executeAsync();
+
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);  //redirect to login Activity
+            intent.putExtra(LoginActivity.OP_CODE,LoginActivity.OP_LOG_OUT);
+            startActivity(intent);
 
         }//update status in the menu(nav)
         else if(id ==R.id.updateStatus){
@@ -288,10 +272,10 @@ public class MainActivity extends AppCompatActivity {
         else if(id == R.id.takePicture){
             Intent in = new Intent(MainActivity.this, NewPictureActivity.class);
             startActivity(in);
-        }else if(id == R.id.horizontalTest){
+        }/*else if(id == R.id.horizontalTest){
             Intent intent = new Intent(MainActivity.this, TrademarkActivity.class);
             startActivity(intent);
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

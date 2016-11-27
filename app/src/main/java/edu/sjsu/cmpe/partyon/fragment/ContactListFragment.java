@@ -186,10 +186,11 @@ public class ContactListFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent in = new Intent(getContext(), ContactDetailActivity.class);
                 Bundle b = new Bundle();
+                System.out.println("mFollowList.get(i).getUsername():"+mFollowList.get(i).getUsername());
                 b.putString(User.ATT_USER_ID,mFollowList.get(i).getObjectId());
-                b.putString(User.ATT_USER_ID,mFollowList.get(i).getObjectId());
+                b.putString(User.ATT_USER_USERNAME,mFollowList.get(i).getUsername());
                 in.putExtras(b);
-                startActivity(in);
+                getContext().startActivity(in);
             }
         });
     }

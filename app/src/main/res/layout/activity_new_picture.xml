@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
 
-        android:id="@+id/photoClicked"
+        android:id="@+id/clickedPhoto"
         android:scaleType="fitXY"
 
         android:layout_alignParentTop="true"
@@ -27,16 +27,31 @@
         app:fabSize="normal"
         app:srcCompat="@android:drawable/ic_input_add"
         android:layout_marginBottom="47dp"
-        android:id="@+id/clickPictureButton"
+        android:id="@+id/uploadPictureButton"
         app:backgroundTint="?attr/colorControlHighlight"
         android:longClickable="false"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="launchCamera" />
+
+         />
 
     <HorizontalScrollView
+        android:id="@+id/activity_trademark_1"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_alignTop="@+id/clickPictureButton"
-        android:layout_alignParentStart="true"></HorizontalScrollView>
+        android:layout_height="150dp"
+        android:scrollbars="none"
+        tools:context="edu.sjsu.cmpe.partyon.activities.TrademarkActivity"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="322dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/trademarkLinearLayout_1"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"/>
+
+    </HorizontalScrollView>
 </RelativeLayout>

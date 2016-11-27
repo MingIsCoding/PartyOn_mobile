@@ -7,12 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.sjsu.cmpe.partyon.activities.WalletActivity">
-
     <android.support.v7.widget.Toolbar
         android:id="@+id/wallet_toolbar"
         android:layout_width="match_parent"
         style="@style/ActionBarStyle"
         app:title="New Post"
         android:titleTextColor="@color/font_white_color"
-        android:layout_height="wrap_content"></android.support.v7.widget.Toolbar>
+        android:layout_height="wrap_content"/>
 </LinearLayout>

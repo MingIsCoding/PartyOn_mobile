@@ -63,41 +63,7 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
 
     public static int RESULT_SUCCESS = 102;
     public static int RESULT_CANCEL = 101;
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG,"onStart");
-    }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG,"onRestart");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG,"onResume");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG,"onResume");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG,"onDestroy");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG,"onPause");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +98,7 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
         endDateTimeField.setOnFocusChangeListener(this);
         endDateTimeField.setOnClickListener(this);
         placePikerBtn.setOnClickListener(this);
+        addressField.setOnClickListener(this);
         slideDateTimeListener = new SlideDateTimeListener() {
             @Override
             public void onDateTimeSet(Date date)
@@ -221,17 +188,17 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
             case 0: capacityStart=0;
                     capacityEnd=10;
                     break;
-            case 1: capacityStart=11;
+            case 1: capacityStart=0;
                     capacityEnd=30;
                     break;
-            case 2: capacityStart=31;
+            case 2: capacityStart=0;
                     capacityEnd=60;
                     break;
-            case 3: capacityStart=61;
+            case 3: capacityStart=0;
                     capacityEnd=100;
                     break;
-            case 4: capacityStart=101;
-                    capacityEnd=1000;
+            case 4: capacityStart=0;
+                    capacityEnd=200;
                     break;
         }
         party.setCapacityRangeStart(capacityStart);
@@ -327,6 +294,17 @@ public class NewPartyActivity extends AppCompatActivity implements View.OnClickL
             isWorkingOnStartDateTime = false;
             showDateTimePicker(startDateTime);
         }else if(view.getId() == R.id.placePickerBtn){
+            PlacePicker.IntentBuilder ppBuilder = new PlacePicker.IntentBuilder();
+            Intent intent;
+            try {
+                intent = ppBuilder.build(this);
+                startActivityForResult(intent,PLACE_PICKER_REQUEST);
+            } catch (GooglePlayServicesRepairableException e) {
+                e.printStackTrace();
+            } catch (GooglePlayServicesNotAvailableException e) {
+                e.printStackTrace();
+            }
+        }else if(view.getId() == R.id.addressField){
             PlacePicker.IntentBuilder ppBuilder = new PlacePicker.IntentBuilder();
             Intent intent;
             try {

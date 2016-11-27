@@ -1,11 +1,14 @@
+/*
 package edu.sjsu.cmpe.partyon.entities;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 
+*/
 /**
  * Created by navdeep on 11/5/2016.
- */
+ *//*
+
 
 @ParseClassName("Profile")
 public class Profile extends ParseObject{
@@ -77,3 +80,4 @@ public class Profile extends ParseObject{
         this.iconID = iconID;
     }
 }
+*/

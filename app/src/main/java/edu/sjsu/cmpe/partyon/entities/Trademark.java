@@ -5,10 +5,11 @@ import com.parse.ParseObject;
 /**
  * Created by Ming on 10/19/16.
  */
-
 public class Trademark extends ParseObject {
     private String name;
     private String uri;
+    private String Url;
+
 
     public String getName() {
         return name;

@@ -42,6 +42,7 @@ import com.facebook.FacebookRequestError;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.HttpMethod;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
@@ -93,6 +94,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String TAG = "LoginActivity";
     private CallbackManager mCallbackManager;
     private static final int RC_GOOGLE_SIGN_IN = 17;
+    public static final String OP_LOG_OUT = "operation_log_out";
+    public static final String OP_CODE = "operation_code";
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -251,8 +254,26 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
     }
-    public static void callFacebookLogout(Context context) {
+    public void callFacebookLogout() {
+//log out from facebook
+        LoginManager.getInstance().logOut();
+        GraphRequest delPermRequest
+                = new GraphRequest(AccessToken.getCurrentAccessToken(),
+                "/{user-id}/permissions/", null, HttpMethod.DELETE, new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse graphResponse) {
+                if(graphResponse!=null){
+                    FacebookRequestError error =graphResponse.getError();
+                    if(error!=null){
+                        Log.e(TAG, error.toString());
+                    }else {
 
+                    }
+                }
+            }
+        });
+        Log.d(TAG,"Executing revoke permissions with graph path" + delPermRequest.getGraphPath());
+        delPermRequest.executeAsync();
     }
     private void finalizeLoginProcess() {
         AppData.isUserLoggedin = true;

@@ -3,6 +3,7 @@ package edu.sjsu.cmpe.partyon.holder;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -13,10 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -26,8 +30,10 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.activities.ImageTest;
 import edu.sjsu.cmpe.partyon.activities.NewPartyActivity;
 import edu.sjsu.cmpe.partyon.activities.PostDetailActivity;
+import edu.sjsu.cmpe.partyon.adapter.imageTestAdapter;
 import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Like;
 import edu.sjsu.cmpe.partyon.entities.Post;
@@ -41,7 +47,9 @@ import edu.sjsu.cmpe.partyon.entities.User;
 public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
     private final static String TAG = "PostItemViewHolder";
     private Post mPost;
+    private ParseFile file;
     private ImageView mAuthorProfilePic;
+    private ImageView mPostImageView;
     private TextView mAuthorNameView;
     private TextView mContentTxtView;
     private EditText mCommentEditText;
@@ -67,6 +75,8 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
         mLikeView = (TextView) v.findViewById(R.id.post_like_txtView);
         mFollowBtn = (Button)v.findViewById(R.id.follow_btn);
         mAuthorProfilePic = (ImageView)v.findViewById(R.id.author_profile_pic);
+        mPostImageView = (ImageView) v.findViewById(R.id.post_image_view);
+
         //mCommentEditText.setOnClickListener(this);
         mCommentBtn.setOnClickListener(this);
         mLikeBtn.setOnClickListener(this);
@@ -80,6 +90,10 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
             mAuthorNameView.setText(
                     post.getAuthor().fetchIfNeeded().getUsername());//post.getAuthor().getUsername()
             mContentTxtView.setText(post.getTextContent());
+            showPostImage();
+//            file = post.getPostPhotos();
+//            String Url = file.getUrl();
+//            Picasso.with(mContext).load(Url).into(mPostImageView);
         }catch (ParseException e){
             e.printStackTrace();
         }
@@ -231,4 +245,36 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
             });
         }
     }
+    private void showPostImage(){
+            //String object = mPost.getObjectId();
+            //Toast.makeText(mContext, "ObjectID"+object, Toast.LENGTH_LONG).show();
+            file = (ParseFile) mPost.getParseFile("Photo");
+            int targetWidth = mPostImageView.getWidth();
+            int targetHeight = mPostImageView.getHeight();
+            Log.d(TAG,"Width "+targetWidth+" Height "+targetHeight);
+
+            String Url = file.getUrl();
+            //Set the resize width to something bigger than screen size and
+            //put the height to 0 to maintain the aspect ratio.
+            Picasso.with(mContext).load(Url).resize(800,0).into(mPostImageView);
+            //Next Line does almost the same thing.
+            //Picasso.with(mContext).load(Url).resize(600,600).centerInside().into(mPostImageView);
+
+//        ParseQuery<Post> query= new ParseQuery<>("Post");
+//        query.findInBackground(new FindCallback<Post>() {
+//            @Override
+//            public void done(List<Post> image, ParseException e) {
+//                if(e==null){
+//                    file = mPost.getPostPhotos();
+//                    String Url = file.getUrl();
+//                    Picasso.with(mContext).load(Url).into(mPostImageView);
+//
+//                }else{
+//                    Toast.makeText(mContext, "error retrieving Image", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+    }
+
+
 }

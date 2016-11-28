@@ -104,7 +104,7 @@ public class PostListFragment extends Fragment {
     private void fetchData(){
 
         ParseQuery<Post> query = new ParseQuery<Post>("Post");
-        query.orderByDescending("CreatedAt");
+        query.orderByAscending("CreatedAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {

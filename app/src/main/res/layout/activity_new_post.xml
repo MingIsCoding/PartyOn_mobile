@@ -20,8 +20,8 @@
         <ImageView
             android:id="@+id/post_img_view"
             android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@drawable/party_cover_holder"/>
+            android:layout_height="80dp" />
+            <!-- android:background="@drawable/party_cover_holder"/> -->
 
         <EditText
             android:maxLines="5"
@@ -68,4 +68,13 @@
             android:layout_height="wrap_content"
             android:background="@drawable/ic_share_black_24dp"/>
     </LinearLayout>
+    <ProgressBar
+
+        android:id="@+id/progress_bar_post"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_gravity="center_horizontal"
+        />
+
 </LinearLayout>

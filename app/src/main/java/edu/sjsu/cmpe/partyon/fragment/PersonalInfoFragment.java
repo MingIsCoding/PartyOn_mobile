@@ -1,12 +1,9 @@
 package edu.sjsu.cmpe.partyon.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,9 +18,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -34,25 +28,18 @@ import java.util.List;
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.activities.WalletActivity;
 import edu.sjsu.cmpe.partyon.adapter.ProfileAdapter;
-import edu.sjsu.cmpe.partyon.adapter.ProfilePicAdapter;
 import edu.sjsu.cmpe.partyon.config.AppData;
-import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.utilities.Blur;
 import edu.sjsu.cmpe.partyon.utilities.ProfileItem;
-import jp.wasabeef.blurry.Blurry;
-
-import static android.R.attr.data;
-import static android.R.attr.logo;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link PersonalListFragment#newInstance} factory method to
+ * Use the {@link PersonalInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PersonalListFragment extends Fragment {
+public class PersonalInfoFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 //    private List<Profile> mProfile = new ArrayList<Profile>();
@@ -61,7 +48,7 @@ public class PersonalListFragment extends Fragment {
     private ImageView mProfilePicture;
     private LinearLayout mPersonal_info_layout;
     private TextView mUsername;
-    private static final String TAG = "PersonalListFragment";
+    private static final String TAG = "PersonalInfoFragment";
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private final static int ITEM_PROFILE = 0;
@@ -94,7 +81,7 @@ public class PersonalListFragment extends Fragment {
     private String mParam2;
 
 
-    public PersonalListFragment() {
+    public PersonalInfoFragment() {
         // Required empty public constructor
     }
 
@@ -104,11 +91,11 @@ public class PersonalListFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment PersonalListFragment.
+     * @return A new instance of fragment PersonalInfoFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PersonalListFragment newInstance(String param1, String param2) {
-        PersonalListFragment fragment = new PersonalListFragment();
+    public static PersonalInfoFragment newInstance(String param1, String param2) {
+        PersonalInfoFragment fragment = new PersonalInfoFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -162,7 +149,7 @@ public class PersonalListFragment extends Fragment {
                     Intent in = new Intent(getContext(), WalletActivity.class);
                     startActivity(in);
                 }
-                Toast.makeText(PersonalListFragment.this.getActivity(), message, Toast.LENGTH_LONG).show();
+                Toast.makeText(PersonalInfoFragment.this.getActivity(), message, Toast.LENGTH_LONG).show();
                /*Fragment does not extend context so add getActivity to make it work in a fragment(Fragment is not an activity)*/
             }
         });

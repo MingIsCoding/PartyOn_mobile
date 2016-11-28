@@ -12,5 +12,45 @@
         style="@style/ActionBarStyle"
         app:title="Contact Detail"
         android:titleTextColor="@color/font_white_color"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:titleTextColor="@color/cast_expanded_controller_text_color" />
+    <LinearLayout
+        android:layout_below="@+id/contact_detail_toolbar"
+        android:orientation="vertical"
+        android:id="@+id/contact_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_purple"
+        android:gravity="center_horizontal"
+        android:paddingBottom="16dp"
+        android:paddingTop="16dp"
+        android:layout_weight="0"
+        >
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/contact_profilePicture"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="10dp"
+            android:contentDescription="place for profile"
+            android:adjustViewBounds="false"
+            android:layout_centerHorizontal="true"
+            app:civ_border_color="#EEEEEE"
+            app:civ_border_width="4dp"
+            app:civ_shadow="true"
+            app:civ_shadow_radius="10"
+            app:civ_shadow_color="#8BC34A"/>
+        <TextView
+            android:id="@+id/contact_info_name_view"
+            android:text="Martin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/contact_info_level_view"
+            android:text="newbie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </RelativeLayout>

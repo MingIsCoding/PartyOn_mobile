@@ -8,6 +8,12 @@
         android:icon="@drawable/icon_add_white"
         app:showAsAction="ifRoom" />
     <item
+        android:id="@+id/takePicture"
+        android:title="Take Photo"
+        android:icon="@drawable/ic_add_a_photo_black_24dp"
+        app:showAsAction="ifRoom"
+        />
+    <item
         android:id="@+id/action_search_on_map"
         android:title="Search"
         />
@@ -18,21 +24,12 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/logoutUser"
-        android:title="logout"
+        android:orderInCategory="200"
+        android:title="Logout"
         />
     <item
         android:id="@+id/action_new_post"
         android:title="new post"/>
-    <item
-        android:id="@+id/updateStatus"
-        android:title="Update"
-        />
-    <item
-        android:id="@+id/takePicture"
-        android:title="Take Photo"
-        />
-    <item
-        android:id="@+id/horizontalTest"
-        android:title="Test Hori"
-        />
+
+
 </menu>

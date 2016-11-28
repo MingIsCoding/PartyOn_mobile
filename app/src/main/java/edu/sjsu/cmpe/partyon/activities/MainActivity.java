@@ -261,11 +261,8 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(LoginActivity.OP_CODE,LoginActivity.OP_LOG_OUT);
             startActivity(intent);
 
-        }//update status in the menu(nav)
-        else if(id ==R.id.updateStatus){
-            Intent intent = new Intent(this, UpdateActivity.class);
-            startActivity(intent);
-        }else if(id == R.id.action_new_post){
+        }
+        else if(id == R.id.action_new_post){
             Intent in = new Intent(MainActivity.this, NewPostActivity.class);
             startActivity(in);
         }// for clicking a new picture(currently in the menu tab) will be moved according to progress-nav
@@ -274,6 +271,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(in);
         }/*else if(id == R.id.horizontalTest){
             Intent intent = new Intent(MainActivity.this, TrademarkActivity.class);
+            startActivity(intent);
+        }
+        else if(id ==R.id.updateStatus){
+            Intent intent = new Intent(this, UpdateActivity.class);
             startActivity(intent);
         }*/
 

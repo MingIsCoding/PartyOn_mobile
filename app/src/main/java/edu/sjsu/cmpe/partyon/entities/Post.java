@@ -2,8 +2,12 @@ package edu.sjsu.cmpe.partyon.entities;
 
 import android.icu.text.TimeZoneFormat;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,10 +36,16 @@ public class Post extends ParseObject {
     private String brandID;
     private int state;
     private List<Reply> replies;
+    private ParseFile postPhotos;
+
+
+    private ParseObject imageObject;
+    private ParseObject imageFile;
 
     public User getAuthor() {
         return (User)getParseUser("author");
     }
+
 
     public void setAuthor(User author) {
         put("author",author);

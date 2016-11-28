@@ -2,10 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="edu.sjsu.cmpe.partyon.activities.NewPostActivity">
+    tools:context="edu.sjsu.cmpe.partyon.activities.NewPictureActivity">
     <item
-        android:id="@+id/action_postMenu"
-        android:title="Post"
-        app:showAsAction="ifRoom" />
+        android:id="@+id/action_uploadPictureMenu"
+        android:title="Create"
+        app:showAsAction="ifRoom"/>
 
 </menu>

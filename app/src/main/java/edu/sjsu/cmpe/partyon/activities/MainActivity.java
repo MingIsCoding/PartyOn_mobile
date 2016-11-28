@@ -18,16 +18,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.FacebookRequestError;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -37,8 +30,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.ViewPagerIndicator;
-import edu.sjsu.cmpe.partyon.VpSimpleFragment;
 import edu.sjsu.cmpe.partyon.entities.Like;
 import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
@@ -47,10 +38,9 @@ import edu.sjsu.cmpe.partyon.entities.Reply;
 import edu.sjsu.cmpe.partyon.entities.Ticket;
 import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.fragment.ContactListFragment;
-import edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
-import edu.sjsu.cmpe.partyon.fragment.PersonalListFragment;
+import edu.sjsu.cmpe.partyon.fragment.PersonalInfoFragment;
 import edu.sjsu.cmpe.partyon.fragment.PostListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -174,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
          //VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
 //        VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
         ContactListFragment contactInstance = ContactListFragment.newInstance("0","1");
-        PersonalListFragment meInstance = PersonalListFragment.newInstance("1","2");
+        PersonalInfoFragment meInstance = PersonalInfoFragment.newInstance("1","2");
 // adding for the post status method(navdeep) change accordingly.
         mContents.add(0,postInstance);
         //mContents.add(0,new MapPartyListFragment());

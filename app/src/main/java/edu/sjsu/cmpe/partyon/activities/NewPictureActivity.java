@@ -219,7 +219,7 @@ public class NewPictureActivity extends AppCompatActivity {
     }
     // To display the horizontal scroll view on bottom of preview for trademarks
     public void trademarkQuery(){
-        ParseQuery<ParseObject> query= new ParseQuery<>("User_Photos");
+        ParseQuery<ParseObject> query= new ParseQuery<>("Trademark");
 
 
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -230,7 +230,7 @@ public class NewPictureActivity extends AppCompatActivity {
 
                     for(ParseObject object:images){
                         //ParseFile file = new ParseFile();
-                        ParseFile file = object.getParseFile("Photo");
+                        ParseFile file = object.getParseFile("image");
                         String path= file.getUrl();
                         //String newPath = path.toString();
                         Log.d(TAG,path);

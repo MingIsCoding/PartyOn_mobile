@@ -81,7 +81,7 @@ public class NewPostActivity extends CloseableActivity {
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
         getMenuInflater().inflate(R.menu.menu_new_post, menu);
         return super.onCreateOptionsMenu(menu);
     }

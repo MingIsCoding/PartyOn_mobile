@@ -2,16 +2,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activities.MainActivity">
-    <item
-        android:id="@+id/action_new_party"
-        android:title="New Party"
-        android:icon="@drawable/icon_add_white"
-        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/takePicture"
         android:title="Take Photo"
-        android:icon="@drawable/ic_add_a_photo_black_24dp"
+        android:icon="@drawable/ic_add_a_photo_white_24dp"
         app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_new_party"
+        android:title="New Party"
         />
     <item
         android:id="@+id/action_search_on_map"

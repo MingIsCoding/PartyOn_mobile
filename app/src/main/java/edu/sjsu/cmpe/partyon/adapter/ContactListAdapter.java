@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.ParseException;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -56,6 +57,8 @@ public class ContactListAdapter extends BaseAdapter {
 //        holder.mContactIcon.setImageDrawable();
         try {
             holder.mContactTextView.setText(u.fetchIfNeeded().getUsername());
+            Picasso.with(mContent).load(u.getProfilePicSmall()).into(holder.mContactIcon);
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

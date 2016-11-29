@@ -97,7 +97,7 @@ public class ContactListFragment extends Fragment {
 
     }
     private void initView(){
-        mFollowList = AppData.getUser().getFollows();
+        mFollowList = new ArrayList<>(AppData.getUser().getFollows());
         if(mFollowList == null){
             mFollowList = new ArrayList<User>();
         }
@@ -120,7 +120,7 @@ public class ContactListFragment extends Fragment {
                 // set a icon
                 deleteItem.setTitle("UNFOLLOW");
                 // set item title fontsize
-                deleteItem.setTitleSize(18);
+                deleteItem.setTitleSize(14);
                 // set item title font color
                 deleteItem.setTitleColor(Color.WHITE);
                 // add to menu

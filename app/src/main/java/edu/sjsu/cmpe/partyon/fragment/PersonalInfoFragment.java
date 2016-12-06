@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.activities.MessageBoxActivity;
 import edu.sjsu.cmpe.partyon.activities.WalletActivity;
 import edu.sjsu.cmpe.partyon.adapter.ProfileAdapter;
 import edu.sjsu.cmpe.partyon.config.AppData;
@@ -56,6 +57,7 @@ public class PersonalInfoFragment extends Fragment {
     private final static int ITEM_PHOTOS = 2;
     private final static int ITEM_QR_CODE = 3;
     private final static int ITEM_BADGE = 4;
+    private final static int ITEM_MSGBOX = 5;
     final Target backgroundTarget = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -144,13 +146,16 @@ public class PersonalInfoFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.v("TAG", "Clicked row number:" + position);
                 ProfileItem currentItem = mItemList.get(position);
-                String message = "Clicked on " + position + " item " + currentItem.getTitle();
-                if (position == 0) {
-                    Intent in = new Intent(getContext(), WalletActivity.class);
-                    startActivity(in);
+                switch (currentItem.getId()){
+                    case ITEM_MSGBOX:
+                        Intent msgIn = new Intent(getContext(), MessageBoxActivity.class);
+                        startActivity(msgIn);
+                        break;
+                    case ITEM_WALLET:
+                        Intent walletIn = new Intent(getContext(), WalletActivity.class);
+                        startActivity(walletIn);
+                        break;
                 }
-                Toast.makeText(PersonalInfoFragment.this.getActivity(), message, Toast.LENGTH_LONG).show();
-               /*Fragment does not extend context so add getActivity to make it work in a fragment(Fragment is not an activity)*/
             }
         });
         return view;
@@ -161,6 +166,7 @@ public class PersonalInfoFragment extends Fragment {
     private void populateProfileList() {
         mItemList = new ArrayList<>();
         mItemList.add(new ProfileItem(ITEM_PROFILE, "My Profile", R.drawable.ic_perm_identity_black_24dp));
+        mItemList.add(new ProfileItem(ITEM_MSGBOX, "Message Box", R.drawable.ic_message_black_24dp));
         mItemList.add(new ProfileItem(ITEM_PROFILE, "My Badge", R.drawable.ic_card_giftcard_black_24dp));
         mItemList.add(new ProfileItem(ITEM_PHOTOS, "My Post", R.drawable.ic_perm_media_black_24dp));
         mItemList.add(new ProfileItem(ITEM_WALLET, "My Wallet", R.drawable.ic_picture_in_picture_black_24dp));

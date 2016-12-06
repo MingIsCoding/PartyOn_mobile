@@ -2,9 +2,12 @@ package edu.sjsu.cmpe.partyon.adapter;
 
 import android.content.pm.ApplicationInfo;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,11 +15,14 @@ import android.widget.Toast;
 import com.parse.ParseException;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.entities.User;
-import edu.sjsu.cmpe.partyon.fragment.ContactListFragment;
 import edu.sjsu.cmpe.partyon.holder.ContactItemViewHolder;
 
 /**
@@ -25,10 +31,16 @@ import edu.sjsu.cmpe.partyon.holder.ContactItemViewHolder;
 
 public class ContactListAdapter extends BaseAdapter {
     private List<User> followList;
+    private Set<User> mSelectedSet;
+    private List<ContactItemViewHolder> mHolderCtrls;
     private FragmentActivity mContent;
-    public ContactListAdapter(List<User> followList, FragmentActivity content){
+    private boolean isCheckable = false;
+    public ContactListAdapter(List<User> followList, FragmentActivity content, boolean checkable){
         this.followList = followList;
         this.mContent = content;
+        this.mHolderCtrls = new ArrayList<>();
+        this.mSelectedSet = new HashSet<>();
+        this.isCheckable = checkable;
     }
     @Override
     public int getCount() {
@@ -46,45 +58,73 @@ public class ContactListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if (view == null) {
-            view = View.inflate(mContent,
+    public View getView(int i, View itemView, ViewGroup viewGroup) {
+        ContactItemViewHolder holder;
+        final View iView = itemView;
+        final User u = getItem(i);
+        if (itemView == null) {
+            itemView = View.inflate(mContent,
                     R.layout.item_contact_list, null);
-            new ContactItemViewHolder(view);
+
+            holder = new ContactItemViewHolder(itemView, mSelectedSet.contains(u));
+        }else{
+            holder = (ContactItemViewHolder) itemView.getTag();
         }
-        ContactItemViewHolder holder = (ContactItemViewHolder) view.getTag();
-        User u = getItem(i);
-//        holder.mContactIcon.setImageDrawable();
+        mHolderCtrls.add(holder);
+        if (isCheckable){
+            holder.getmContactCheckbox().setVisibility(View.VISIBLE);
+        }else {
+            holder.getmContactCheckbox().setVisibility(View.GONE);
+        }
+
         try {
-            holder.mContactTextView.setText(u.fetchIfNeeded().getUsername());
-            Picasso.with(mContent).load(u.getProfilePicSmall()).into(holder.mContactIcon);
+            holder.getmContactTextView().setText(u.fetchIfNeeded().getUsername());
+            Picasso.with(mContent).load(u.getProfilePicSmall()).into(holder.getmContactIcon());
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        holder.mContactIcon.setOnClickListener(new View.OnClickListener() {
+        holder.getmContactIcon().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Toast.makeText(mContent, "iv_icon_click", Toast.LENGTH_SHORT).show();
             }
         });
-        holder.mContactTextView.setOnClickListener(new View.OnClickListener() {
+        holder.getmContactTextView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(mContent,"iv_text_click",Toast.LENGTH_SHORT).show();
             }
         });
-        return view;
+        holder.getmContactCheckbox().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CheckBox cb = (CheckBox)view;
+                if(!cb.isChecked()){
+                    mSelectedSet.remove(u);
+                }else {
+                    mSelectedSet.add(u);
+                }
+                Log.d("adapter",":"+ mSelectedSet.size());
+            }
+        });
+        return itemView;
     }
-    class ContactItemViewHolder{
-        private ImageView mContactIcon;
-        private TextView mContactTextView;
 
-        public ContactItemViewHolder(View view) {
-            mContactIcon = (ImageView) view.findViewById(R.id.contact_icon);
-            mContactTextView = (TextView) view.findViewById(R.id.contact_name);
-            view.setTag(this);
-        }
+    public List<ContactItemViewHolder> getmHolderCtrls() {
+        return mHolderCtrls;
+    }
+
+    public void setmHolderCtrls(List<ContactItemViewHolder> mHolderCtrls) {
+        this.mHolderCtrls = mHolderCtrls;
+    }
+
+    public Set<User> getmSelectedSet() {
+        return mSelectedSet;
+    }
+
+    public void setmSelectedSet(Set<User> mSelectedSet) {
+        this.mSelectedSet = mSelectedSet;
     }
 }

@@ -15,14 +15,28 @@ public class Ticket extends ParseObject {
     // when a person quits before the party ends
     public final static int STATE_LEFT = 4;
     public final static int STATE_DONE = 5;
-
-    private Party party;
-    private User receiver;
-    private User sender;
-    private int state;
-    private String msg;
+    public final static int STATE_MSG_NOTIFIED = 1;
+    public final static int STATE_MSG_UNNOTIFIED = 0;
+    public final static int STATE_MSG_READ = 2;
     private String partyID;
-    private String receiverID;
+    private int msgState;
+
+
+    public int getMsgState() {
+        return getInt("msgState");
+    }
+
+    public void setMsgState(int msgState) {
+        put("msgState",msgState);
+    }
+
+    public String getSenderID() {
+        return getString("senderID");
+    }
+
+    public void setSenderID(String senderID) {
+        put("senderID",senderID);
+    }
 
     public Party getParty() {
         return (Party)getParseObject("party");

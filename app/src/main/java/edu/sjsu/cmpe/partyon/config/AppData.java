@@ -4,10 +4,13 @@ import com.parse.ParseUser;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 
 import edu.sjsu.cmpe.partyon.entities.Party;
+import edu.sjsu.cmpe.partyon.entities.Ticket;
 import edu.sjsu.cmpe.partyon.entities.User;
 
 public class AppData implements Serializable{
@@ -21,6 +24,7 @@ public class AppData implements Serializable{
     public static Map<Object,String> objectPersistNameMap;
     public static final String OBJ_NAME_USER = "_User";
     public static final String OBJ_NAME_PARTY = "Party";
+    public static final String OBJ_NAME_TICKET = "Ticket";
     public static final String OBJ_NAME_LIKE = "Like";
     public static final String OBJ_PARTY_ID = "party_id";
     public static final String OBJ_PARTY_NAME = "party_name";
@@ -41,4 +45,14 @@ public class AppData implements Serializable{
         objectPersistNameMap = new HashMap<Object,String>();
         objectPersistNameMap.put(Party.class,"Party");
     }*/
+    public static Set<User> selectedPeople;
+    public static List<Ticket> messageList;
+    public static Ticket getTicketFromMsgListByID(String id){
+        for(Ticket t: messageList){
+            if(t.getObjectId().equals(id)) {
+                return t;
+            }
+        }
+        return null;
+    }
 }

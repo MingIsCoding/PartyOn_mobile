@@ -7,23 +7,19 @@
     android:padding="8dp"
     android:gravity="center_vertical">
     <CheckBox
-        android:id="@+id/contact_checkbox"
+        android:id="@+id/msg_list_checkbox"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/contact_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+    <ImageView
+        android:id="@+id/msg_list_icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_marginLeft="10dp"
         android:scaleType="centerCrop"
-        android:background="@drawable/ic_account_circle_black_24dp"
+        android:background="@drawable/ic_local_bar_black_24dp"
         android:contentDescription=""
-        app:civ_border_color="@color/wallet_holo_blue_light"
-        app:civ_border_width="2dp"
-        app:civ_shadow="false"
-        app:civ_shadow_radius="2"
-        app:civ_shadow_color="#8BC34A"/>
+        android:backgroundTint="@color/com_facebook_button_background_color_focused_disabled" />
     <!--<ImageView
         android:id="@+id/contact_icon"
         android:layout_width="50dp"
@@ -31,13 +27,13 @@
         android:src="@drawable/ic_account_circle_black_24dp" />-->
 
     <TextView
-        android:id="@+id/contact_name"
+        android:id="@+id/msg_list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:text="name"
-        android:textColor="@android:color/black"
+        android:textColor="@color/cardview_dark_background"
         android:textSize="18sp" />
 
 </LinearLayout>

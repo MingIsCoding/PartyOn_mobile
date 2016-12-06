@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.PartyDetailScrollingActivity">
+
+    <item
+        android:id="@+id/menu_invite_friends"
+        android:title="Invite people"
+        android:icon="@drawable/ic_add_a_photo_white_24dp"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/menu_party_info"
+        android:title="Party Info"
+        />
+    <item
+        android:id="@+id/menu_party_members"
+        android:title="Members"
+        />
+</menu>

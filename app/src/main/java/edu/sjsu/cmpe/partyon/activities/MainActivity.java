@@ -1,5 +1,8 @@
 package edu.sjsu.cmpe.partyon.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
@@ -27,6 +30,7 @@ import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
@@ -42,6 +46,7 @@ import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
 import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.fragment.PersonalInfoFragment;
 import edu.sjsu.cmpe.partyon.fragment.PostListFragment;
+import edu.sjsu.cmpe.partyon.services.NotificationService;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyActivity";
@@ -66,31 +71,6 @@ public class MainActivity extends AppCompatActivity {
     //private ViewPagerIndicator mIndicator;
     private TabLayout mTabLayout;
 
-/*    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }*/
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
             printLoggedInUserInfo();
             initViews();
             initData();
-
+            //initService();
+            initAlarm();
             mViewPager.setAdapter(mAdapter);
         }
     }
@@ -120,7 +101,25 @@ public class MainActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
     }
+    private void initService(){
+        Log.d(TAG,"initService");
+        Intent in = new Intent(getBaseContext(), NotificationService.class);
+        in.putExtra(NotificationService.RECEIVER_ID,AppData.getUser().getObjectId());
+        startService(in);
+    }
+    private void initAlarm(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
+        Intent notificationIntent = new Intent("android.media.action.DISPLAY_NOTIFICATION");
+        notificationIntent.addCategory("android.intent.category.DEFAULT");
+
+        PendingIntent broadcast = PendingIntent.getBroadcast(this, 100, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.SECOND, 15);
+        //alarmManager.setExact(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), broadcast);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),(30*1000),broadcast);
+    }
     private void initViews() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -238,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }else if(id == R.id.action_new_party){
             Intent i = new Intent(MainActivity.this, NewPartyActivity.class);//NewPartyActivity
-            startActivityForResult(i,REQUEST_CREATE_NEW_PARTY);
+                startActivityForResult(i,REQUEST_CREATE_NEW_PARTY);
         }else if(id == R.id.action_search_on_map){
             Intent i = new Intent(this, MapSearchActivity.class);
             startActivity(i);

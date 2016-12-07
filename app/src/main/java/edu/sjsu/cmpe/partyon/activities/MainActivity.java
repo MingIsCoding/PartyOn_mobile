@@ -197,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
                     //.clientKey("test")
                     .server(AppData.backendServerURL).build());
             AppData.isParseAdapterInitiated = true;
+            ParseObject.registerSubclass(User.class);
             ParseObject.registerSubclass(Party.class);
             ParseObject.registerSubclass(User.class);
             ParseObject.registerSubclass(Location.class);

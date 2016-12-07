@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe.partyon.entities;
 
+import com.parse.ParseClassName;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * Created by Ming on 9/21/16.
  */
+@ParseClassName("_User")
 public class User extends ParseUser {
     public final static String ATT_USER_ID = "user_id";
     public final static String ATT_USER_USERNAME = "username";

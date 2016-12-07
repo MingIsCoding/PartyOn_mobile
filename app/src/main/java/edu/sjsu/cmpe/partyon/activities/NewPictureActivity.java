@@ -155,7 +155,7 @@ public class NewPictureActivity extends AppCompatActivity {
     }
 
 //    private void uploadImage(){
-//        //initialize
+//        //initialize.
 //        ParseObject imageObject = null;
 //        ParseFile imageFile = null;
 //        imageObject = new ParseObject("User_Photos");

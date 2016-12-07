@@ -13,7 +13,7 @@ public class User extends ParseUser {
     public final static String ATT_USER_ID = "user_id";
     public final static String ATT_USER_USERNAME = "username";
 
-    private String username;
+    /*private String username;
     private String password;
     private String firstName;
     private String lastName;
@@ -28,7 +28,7 @@ public class User extends ParseUser {
     private String googleID;
     private Date birthday;
     private Party ongoingParty;
-    private List<User> follows;
+    private List<User> follows;*/
 
 
     public String getFirstName() {

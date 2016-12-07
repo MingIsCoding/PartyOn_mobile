@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_people_picker"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="edu.sjsu.cmpe.partyon.activities.PeoplePickerActivity">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/people_picker_toolbar"
+        android:layout_width="match_parent"
+        style="@style/ActionBarStyle"
+        app:title="Invite People"
+        android:titleTextColor="@color/font_white_color"
+        android:layout_height="wrap_content"/>
+    <com.baoyz.swipemenulistview.SwipeMenuListView
+        android:id="@+id/people_picker_listView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

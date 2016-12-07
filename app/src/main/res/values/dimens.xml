@@ -10,4 +10,7 @@
     <dimen name="main_margin">16dp</dimen>
     <dimen name="party_list_item_height">60dp</dimen>
     <dimen name="font_title_size">20sp</dimen>
+    <dimen name="msg_detail_box_width">320dp</dimen>
+    <dimen name="msg_detail_box_height">420dp</dimen>
+
 </resources>

@@ -1,22 +1,18 @@
-package edu.sjsu.cmpe.partyon.fragment;
+package edu.sjsu.cmpe.partyon.activities;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.view.ActionMode;
+import android.util.Log;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -24,84 +20,54 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
-import com.baoyz.swipemenulistview.SwipeMenuListView;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.activities.ContactDetailActivity;
-import edu.sjsu.cmpe.partyon.adapter.BaseSwipListAdapter;
 import edu.sjsu.cmpe.partyon.adapter.ContactListAdapter;
 import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.entities.Ticket;
 import edu.sjsu.cmpe.partyon.entities.User;
+import edu.sjsu.cmpe.partyon.holder.ContactItemViewHolder;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * Use the {@link ContactListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ContactListFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import static edu.sjsu.cmpe.partyon.config.AppData.selectedPeople;
+//import edu.sjsu.cmpe.partyon.holder.ContactItemViewHolder;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-//    private List<ApplicationInfo> mAppList;
-    private List<User> mFollowList;
+public class PeoplePickerActivity extends CloseableActivity {
+    private List<User> mPeopleList;
     private ContactListAdapter mAdapter;
     private SwipeMenuListView mListView;
+    private final static String TAG = "PeoplePickerActivity";
+    public static int RESULT_SUCCESS = 102;
 
-    public ContactListFragment() {
-        // Required empty public constructor
+
+    @Override
+    int getToolBarID() {
+        return R.id.people_picker_toolbar;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ContactListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ContactListFragment newInstance(String param1, String param2) {
-        ContactListFragment fragment = new ContactListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    int getResourceID() {
+        return R.layout.activity_people_picker;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_contact_list, container, false);
-        mListView = (SwipeMenuListView) v.findViewById(R.id.listView);
+        //setContentView(R.layout.activity_people_picker);
         initView();
-        return v;
-
     }
-    private void initView(){
-        mFollowList = new ArrayList<>(AppData.getUser().getFollows());
-        if(mFollowList == null){
-            mFollowList = new ArrayList<User>();
+    private void initView() {
+        mListView = (SwipeMenuListView)findViewById(R.id.people_picker_listView);
+        mListView.setChoiceMode(mListView.CHOICE_MODE_MULTIPLE);
+        mPeopleList = new ArrayList<>(AppData.getUser().getFollows());
+        if (mPeopleList == null) {
+            mPeopleList = new ArrayList<User>();
         }
-        mAdapter = new ContactListAdapter(mFollowList,getActivity(), false);
+        mAdapter = new ContactListAdapter(mPeopleList, this, true);
         mListView.setAdapter(mAdapter);
 
         // step 1. create a MenuCreator
@@ -110,8 +76,7 @@ public class ContactListFragment extends Fragment {
             @Override
             public void create(SwipeMenu menu) {
                 // create "delete" item
-                SwipeMenuItem deleteItem = new SwipeMenuItem(
-                        getContext());
+                SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
                 // set item background
                 deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
                         0x3F, 0x25)));
@@ -137,7 +102,7 @@ public class ContactListFragment extends Fragment {
                 switch (index) {
                     case 0:
                         // delete
-                        mFollowList.remove(position);
+                        mPeopleList.remove(position);
                         AppData.getUser().unFollow(index);
                         AppData.getUser().saveInBackground();
                         mAdapter.notifyDataSetChanged();
@@ -181,48 +146,52 @@ public class ContactListFragment extends Fragment {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
-                Toast.makeText(getContext(), position + " long click", Toast.LENGTH_SHORT).show();
+
+                //((ContactItemViewHolder)view.getTag()).switchCheckState();
                 return false;
             }
+
         });
+
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent in = new Intent(getContext(), ContactDetailActivity.class);
-                Bundle b = new Bundle();
-                System.out.println("mFollowList.get(i).getUsername():"+mFollowList.get(i).getUsername());
-                b.putString(User.ATT_USER_ID,mFollowList.get(i).getObjectId());
-                b.putString(User.ATT_USER_USERNAME,mFollowList.get(i).getUsername());
-                in.putExtras(b);
-                getContext().startActivity(in);
+                ContactItemViewHolder cth = mAdapter.getmHolderCtrls().get(i);
+                Log.d(TAG,"selected"+i);
+
+                /*if(!cth.isSelected()){
+                    cth.switchCheckState();
+                    mSelectedPeople.add(mPeopleList.get(i));
+//                    mListView.setSelection(i);
+                    Log.d(TAG,"selected"+i);
+//                    mListView.setItemChecked(i, true);
+                    view.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.wallet_holo_blue_light));
+                }else {
+                    mSelectedPeople.remove(mPeopleList.get(i));
+                    view.setBackgroundColor(0);
+                    cth.switchCheckState();
+                }*/
             }
         });
     }
-
-
-
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
     }
-
-
-
-  /*  @Override
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_people_picker, menu);
+        return true;
+    }
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.action_left) {
-            mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-            return true;
+        if(id == R.id.menu_invite_finish){
+            AppData.selectedPeople = new HashSet<>(mAdapter.getmSelectedSet());
+            setResult(RESULT_SUCCESS);
+            finish();
         }
-        if (id == R.id.action_right) {
-            mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
-    }*/
-
-
+    }
 }

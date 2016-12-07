@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.PeoplePickerActivity">
+
+    <item
+        android:id="@+id/menu_invite_finish"
+        android:title="Finish"
+        app:showAsAction="ifRoom"
+        />
+</menu>

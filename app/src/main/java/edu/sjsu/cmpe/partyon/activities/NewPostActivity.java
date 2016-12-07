@@ -53,6 +53,7 @@ public class NewPostActivity extends CloseableActivity {
         spinner.setVisibility(View.GONE);
 
         Toast.makeText(this, "new Post View", Toast.LENGTH_LONG).show();
+        //Get the passed on value from the camera and watermark(name is thumbImage)
         byte[] passedByte = getIntent().getByteArrayExtra("thumbImage");
         bitmap = BitmapFactory.decodeByteArray(passedByte, 0, passedByte.length);
         mImageView.setImageBitmap(bitmap);

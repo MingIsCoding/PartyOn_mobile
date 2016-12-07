@@ -2,16 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/activity_wallet"
     android:orientation="vertical"
+    android:id="@+id/activity_my_posts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.sjsu.cmpe.partyon.activities.WalletActivity">
+
+    tools:context="edu.sjsu.cmpe.partyon.activities.MyPostsActivity">
     <android.support.v7.widget.Toolbar
-        android:id="@+id/wallet_toolbar"
+        android:id="@+id/posts_toolbar"
         android:layout_width="match_parent"
         style="@style/ActionBarStyle"
-        app:title="Wallet"
+        app:title="My Posts"
         android:titleTextColor="@color/font_white_color"
         android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_posts_recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
 </LinearLayout>

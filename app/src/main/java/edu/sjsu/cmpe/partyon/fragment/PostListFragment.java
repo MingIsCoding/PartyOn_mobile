@@ -83,7 +83,6 @@ public class PostListFragment extends Fragment {
             mLayoutID = getArguments().getInt(LAYOUT_ID);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState){

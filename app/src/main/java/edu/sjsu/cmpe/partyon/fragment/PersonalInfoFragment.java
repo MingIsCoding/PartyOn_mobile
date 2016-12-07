@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.activities.MyPostsActivity;
+import edu.sjsu.cmpe.partyon.activities.MyProfileActivity;
 import edu.sjsu.cmpe.partyon.activities.WalletActivity;
 import edu.sjsu.cmpe.partyon.adapter.ProfileAdapter;
 import edu.sjsu.cmpe.partyon.config.AppData;
@@ -146,10 +148,16 @@ public class PersonalInfoFragment extends Fragment {
                 ProfileItem currentItem = mItemList.get(position);
                 String message = "Clicked on " + position + " item " + currentItem.getTitle();
                 if (position == 0) {
+                    Intent in = new Intent(getContext(), MyProfileActivity.class);
+                    startActivity(in);
+                }else if(position == 2){
+                    Intent intent = new Intent(getContext(), MyPostsActivity.class);
+                    startActivity(intent);
+                }else if(position == 3){
                     Intent in = new Intent(getContext(), WalletActivity.class);
                     startActivity(in);
                 }
-                Toast.makeText(PersonalInfoFragment.this.getActivity(), message, Toast.LENGTH_LONG).show();
+                //Toast.makeText(PersonalInfoFragment.this.getActivity(), message, Toast.LENGTH_LONG).show();
                /*Fragment does not extend context so add getActivity to make it work in a fragment(Fragment is not an activity)*/
             }
         });
@@ -162,7 +170,7 @@ public class PersonalInfoFragment extends Fragment {
         mItemList = new ArrayList<>();
         mItemList.add(new ProfileItem(ITEM_PROFILE, "My Profile", R.drawable.ic_perm_identity_black_24dp));
         mItemList.add(new ProfileItem(ITEM_PROFILE, "My Badge", R.drawable.ic_card_giftcard_black_24dp));
-        mItemList.add(new ProfileItem(ITEM_PHOTOS, "My Post", R.drawable.ic_perm_media_black_24dp));
+        mItemList.add(new ProfileItem(ITEM_PHOTOS, "My Posts", R.drawable.ic_perm_media_black_24dp));
         mItemList.add(new ProfileItem(ITEM_WALLET, "My Wallet", R.drawable.ic_picture_in_picture_black_24dp));
 
     }

@@ -119,10 +119,7 @@
         <activity
             android:name=".activities.WalletActivity"
             android:theme="@style/PurpleTheme.NoActionBar" />
-        <activity android:name=".activities.MyProfileActivity"
-            android:theme="@style/PurpleTheme.NoActionBar"/>
-        <activity android:name=".activities.MyPostsActivity"
-            android:theme="@style/PurpleTheme.NoActionBar"/>
+        <activity android:name=".activities.MyProfileActivity"></activity>
     </application>
 
 </manifest>

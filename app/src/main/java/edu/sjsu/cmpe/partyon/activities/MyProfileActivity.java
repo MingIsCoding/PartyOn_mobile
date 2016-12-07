@@ -5,11 +5,21 @@ import android.os.Bundle;
 
 import edu.sjsu.cmpe.partyon.R;
 
-public class MyProfileActivity extends AppCompatActivity {
+public class MyProfileActivity extends CloseableActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    int getToolBarID() {
+        return R.id.profile_toolbar;
+    }
+
+    @Override
+    int getResourceID() {
+        return R.layout.activity_my_profile;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_profile);
+        //setContentView(R.layout.activity_my_profile);
     }
 }

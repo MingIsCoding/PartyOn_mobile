@@ -6,12 +6,17 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.Target;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,10 +27,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
@@ -57,10 +64,8 @@ public class NewPictureActivity extends AppCompatActivity {
     private int IMAGE_MAX_SIZE = 200 * 200;
     private File file;
     private Bitmap bit;
-
-
-
-
+    private Bitmap bitmapProcessed;
+    private byte[] byteArrayToPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +107,7 @@ public class NewPictureActivity extends AppCompatActivity {
         trademarkQuery();
 
         if(requestCode==REQUEST_IMAGE_CAPTURE&& resultCode==RESULT_OK){
-            Toast.makeText(this,imagePath,Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,imagePath,Toast.LENGTH_LONG).show();
             try{
                // image = (Bitmap) data.getExtras().get("data");
 
@@ -114,8 +119,8 @@ public class NewPictureActivity extends AppCompatActivity {
                 //call the compress function here
                 bit = compressBitmap(file);
 
-                int lengthBitmap = bit.getAllocationByteCount();
-                Log.d(TAG, "The length of bitmap after compress is  "+ lengthBitmap);
+                //int lengthBitmap = bit.getAllocationByteCount();
+                //Log.d(TAG, "The length of bitmap after compress is  "+ lengthBitmap);
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageName);
 
                        }catch(IOException e){
@@ -201,7 +206,7 @@ public class NewPictureActivity extends AppCompatActivity {
                 scale *=2;
             }
 
-            //Second method
+            //Second method, they both give similar results
             //        int scale = 1;
 //        if(option.outHeight> IMAGE_MAX_SIZE || option.outWidth > IMAGE_MAX_SIZE){
 //            scale = (int)Math.pow(2, (int) Math.ceil(Math.log(IMAGE_MAX_SIZE)/(double) Math.max(option.outHeight,option.outWidth))/Math.log(0.5));
@@ -230,28 +235,46 @@ public class NewPictureActivity extends AppCompatActivity {
 
                     for(ParseObject object:images){
                         //ParseFile file = new ParseFile();
-                        ParseFile file = object.getParseFile("image");
-                        String path= file.getUrl();
+                        ParseFile file = object.getParseFile("image");  //Get the Parse File
+                        String path= file.getUrl();     //Get the Url of the image from object
+
                         //String newPath = path.toString();
                         Log.d(TAG,path);
+                        ParseObject brand = object.getParseObject("brand");
+                        final String brandId = brand.getObjectId();
+                        Log.d(TAG, "------------------BRand "+ brandId);
+                        final String id = object.getObjectId();
                         //setTheImage(path);
                         ImageView imageView = new ImageView(getApplicationContext());
+
+                        //imageView.setTag(object);
                         // Set the layout params (width and height, in that order)
                         LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(300, 350);
-                        // set margings, left top right bottom
-                        lParams.setMargins(0,0,5,0);
+                        lParams.setMargins(0,0,5,0);    // set margings, left top right bottom
                         imageView.setLayoutParams(lParams);
                         //Add the view before adding picasso, doesn't show otherwise
                         imageGallery.addView(imageView);
                         Picasso.with(NewPictureActivity.this).load(path).into(imageView, new com.squareup.picasso.Callback() {
                             @Override
                             public void onSuccess() {
+
                                 Log.d(TAG,"onSuccess");
                             }
 
                             @Override
                             public void onError() {
-                                Log.d(TAG,"Error ocurred");
+                                Log.d(TAG,"Error occured");
+                            }
+                        });
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //ImageView image = (ImageView) v;
+                                //int position = image.getTag();
+                                //
+                                showWatermark(brandId);
+
+                                Toast.makeText(NewPictureActivity.this, "touched "+id, Toast.LENGTH_LONG).show();
                             }
                         });
                         //imageGallery.addView(getImageView(path));
@@ -263,22 +286,153 @@ public class NewPictureActivity extends AppCompatActivity {
         });
     }
 
+    public void showWatermark(String id) {
+        final String recievedId = id;
+        Log.d(TAG, "The passed ID ----"+ id);
+        ParseQuery<ParseObject> queryTrademark = ParseQuery.getQuery("Trademark");
+        ParseQuery<ParseObject> queryPicture = ParseQuery.getQuery("Picture"); //ParseQuery<ParseObject>("Picture")
+        ParseQuery<ParseObject> queryBrand = ParseQuery.getQuery("Brand");
 
-//    public void testQuery(){
-//        ParseQuery<ParseObject> query= new ParseQuery<>("User_Photos");
-//        query.findInBackground(new FindCallback<ParseObject>() {
+        queryPicture.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                for(ParseObject watermark:objects){
+
+                    String watermarkId = watermark.getObjectId();
+                    //Log.d(TAG, "Picture Found --- "+ watermarkId);
+                    ParseObject brand = watermark.getParseObject("brand");
+                    String brandId = brand.getObjectId();
+
+                    if(brandId.equals(recievedId)){
+                        final ParseFile watermarkImage = watermark.getParseFile("image");
+
+                        String path = watermarkImage.getUrl();
+                        Log.d(TAG, "Picture Found after brand ------------++++++++++++------ "+ watermarkId);
+                        ImageView imageView = (ImageView) findViewById(R.id.watermarkView);
+                        Picasso.with(getApplicationContext()).load(path).into(imageView);
+                        Picasso.with(getApplicationContext()).load(path).into(new com.squareup.picasso.Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                //Bitmap shortBitmap = Bitmap.createScaledBitmap(bitmap, 70,70,true);
+                                Bitmap resizedBitmap = resizeBitmapProcess(bitmap, 70, 70);
+                               // Bitmap bitmapCompressed= compressBitmap(watermarkImage);
+                                imageProcess(bit,resizedBitmap);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Drawable errorDrawable) {
+
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
+
+                    }
+                }
+            }
+        });
+
+//        Commented out, found shorter way, leaving here for future reference.
+//          queryTrademark.getInBackground(id, new GetCallback<ParseObject>() {
 //            @Override
-//            public void done(List<ParseObject> images, ParseException e) {
-//                if(e==null){
-//                    imageTestAdapter adapter = new imageTestAdapter(NewPictureActivity.this, images);
-//
-//                    //Toast.makeText(NewPictureActivity.this, images.size()+"", Toast.LENGTH_LONG).show();
-//                }else{
-//                    Toast.makeText(NewPictureActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-//                }
+//            public void done(ParseObject object, ParseException e) {
+//                ParseObject brand = object.getParseObject("brand");
+//                String brandId = brand.getObjectId();
+//                Log.d(TAG, "------------------BRand "+ brandId);
+//                getWatermark(brandId);
 //            }
 //        });
-//    }
+//        queryTrademark.getInBackground(recievedId, new GetCallback<ParseObject>() {
+//            @Override
+//            public void done(ParseObject object, ParseException e) {
+////                //get the parsefile from the object
+////                ParseFile file = object.getParseFile("image");      //image is the name of the column in DB
+////                String path = file.getUrl();
+////                Log.d(TAG, "================ " + path);
+//                Log.d(TAG, "1");
+//                ParseRelation<ParseObject> relation = object.getRelation("brand");
+//                ParseQuery<ParseObject> queryBrand = relation.getQuery();
+//                Log.d(TAG, "2");
+//
+//                queryBrand.findInBackground(new FindCallback<ParseObject>() {
+//                    @Override
+//                    public void done(List<ParseObject> brands, ParseException e) {
+//                        Log.d(TAG,"Inside the find");
+//                        for(ParseObject brand:brands){
+//
+//                            brand.fetchIfNeeded();
+//                            String brandId = brand.getObjectId();
+//                            Log.d(TAG,"________+_++_+____++_+_+_++__+_"+brandId);
+//                        }
+//                    }
+//                });
+//
+//                //String brandName =object.getString("pBrand");
+//
+//            }
+//
+//        });
+    }
+
+    public Bitmap imageProcess(Bitmap bitBottom, Bitmap bitTop){
+        int widthBottom = bitBottom.getWidth();
+        int heightBottom = bitBottom.getHeight();
+        bitmapProcessed = Bitmap.createBitmap(widthBottom,heightBottom,bitBottom.getConfig());
+        //Bitmap bitmapOverlay = Bitmap.createBitmap(70,70,Bitmap.Config.ARGB_8888);
+
+       //Bitmap temp = Bitmap.createBitmap(bitTop.getWidth(), bitTop.getHeight(), Bitmap.Config.ARGB_8888);
+        //Bitmap shortBitmap = Bitmap.createScaledBitmap(bitTop, 70,70,true);
+        //Selecting portrait or Landscape mode of pictures
+        if(heightBottom>widthBottom){
+            Canvas canvas = new Canvas((bitmapProcessed));
+            canvas.drawBitmap(bitBottom, new Matrix(), null);
+            //set the X,Y axis for the image
+            canvas.drawBitmap(bitTop, 230,325,new Paint(Paint.FILTER_BITMAP_FLAG));
+//            Paint paint = new Paint();
+//            paint.setFilterBitmap(true);
+            //canvas.drawBitmap(bitTop, 0,0,new Paint(Paint.FILTER_BITMAP_FLAG));
+            //canvas.drawBitmap(bitTop, 0,0,null);
+            return bitmapProcessed;
+        }else{
+            Canvas canvas = new Canvas((bitmapProcessed));
+            canvas.drawBitmap(bitBottom, new Matrix(), null);
+            //set the X,Y axis for the image
+            canvas.drawBitmap(bitTop, 330,225,new Paint(Paint.FILTER_BITMAP_FLAG));
+            return bitmapProcessed;
+        }
+    }
+
+    public Bitmap resizeBitmapProcess(Bitmap bitmap, int desWidth, int desHeight){
+        // Do not actually need to use this method, scaling is still poor,
+        //same result with one line of code in ImageProcess(createScaledBitmap)
+        Bitmap resizedBitmap = Bitmap.createBitmap(desWidth,desHeight, Bitmap.Config.ARGB_8888);
+        float xAxis = desWidth /(float) bitmap.getWidth();
+        float yAxis = desWidth /(float) bitmap.getHeight();
+
+        float xMiddle = 0;
+        //float yMiddle = desHeight/2.0f;
+        float yMiddle = 0;
+
+        Matrix scale = new Matrix();
+        scale.setScale(xAxis,yAxis,xMiddle,yMiddle);
+        //scale.postScale(xAxis,yAxis);
+
+        Canvas canvas = new Canvas((resizedBitmap));
+        canvas.setMatrix(scale);
+//        Paint paint = new Paint();
+//        paint.setFilterBitmap(true);
+        //canvas.drawBitmap(bitmap,xMiddle-bitmap.getWidth()/2, yMiddle-bitmap.getHeight()/2, new Paint(Paint.FILTER_BITMAP_FLAG));
+        canvas.drawBitmap(bitmap,0,0,new Paint(Paint.FILTER_BITMAP_FLAG));
+        //Bitmap newBitmap = Bitmap.createBi
+
+
+        return resizedBitmap;
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_new_picture, menu);
@@ -296,9 +450,18 @@ public class NewPictureActivity extends AppCompatActivity {
             Toast.makeText(this, ""+lengthBitmap, Toast.LENGTH_LONG).show();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             //compress the bitmap, save as PNG(lossless) 100 is compression for quality, 0 is compression for size
-            bit.compress(Bitmap.CompressFormat.PNG, 100, stream);   //stream is passed to the bit for compress algorithm
-            byte[] byteArrayToPass = stream.toByteArray();
+//            bit.compress(Bitmap.CompressFormat.PNG, 100, stream);   //stream is passed to the bit for compress algorithm
 
+            //check if the user has not selected the trademark image, let them through
+            if(bitmapProcessed!=null){
+                bitmapProcessed.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteArrayToPass = stream.toByteArray();
+            }else{
+                bit.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byteArrayToPass = stream.toByteArray();
+            }
+
+            //pass the new Bitmap to the newPostActivity and upload there
             Intent intent = new Intent(this, NewPostActivity.class);
             intent.putExtra("thumbImage", byteArrayToPass);
             startActivity(intent);
@@ -310,4 +473,19 @@ public class NewPictureActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    //    public void testQuery(){
+//        ParseQuery<ParseObject> query= new ParseQuery<>("User_Photos");
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> images, ParseException e) {
+//                if(e==null){
+//                    imageTestAdapter adapter = new imageTestAdapter(NewPictureActivity.this, images);
+//
+//                    //Toast.makeText(NewPictureActivity.this, images.size()+"", Toast.LENGTH_LONG).show();
+//                }else{
+//                    Toast.makeText(NewPictureActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//    }
 }

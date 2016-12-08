@@ -6,12 +6,48 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.sjsu.cmpe.partyon.activities.WalletActivity">
+    tools:context="edu.sjsu.cmpe.partyon.activities.WalletActivity"
+    android:gravity="center_horizontal">
     <android.support.v7.widget.Toolbar
         android:id="@+id/wallet_toolbar"
         android:layout_width="match_parent"
         style="@style/ActionBarStyle"
         app:title="Wallet"
-        android:titleTextColor="@color/font_white_color"
+        app:titleTextColor="@color/font_white_color"
         android:layout_height="wrap_content"/>
+    <TextView
+        android:layout_marginTop="20dp"
+        android:text="Balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/balance_view"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:text="$100.00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp" />
+    <LinearLayout
+        style="@style/PurpleTheme.border_box"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:id="@+id/history_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </ScrollView>
+    </LinearLayout>
+    <Button
+        android:text="My QR CODE"
+        android:onClick="showQrCode"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_light" />
 </LinearLayout>

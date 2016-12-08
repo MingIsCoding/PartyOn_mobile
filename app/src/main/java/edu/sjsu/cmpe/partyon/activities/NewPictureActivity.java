@@ -48,6 +48,7 @@ import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.adapter.imageTestAdapter;
+import edu.sjsu.cmpe.partyon.config.AppData;
 
 import static android.R.attr.data;
 
@@ -66,6 +67,7 @@ public class NewPictureActivity extends AppCompatActivity {
     private Bitmap bit;
     private Bitmap bitmapProcessed;
     private byte[] byteArrayToPass;
+    private boolean isTagged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -464,6 +466,7 @@ public class NewPictureActivity extends AppCompatActivity {
             //pass the new Bitmap to the newPostActivity and upload there
             Intent intent = new Intent(this, NewPostActivity.class);
             intent.putExtra("thumbImage", byteArrayToPass);
+            intent.putExtra("isTagged",isTagged);
             startActivity(intent);
 //        uploadImage();
 //        Intent in = new Intent(NewPictureActivity.this, ImageTest.class);

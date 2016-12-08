@@ -2,30 +2,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="320dp"
-    android:minHeight="500dp"
+    android:minWidth="300dp"
+    android:minHeight="280dp"
     android:orientation="vertical"
+    android:background="@drawable/rounded_dialog"
     tools:context="edu.sjsu.cmpe.partyon.fragment.MsgDetailFragment">
-
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:padding="16dp"
+        android:text="INVITATION"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_purple"
+        android:textColor="@color/cardview_light_background"
+        android:gravity="center_horizontal" />
+    <TextView
+        style="@style/form_component_label"
+        android:text="Name"/>
+    <TextView
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:id="@+id/sender_name_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="@string/hello_blank_fragment" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_blank_fragment" />
+    <View style="@style/form_divider"/>
+
     <TextView
+        style="@style/form_component_label"
+        android:text="Time"/>
+    <TextView
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
         android:id="@+id/sent_time_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/hello_blank_fragment" />
+    <View style="@style/form_divider"/>
+
+
+    <TextView
+        style="@style/form_component_label"
+        android:text="Content"/>
     <LinearLayout
-        style="@style/PurpleTheme.border_box">
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        style="@style/PurpleTheme.border_box"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_height="100dp">
         <TextView
             android:id="@+id/msg_content_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/hello_blank_fragment" />
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:onClick="acceptInvitation"
+            android:text="Accept"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_green_light" />
+        <Button
+            android:onClick="refuseInvitation"
+            android:layout_weight="1"
+            android:text="Refuse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_orange_light" />
+    </LinearLayout>
 
 </LinearLayout>

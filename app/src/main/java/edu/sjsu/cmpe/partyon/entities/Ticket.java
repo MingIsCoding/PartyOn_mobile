@@ -15,6 +15,7 @@ public class Ticket extends ParseObject {
     // when a person quits before the party ends
     public final static int STATE_LEFT = 4;
     public final static int STATE_DONE = 5;
+    public final static int STATE_REFUSED = 6;
     public final static int STATE_MSG_NOTIFIED = 1;
     public final static int STATE_MSG_UNNOTIFIED = 0;
     public final static int STATE_MSG_READ = 2;

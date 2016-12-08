@@ -11,8 +11,8 @@
         android:id="@+id/people_picker_toolbar"
         android:layout_width="match_parent"
         style="@style/ActionBarStyle"
-        app:title="Invite People"
-        android:titleTextColor="@color/font_white_color"
+        app:title="Scan QR Code"
+        app:titleTextColor="@color/font_white_color"
         android:layout_height="wrap_content"/>
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/people_picker_listView"

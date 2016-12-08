@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -39,6 +40,7 @@ import edu.sjsu.cmpe.partyon.entities.Like;
 import edu.sjsu.cmpe.partyon.entities.Post;
 import edu.sjsu.cmpe.partyon.entities.Reply;
 import edu.sjsu.cmpe.partyon.entities.User;
+import edu.sjsu.cmpe.partyon.utilities.BadgeTool;
 
 /**
  * Created by Ming on 10/19/16.
@@ -48,7 +50,7 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
     private final static String TAG = "PostItemViewHolder";
     private Post mPost;
     private ParseFile file;
-    private ImageView mAuthorProfilePic;
+    private CircularImageView mAuthorProfilePic;
     private ImageView mPostImageView;
     private TextView mAuthorNameView;
     private TextView mContentTxtView;
@@ -74,7 +76,7 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
         mLikeBtn = (ImageButton)v.findViewById(R.id.post_like_btn);
         mLikeView = (TextView) v.findViewById(R.id.post_like_txtView);
         mFollowBtn = (Button)v.findViewById(R.id.follow_btn);
-        mAuthorProfilePic = (ImageView)v.findViewById(R.id.author_profile_pic);
+        mAuthorProfilePic = (CircularImageView)v.findViewById(R.id.author_profile_pic);
         mPostImageView = (ImageView) v.findViewById(R.id.post_image_view);
 
         //mCommentEditText.setOnClickListener(this);
@@ -97,6 +99,7 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
         }catch (ParseException e){
             e.printStackTrace();
         }
+        mAuthorProfilePic.setBorderColor(BadgeTool.getLevelColor(AppData.getUser().getPoints()));
         Picasso.with(mContext).load(post.getAuthor().getProfilePicSmall()).into(mAuthorProfilePic);
         //follow
         try {

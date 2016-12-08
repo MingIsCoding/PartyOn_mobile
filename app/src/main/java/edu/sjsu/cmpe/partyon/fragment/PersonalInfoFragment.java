@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.activities.BadgeInfoActivity;
 import edu.sjsu.cmpe.partyon.activities.MessageBoxActivity;
 import edu.sjsu.cmpe.partyon.activities.WalletActivity;
 import edu.sjsu.cmpe.partyon.adapter.ProfileAdapter;
@@ -155,6 +156,10 @@ public class PersonalInfoFragment extends Fragment {
                         Intent walletIn = new Intent(getContext(), WalletActivity.class);
                         startActivity(walletIn);
                         break;
+                    case ITEM_BADGE:
+                        Intent badgeIn = new Intent(getContext(), BadgeInfoActivity.class);
+                        startActivity(badgeIn);
+                        break;
                 }
             }
         });
@@ -167,7 +172,7 @@ public class PersonalInfoFragment extends Fragment {
         mItemList = new ArrayList<>();
         mItemList.add(new ProfileItem(ITEM_PROFILE, "My Profile", R.drawable.ic_perm_identity_black_24dp));
         mItemList.add(new ProfileItem(ITEM_MSGBOX, "Message Box", R.drawable.ic_message_black_24dp));
-        mItemList.add(new ProfileItem(ITEM_PROFILE, "My Badge", R.drawable.ic_card_giftcard_black_24dp));
+        mItemList.add(new ProfileItem(ITEM_BADGE, "My Badge", R.drawable.ic_card_giftcard_black_24dp));
         mItemList.add(new ProfileItem(ITEM_PHOTOS, "My Post", R.drawable.ic_perm_media_black_24dp));
         mItemList.add(new ProfileItem(ITEM_WALLET, "My Wallet", R.drawable.ic_picture_in_picture_black_24dp));
 

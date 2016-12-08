@@ -92,6 +92,7 @@ public class PostListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_list, container, false);
         mPostListRecyclerView = (RecyclerView)view.findViewById(R.id.post_list_recyclerView);
         mPostListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //mPostListRecyclerView.setNestedScrollingEnabled(false);
         mPostListAdapter = new PostListAdapter(getActivity(),postList);
         mPostListRecyclerView.setAdapter(mPostListAdapter);
         fetchData();

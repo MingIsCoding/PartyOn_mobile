@@ -1,5 +1,8 @@
 package edu.sjsu.cmpe.partyon.config;
 
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import java.io.Serializable;
@@ -25,6 +28,7 @@ public class AppData implements Serializable{
     public static final String OBJ_NAME_USER = "_User";
     public static final String OBJ_NAME_PARTY = "Party";
     public static final String OBJ_NAME_TICKET = "Ticket";
+    public static final String OBJ_NAME_TRANSACTION = "Transaction";
     public static final String OBJ_NAME_LIKE = "Like";
     public static final String OBJ_PARTY_ID = "party_id";
     public static final String OBJ_PARTY_NAME = "party_name";
@@ -54,5 +58,26 @@ public class AppData implements Serializable{
             }
         }
         return null;
+    }
+
+    public final static int POINT_NEW_POST = 20;
+    public final static int POINT_NEW_TAG_POST = 40;
+    public final static int POINT_FOLLOW = 10;
+    public final static int POINT_CONSUME = 30;
+    public final static int CREDIT_TAG_POST = 30;
+
+
+    public static void addPoints(final int points, final int credits){
+        currentUser.fetchInBackground(new GetCallback<User>() {
+            @Override
+            public void done(User u, ParseException e) {
+                if(points != 0){
+                    u.setPoints(u.getPoints() + points);
+                }
+                if(credits != 0){
+                    u.setBalance(u.getBalance() + credits);
+                }
+            }
+        });
     }
 }

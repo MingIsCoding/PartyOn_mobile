@@ -16,14 +16,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Post;
 import edu.sjsu.cmpe.partyon.entities.User;
 
@@ -58,6 +61,13 @@ public class NewPostActivity extends CloseableActivity {
         bitmap = BitmapFactory.decodeByteArray(passedByte, 0, passedByte.length);
         mImageView.setImageBitmap(bitmap);
 
+    }
+    private void updatePoints(){
+        if(getIntent().getBooleanExtra("isTagged",false)){
+            AppData.addPoints(AppData.POINT_NEW_TAG_POST,AppData.CREDIT_TAG_POST);
+        }else {
+            AppData.addPoints(AppData.POINT_NEW_POST,0);
+        }
     }
     private void savePost(){
         post = new Post();

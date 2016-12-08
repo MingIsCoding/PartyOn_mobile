@@ -15,6 +15,7 @@ import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -45,6 +46,7 @@ public class MessageBoxActivity extends CloseableActivity {
     private SwipeMenuListView mListView;
     private MsgListAdapter mAdapter;
     private List<Ticket> mMessageList;
+    private Ticket mTicket;
     private final static String TAG = "MessageBoxActivity";
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,26 +109,14 @@ public class MessageBoxActivity extends CloseableActivity {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
-                    case 0:
-                        Ticket t = mMessageList.get(index);
-                        t.setMsgState(Ticket.STATE_MSG_READ);
-                        t.saveInBackground();
-                        Intent intent = new Intent(MessageBoxActivity.this,
-                                PartyDetailScrollingActivity.class);
-                        intent.putExtra(PartyDetailScrollingActivity.OP_CODE,
-                                PartyDetailScrollingActivity.ACCEPT_INVITATION);
-                        intent.putExtra(PartyDetailScrollingActivity.OP_TICKET,
-                                mMessageList.get(index).getObjectId());
-                        Bundle bundle = new Bundle();
-                        bundle.putString(AppData.OBJ_PARTY_ID,t.getPartyID().toString());
-                        bundle.putString(AppData.OBJ_PARTY_NAME,"Loading...");
-                        intent.putExtras(bundle);
-
-                        startActivity(intent);
+                    case 0://accept and open
+                        mTicket = mMessageList.get(index);
+                        doAcceptAndOpenParty();
                         break;
                     case 1:
                         // delete
-                        mAdapter.notifyDataSetChanged();
+                        mTicket = mMessageList.get(index);
+                        doDelete();
                         break;
                 }
                 return false;
@@ -177,6 +167,7 @@ public class MessageBoxActivity extends CloseableActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                mTicket = mMessageList.get(i);
                 mDetailDiaglogFragment =
                         MsgDetailFragment.newInstance(mMessageList.get(i).getObjectId(),null);
                 Log.d(TAG,"selected"+i);
@@ -201,7 +192,7 @@ public class MessageBoxActivity extends CloseableActivity {
                             AppData.messageList = new ArrayList<Ticket>(objects);
                         }
                     } else {
-                        // something went wrong
+                        Log.e(TAG,e.getMessage());
                     }
                 }
             });
@@ -210,5 +201,42 @@ public class MessageBoxActivity extends CloseableActivity {
     private int dp2px(int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp,
                 getResources().getDisplayMetrics());
+    }
+
+    public void acceptInvitation(View view) {
+        doAcceptAndOpenParty();
+    }
+
+    public void refuseInvitation(View view) {
+        doRefuseInvitation();
+    }
+    private void doRefuseInvitation(){
+        mTicket.setState(Ticket.STATE_REQUESTED);
+        mTicket.saveInBackground();
+    }
+    private void doAcceptAndOpenParty(){
+        mTicket.setMsgState(Ticket.STATE_MSG_READ);
+        mTicket.saveInBackground();
+        Intent intent = new Intent(MessageBoxActivity.this,
+                PartyDetailScrollingActivity.class);
+        intent.putExtra(PartyDetailScrollingActivity.OP_CODE,
+                PartyDetailScrollingActivity.ACCEPT_INVITATION);
+        intent.putExtra(PartyDetailScrollingActivity.OP_TICKET,
+                mTicket.getObjectId());
+        Bundle bundle = new Bundle();
+        bundle.putString(AppData.OBJ_PARTY_ID,mTicket.getPartyID().toString());
+        bundle.putString(AppData.OBJ_PARTY_NAME,"Loading...");
+        intent.putExtras(bundle);
+
+        startActivity(intent);
+    }
+    private void doDelete(){
+        mTicket.deleteInBackground(new DeleteCallback() {
+            @Override
+            public void done(ParseException e) {
+                mMessageList.remove(mTicket);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

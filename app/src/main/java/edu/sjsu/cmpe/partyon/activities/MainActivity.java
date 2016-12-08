@@ -40,6 +40,7 @@ import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.entities.Post;
 import edu.sjsu.cmpe.partyon.entities.Reply;
 import edu.sjsu.cmpe.partyon.entities.Ticket;
+import edu.sjsu.cmpe.partyon.entities.Transaction;
 import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.fragment.ContactListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
@@ -205,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             ParseObject.registerSubclass(Ticket.class);
             ParseObject.registerSubclass(Reply.class);
             ParseObject.registerSubclass(Like.class);
+            ParseObject.registerSubclass(Transaction.class);
         }
     }
 

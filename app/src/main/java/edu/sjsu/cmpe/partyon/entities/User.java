@@ -31,7 +31,30 @@ public class User extends ParseUser {
     private Date birthday;
     private Party ongoingParty;
     private List<User> follows;*/
+    private float balance;
+    private int points;
 
+    public int getPoints() {
+        if(getInt("points") == 0){
+            return 90;
+        }
+        return getInt("points");
+    }
+
+    public void setPoints(int points) {
+        put("points",points);
+    }
+
+    public float getBalance() {
+        if(getString("balance") == null){
+            return 0;
+        }
+        return Float.parseFloat(getString("balance"));
+    }
+
+    public void setBalance(float balance) {
+        put("balance",balance);
+    }
 
     public String getFirstName() {
         return getString("firstName");

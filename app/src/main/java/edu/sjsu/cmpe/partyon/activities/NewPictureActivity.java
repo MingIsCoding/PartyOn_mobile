@@ -356,7 +356,7 @@ public class NewPictureActivity extends AppCompatActivity {
 //                    }
 //                });
 //
-//                //String brandName =object.getString("pBrand");.
+//                //String brandName =object.getString("pBrand");...
 //
 //            }
 //

@@ -50,6 +50,8 @@ public class ContactListAdapter extends BaseAdapter {
     @Override
     public User getItem(int i) {
         return (User)followList.get(i);
+        //return followList.get(i);
+
     }
 
     @Override

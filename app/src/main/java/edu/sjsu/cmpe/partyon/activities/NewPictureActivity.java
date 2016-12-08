@@ -115,12 +115,12 @@ public class NewPictureActivity extends AppCompatActivity {
                 file = new File(imageName.getPath());
                 //test for image size before and after
                 Long length = file.length();
-                Log.d(TAG, "The length of file is before compress is  "+ length);
+                Log.d(TAG, "The length of file before compress is  "+ length);
                 //call the compress function here
                 bit = compressBitmap(file);
 
-                //int lengthBitmap = bit.getAllocationByteCount();
-                //Log.d(TAG, "The length of bitmap after compress is  "+ lengthBitmap);
+                int lengthBitmap = bit.getAllocationByteCount();
+                Log.d(TAG, "The length of bitmap after compress is  "+ lengthBitmap);
                 image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageName);
 
                        }catch(IOException e){
@@ -194,24 +194,20 @@ public class NewPictureActivity extends AppCompatActivity {
             BitmapFactory.Options option_1 = new BitmapFactory.Options();
             option_1.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(new FileInputStream(file),null,option_1);
-
             //The Size to scale to
             final int REQUIRED_SIZE = 270;
-
             //find the correct scale value, should be a power of 2
             int scale = 1;
-
             while(option_1.outWidth/scale/2>=REQUIRED_SIZE &&
                     option_1.outHeight/scale/2 >= REQUIRED_SIZE){
                 scale *=2;
             }
-
             //Second method, they both give similar results
             //        int scale = 1;
 //        if(option.outHeight> IMAGE_MAX_SIZE || option.outWidth > IMAGE_MAX_SIZE){
-//            scale = (int)Math.pow(2, (int) Math.ceil(Math.log(IMAGE_MAX_SIZE)/(double) Math.max(option.outHeight,option.outWidth))/Math.log(0.5));
+//            scale = (int)Math.pow(2, (int) Math.ceil(Math.log(IMAGE_MAX_SIZE)/
+//              (double) Math.max(option.outHeight,option.outWidth))/Math.log(0.5));
 //        }
-
             //Decoding with inSAmpleSize
             BitmapFactory.Options option_2 = new BitmapFactory.Options();
             option_2.inSampleSize = scale;
@@ -288,24 +284,18 @@ public class NewPictureActivity extends AppCompatActivity {
 
     public void showWatermark(String id) {
         final String recievedId = id;
-        Log.d(TAG, "The passed ID ----"+ id);
-        ParseQuery<ParseObject> queryTrademark = ParseQuery.getQuery("Trademark");
-        ParseQuery<ParseObject> queryPicture = ParseQuery.getQuery("Picture"); //ParseQuery<ParseObject>("Picture")
-        ParseQuery<ParseObject> queryBrand = ParseQuery.getQuery("Brand");
+        ParseQuery<ParseObject> queryPicture = ParseQuery.getQuery("Picture");
 
         queryPicture.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
                 for(ParseObject watermark:objects){
-
                     String watermarkId = watermark.getObjectId();
                     //Log.d(TAG, "Picture Found --- "+ watermarkId);
                     ParseObject brand = watermark.getParseObject("brand");
                     String brandId = brand.getObjectId();
-
                     if(brandId.equals(recievedId)){
                         final ParseFile watermarkImage = watermark.getParseFile("image");
-
                         String path = watermarkImage.getUrl();
                         Log.d(TAG, "Picture Found after brand ------------++++++++++++------ "+ watermarkId);
                         ImageView imageView = (ImageView) findViewById(R.id.watermarkView);
@@ -313,20 +303,14 @@ public class NewPictureActivity extends AppCompatActivity {
                         Picasso.with(getApplicationContext()).load(path).into(new com.squareup.picasso.Target() {
                             @Override
                             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                //Bitmap shortBitmap = Bitmap.createScaledBitmap(bitmap, 70,70,true);
                                 Bitmap resizedBitmap = resizeBitmapProcess(bitmap, 70, 70);
-                               // Bitmap bitmapCompressed= compressBitmap(watermarkImage);
                                 imageProcess(bit,resizedBitmap);
                             }
-
                             @Override
                             public void onBitmapFailed(Drawable errorDrawable) {
-
                             }
-
                             @Override
                             public void onPrepareLoad(Drawable placeHolderDrawable) {
-
                             }
                         });
 
@@ -381,25 +365,16 @@ public class NewPictureActivity extends AppCompatActivity {
         int widthBottom = bitBottom.getWidth();
         int heightBottom = bitBottom.getHeight();
         bitmapProcessed = Bitmap.createBitmap(widthBottom,heightBottom,bitBottom.getConfig());
-        //Bitmap bitmapOverlay = Bitmap.createBitmap(70,70,Bitmap.Config.ARGB_8888);
-
-       //Bitmap temp = Bitmap.createBitmap(bitTop.getWidth(), bitTop.getHeight(), Bitmap.Config.ARGB_8888);
-        //Bitmap shortBitmap = Bitmap.createScaledBitmap(bitTop, 70,70,true);
         //Selecting portrait or Landscape mode of pictures
         if(heightBottom>widthBottom){
             Canvas canvas = new Canvas((bitmapProcessed));
             canvas.drawBitmap(bitBottom, new Matrix(), null);
             //set the X,Y axis for the image
             canvas.drawBitmap(bitTop, 230,325,new Paint(Paint.FILTER_BITMAP_FLAG));
-//            Paint paint = new Paint();
-//            paint.setFilterBitmap(true);
-            //canvas.drawBitmap(bitTop, 0,0,new Paint(Paint.FILTER_BITMAP_FLAG));
-            //canvas.drawBitmap(bitTop, 0,0,null);
             return bitmapProcessed;
         }else{
             Canvas canvas = new Canvas((bitmapProcessed));
             canvas.drawBitmap(bitBottom, new Matrix(), null);
-            //set the X,Y axis for the image
             canvas.drawBitmap(bitTop, 330,225,new Paint(Paint.FILTER_BITMAP_FLAG));
             return bitmapProcessed;
         }

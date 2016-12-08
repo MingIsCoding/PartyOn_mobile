@@ -11,7 +11,7 @@
         android:id="@+id/badge_info_toolbar"
         android:layout_width="match_parent"
         style="@style/ActionBarStyle"
-        app:title="Wallet"
+        app:title="Badge Infomation"
         app:titleTextColor="@color/font_white_color"
         android:layout_height="wrap_content"/>
     <TextView

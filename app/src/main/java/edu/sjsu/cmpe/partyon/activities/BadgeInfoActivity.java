@@ -30,18 +30,26 @@ public class BadgeInfoActivity extends CloseableActivity {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_badge_info);
         mLevel1Icon = (CircularImageView)findViewById(R.id.level_1_icon);
+        Picasso.with(this).load(R.drawable.ic_account_circle_black_24dp).into(mLevel1Icon);
         mLevel1Icon.setBorderColor(Color.WHITE);
 
         mLevel2Icon = (CircularImageView)findViewById(R.id.level_2_icon);
+        Picasso.with(this).load(R.drawable.ic_account_circle_black_24dp).into(mLevel2Icon);
         mLevel2Icon.setBorderColor(Color.GRAY);
 
         mLevel3Icon = (CircularImageView)findViewById(R.id.level_3_icon);
+        Picasso.with(this).load(R.drawable.ic_account_circle_black_24dp).into(mLevel3Icon);
+
         mLevel3Icon.setBorderColor(Color.GREEN);
 
         mLevel4Icon = (CircularImageView)findViewById(R.id.level_4_icon);
+        Picasso.with(this).load(R.drawable.ic_account_circle_black_24dp).into(mLevel4Icon);
+
         mLevel4Icon.setBorderColor(Color.BLUE);
 
         mLevel5Icon = (CircularImageView)findViewById(R.id.level_5_icon);
+        Picasso.with(this).load(R.drawable.ic_account_circle_black_24dp).into(mLevel5Icon);
+
         mLevel5Icon.setBorderColor(Color.RED);
         switch (BadgeTool.getLevelColor(AppData.getUser().getPoints())){
             case Color.WHITE:

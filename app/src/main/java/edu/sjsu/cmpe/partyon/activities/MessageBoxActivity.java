@@ -4,7 +4,6 @@ import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -25,12 +24,9 @@ import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.adapter.MsgListAdapter;
-import edu.sjsu.cmpe.partyon.config.AppData;
-import edu.sjsu.cmpe.partyon.entities.Party;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Ticket;
 import edu.sjsu.cmpe.partyon.fragment.MsgDetailFragment;
-import edu.sjsu.cmpe.partyon.holder.ContactItemViewHolder;
-import edu.sjsu.cmpe.partyon.holder.MsgViewHolder;
 
 public class MessageBoxActivity extends CloseableActivity {
 
@@ -57,8 +53,8 @@ public class MessageBoxActivity extends CloseableActivity {
     }
     private void initVew(){
         mListView = (SwipeMenuListView)findViewById(R.id.message_listView);
-        if(AppData.messageList !=null && AppData.messageList.size() != 0){
-            mMessageList = new ArrayList<>(AppData.messageList);
+        if(App.messageList !=null && App.messageList.size() != 0){
+            mMessageList = new ArrayList<>(App.messageList);
         }else {
             mMessageList = new ArrayList<>();
         }
@@ -177,9 +173,9 @@ public class MessageBoxActivity extends CloseableActivity {
         });
     }
     private void checkMessages(){
-        if(AppData.messageList == null || AppData.messageList.size() == 0){
-            AppData.messageList = new ArrayList<>();
-            ParseQuery query = ParseQuery.getQuery(AppData.OBJ_NAME_TICKET);
+        if(App.messageList == null || App.messageList.size() == 0){
+            App.messageList = new ArrayList<>();
+            ParseQuery query = ParseQuery.getQuery(App.OBJ_NAME_TICKET);
             query.orderByDescending("createdAt");
             query.findInBackground(new FindCallback<Ticket>() {
                 @Override
@@ -189,7 +185,7 @@ public class MessageBoxActivity extends CloseableActivity {
                         for(Ticket t : objects){
                             mMessageList.add(t);
                             mAdapter.notifyDataSetChanged();
-                            AppData.messageList = new ArrayList<Ticket>(objects);
+                            App.messageList = new ArrayList<Ticket>(objects);
                         }
                     } else {
                         Log.e(TAG,e.getMessage());
@@ -224,8 +220,8 @@ public class MessageBoxActivity extends CloseableActivity {
         intent.putExtra(PartyDetailScrollingActivity.OP_TICKET,
                 mTicket.getObjectId());
         Bundle bundle = new Bundle();
-        bundle.putString(AppData.OBJ_PARTY_ID,mTicket.getPartyID().toString());
-        bundle.putString(AppData.OBJ_PARTY_NAME,"Loading...");
+        bundle.putString(App.OBJ_PARTY_ID,mTicket.getPartyID().toString());
+        bundle.putString(App.OBJ_PARTY_NAME,"Loading...");
         intent.putExtras(bundle);
 
         startActivity(intent);

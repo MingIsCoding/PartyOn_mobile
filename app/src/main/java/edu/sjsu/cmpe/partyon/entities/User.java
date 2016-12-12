@@ -1,6 +1,8 @@
 package edu.sjsu.cmpe.partyon.entities;
 
+import com.parse.GetCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -151,7 +153,11 @@ public class User extends ParseUser {
     }
 
     public void setOngoingParty(Party ongoingParty) {
-        put("ongoingParty",ongoingParty);
+        if(ongoingParty == null){
+            remove("ongoingParty");
+        }else {
+            put("ongoingParty",ongoingParty);
+        }
     }
 
     public List<User> getFollows() {
@@ -168,9 +174,23 @@ public class User extends ParseUser {
     public void setFollows(List<User> follows) {
         put("follows",follows);
     }
-    public void unFollow(int index){
+    public void unFollow(User user){
         List<User> list = getFollows();
-        list.remove(index);
+        list.remove(user);
         setFollows(list);
+        saveInBackground();
+    }
+    public void addPoints(final int points, final int credits){
+        fetchInBackground(new GetCallback<User>() {
+            @Override
+            public void done(User u, ParseException e) {
+                if(points != 0){
+                    u.setPoints(u.getPoints() + points);
+                }
+                if(credits != 0){
+                    u.setBalance(u.getBalance() + credits);
+                }
+            }
+        });
     }
 }

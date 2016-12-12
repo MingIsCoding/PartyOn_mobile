@@ -3,9 +3,11 @@ package edu.sjsu.cmpe.partyon.activities;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.app.Fragment;
@@ -34,6 +36,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Like;
 import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
@@ -44,7 +47,6 @@ import edu.sjsu.cmpe.partyon.entities.Transaction;
 import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.fragment.ContactListFragment;
 import edu.sjsu.cmpe.partyon.fragment.PartyListFragment;
-import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.fragment.PersonalInfoFragment;
 import edu.sjsu.cmpe.partyon.fragment.PostListFragment;
 import edu.sjsu.cmpe.partyon.services.NotificationService;
@@ -78,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-        initParseAdapter();
-        if(User.getCurrentUser() == null && !AppData.isDevMode){
+        //initParseAdapter();
+        if(User.getCurrentUser() == null && !App.isDevMode){
             initThirdParties();
             Intent in = new Intent(this, LoginActivity.class);
             startActivity(in);
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void printLoggedInUserInfo() {
-        if(!AppData.isDevMode)
+        if(!App.isDevMode)
             Log.d(TAG,"username:"+User.getCurrentUser().getUsername());
     }
 
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
     private void initService(){
         Log.d(TAG,"initService");
         Intent in = new Intent(getBaseContext(), NotificationService.class);
-        in.putExtra(NotificationService.RECEIVER_ID,AppData.getUser().getObjectId());
+        in.putExtra(NotificationService.RECEIVER_ID, App.getUser().getObjectId());
         startService(in);
     }
     private void initAlarm(){
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             mContents.add(newInstance);
         }*/
         //fragment new instance for the post list
-        PostListFragment postInstance = PostListFragment.newInstance("1",R.id.post_list_recyclerView);
+        PostListFragment postInstance = PostListFragment.newInstance(null,null);
          //VpSimpleFragment postInstance = VpSimpleFragment.newInstance("Posts Tab");
 //        VpSimpleFragment contactInstance = VpSimpleFragment.newInstance("Contact Tab");
         ContactListFragment contactInstance = ContactListFragment.newInstance("0","1");
@@ -189,15 +191,15 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
-    private void initParseAdapter(){
-        if(!AppData.isParseAdapterInitiated){
+/*    private void initParseAdapter(){
+        if(!App.isParseAdapterInitiated){
             //Log.v(TAG, "on Creating..................................");
             Parse.enableLocalDatastore(this);
             Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
-                    .applicationId(AppData.backendServerAppID)
+                    .applicationId(App.backendServerAppID)
                     //.clientKey("test")
-                    .server(AppData.backendServerURL).build());
-            AppData.isParseAdapterInitiated = true;
+                    .server(App.backendServerURL).build());
+            App.isParseAdapterInitiated = true;
             ParseObject.registerSubclass(User.class);
             ParseObject.registerSubclass(Party.class);
             ParseObject.registerSubclass(User.class);
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
             ParseObject.registerSubclass(Like.class);
             ParseObject.registerSubclass(Transaction.class);
         }
-    }
+    }*/
 
 
     @Override
@@ -222,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CREATE_NEW_PARTY && resultCode == NewPartyActivity.RESULT_SUCCESS){
-            Intent in = new Intent(MainActivity.this, PartyDetailActivity.class);
+            Intent in = new Intent(MainActivity.this, PartyDetailScrollingActivity.class);
             in.putExtras(data.getExtras());
             startActivity(in);
         }
@@ -254,13 +256,33 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
-        else if(id == R.id.action_new_post){
+        /*else if(id == R.id.action_new_post){
             Intent in = new Intent(MainActivity.this, NewPostActivity.class);
             startActivity(in);
-        }// for clicking a new picture(currently in the menu tab) will be moved according to progress-nav
+        }*/// for clicking a new picture(currently in the menu tab) will be moved according to progress-nav
         else if(id == R.id.takePicture){
-            Intent in = new Intent(MainActivity.this, NewPictureActivity.class);
-            startActivity(in);
+            if(App.getUser().getOngoingParty() == null){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Not in a party yet");
+                builder.setMessage("You can only post when you are in a party");
+                builder.setPositiveButton("Search Parties", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(MainActivity.this, MapSearchActivity.class);
+                        startActivity(i);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }else {
+                Intent in = new Intent(MainActivity.this, NewPictureActivity.class);
+                startActivity(in);
+            }
+
         }/*else if(id == R.id.horizontalTest){
             Intent intent = new Intent(MainActivity.this, TrademarkActivity.class);
             startActivity(intent);
@@ -307,41 +329,4 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
     }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    /*public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
-        }
-    }*/
 }

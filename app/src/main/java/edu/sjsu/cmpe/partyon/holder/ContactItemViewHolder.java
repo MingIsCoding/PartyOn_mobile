@@ -1,6 +1,5 @@
 package edu.sjsu.cmpe.partyon.holder;
 
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -12,7 +11,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.adapter.ContactListAdapter;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.utilities.BadgeTool;
 
 /**
@@ -42,7 +41,7 @@ public class ContactItemViewHolder{
         mContactTextView = (TextView) view.findViewById(R.id.contact_name);
         mContactCheckbox = (CheckBox)view.findViewById(R.id.contact_checkbox);
         this.isSelected = isChecked;
-        mContactIcon.setBorderColor(BadgeTool.getLevelColor(AppData.getUser().getPoints()));
+        mContactIcon.setBorderColor(BadgeTool.getLevelColor(App.getUser().getPoints()));
         if(this.isSelected){
             mContactCheckbox.setChecked(true);
             view.setBackgroundColor(ContextCompat.getColor(

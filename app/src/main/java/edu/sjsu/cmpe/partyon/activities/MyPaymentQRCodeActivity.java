@@ -15,9 +15,8 @@ import org.json.JSONObject;
 import java.util.Date;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 
-import static android.R.attr.width;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 
@@ -37,7 +36,7 @@ public class MyPaymentQRCodeActivity extends CloseableActivity {
         try {
             code.put("app_id","partyon");
             code.put("intent","payment");
-            code.put("user_id", AppData.getUser().getObjectId());
+            code.put("user_id", App.getUser().getObjectId());
             code.put("balance",100);
             code.put("expiresAt",new Date().getTime()+1000*60*60*5);
         } catch (JSONException e) {

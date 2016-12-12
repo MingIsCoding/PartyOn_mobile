@@ -21,19 +21,14 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
 import com.parse.SaveCallback;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.config.AppData;
 import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.entities.User;

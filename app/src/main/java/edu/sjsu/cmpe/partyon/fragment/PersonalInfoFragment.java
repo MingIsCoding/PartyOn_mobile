@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
@@ -30,7 +29,7 @@ import edu.sjsu.cmpe.partyon.activities.BadgeInfoActivity;
 import edu.sjsu.cmpe.partyon.activities.MessageBoxActivity;
 import edu.sjsu.cmpe.partyon.activities.WalletActivity;
 import edu.sjsu.cmpe.partyon.adapter.ProfileAdapter;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.utilities.Blur;
 import edu.sjsu.cmpe.partyon.utilities.ProfileItem;
 
@@ -126,7 +125,7 @@ public class PersonalInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_personal_list, container, false);
         mProfilePicture = (ImageView) view.findViewById(R.id.profilePicture);
         mUsername = (TextView) view.findViewById(R.id.personal_info_name_view);
-        mUsername.setText(AppData.getUser().getUsername());
+        mUsername.setText(App.getUser().getUsername());
         //Query for Image URL in DATABASE
         //ParseUser user= new ParseUser.getCurrentUser();
         String url = ParseUser.getCurrentUser().getString("profilePicSmall");

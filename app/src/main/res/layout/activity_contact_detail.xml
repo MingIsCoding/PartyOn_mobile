@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_contact_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="edu.sjsu.cmpe.partyon.activities.ContactDetailActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/contact_detail_toolbar"
@@ -53,4 +54,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-</RelativeLayout>
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/personal_post_list_fragment"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <!--<fragment
+        android:id="@+id/personal_post_list_fragment"
+        android:name="edu.sjsu.cmpe.partyon.fragment.PostListFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        tools:layout="@layout/fragment_map_party_list" />-->
+</LinearLayout>

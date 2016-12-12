@@ -15,11 +15,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Transaction;
 import edu.sjsu.cmpe.partyon.entities.User;
 
@@ -51,7 +50,7 @@ public class WalletActivity extends CloseableActivity {
     }
     private void loadData(){
 
-        AppData.getUser().fetchInBackground(new GetCallback<User>(){
+        App.getUser().fetchInBackground(new GetCallback<User>(){
 
             @Override
             public void done(User object, ParseException e) {
@@ -61,7 +60,7 @@ public class WalletActivity extends CloseableActivity {
             }
         });
 
-        ParseQuery query = ParseQuery.getQuery(AppData.OBJ_NAME_TRANSACTION);
+        ParseQuery query = ParseQuery.getQuery(App.OBJ_NAME_TRANSACTION);
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Transaction>() {
             @Override

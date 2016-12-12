@@ -19,7 +19,7 @@ import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.activities.MessageBoxActivity;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Ticket;
 
 /**
@@ -36,18 +36,18 @@ public class AlarmReceiver extends BroadcastReceiver {
         checkMessage(context,intent);
     }
     public void checkMessage(final Context context, final Intent intent){
-        AppData.messageList = new ArrayList<>();
-        ParseQuery query = ParseQuery.getQuery(AppData.OBJ_NAME_TICKET);
+        App.messageList = new ArrayList<>();
+        ParseQuery query = ParseQuery.getQuery(App.OBJ_NAME_TICKET);
         query.orderByDescending("createdAt");
         //query.whereEqualTo("msgState",Ticket.STATE_MSG_UNNOTIFIED);
-        query.whereEqualTo("receiverID",AppData.getUser().getObjectId());
+        query.whereEqualTo("receiverID", App.getUser().getObjectId());
         query.findInBackground(new FindCallback<Ticket>() {
             @Override
             public void done(List<Ticket> objects, ParseException e) {
                 if (e == null) {
                     Log.v(TAG,"get message from server:" + objects.size());
                     for(Ticket t : objects){
-                        AppData.messageList.add(t);
+                        App.messageList.add(t);
                         if(t.getMsgState() == Ticket.STATE_MSG_UNNOTIFIED){
                             mInvitationAmount++;
                         }

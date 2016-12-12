@@ -3,7 +3,7 @@ package edu.sjsu.cmpe.partyon.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +19,7 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.entities.Ticket;
 import edu.sjsu.cmpe.partyon.entities.User;
@@ -57,15 +57,15 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
         mBundle = getIntent().getExtras();
         initViews();
         initData();
+        loadPosts();
         executeAttachedProcess();
     }
     private void initViews(){
         mCollapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collasping_toolbar_layout);
         //mPartyName = (TextView)findViewById(R.id.partyNameView);
-        mAccessTypeView = (TextView)findViewById(R.id.partyAccessTypeView);
+        //mAccessTypeView = (TextView)findViewById(R.id.partyAccessTypeView);
         //mPartyName.setText(mParty.getName());
-        mPostListFragment = (PostListFragment)getSupportFragmentManager()
-                .findFragmentById(R.id.party_post_list_fragment);
+
         mQuickBtn1 = (Button)findViewById(R.id.quickBtn1);
         mQuickBtn2 = (Button)findViewById(R.id.quickBtn2);
         mQuickBtn3 = (Button)findViewById(R.id.quickBtn3);
@@ -75,8 +75,7 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
         mPartyID = mBundle.getString(Party.OBJ_PARTY_ID);
         Log.v(TAG,"OBJ_PARTY_ID: "+mPartyID);
         Log.v(TAG,"OBJ_PARTY_NAME: "+mBundle.getString(Party.OBJ_PARTY_NAME));
-
-        mParty.setName(mBundle.getString(AppData.OBJ_PARTY_NAME));
+        mParty.setName(mBundle.getString(App.OBJ_PARTY_NAME));
         //getSupportActionBar().setTitle(mParty.getName());
         mCollapsingToolbarLayout.setTitle(mParty.getName());
         ParseQuery<Party> query = ParseQuery.getQuery(Party.class);
@@ -94,13 +93,16 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
                 }
             }
         });
-
-
-
+    }
+    private void loadPosts(){
+        mPostListFragment = PostListFragment.newInstance(mPartyID,null);
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.party_post_list_fragment, mPostListFragment);
+        ft.commit();
     }
     private void executeAttachedProcess(){
         if(getIntent().getIntExtra(OP_CODE,0) == ACCEPT_INVITATION){
-            mTicket = AppData.getTicketFromMsgListByID(getIntent().getStringExtra(OP_TICKET));
+            mTicket = App.getTicketFromMsgListByID(getIntent().getStringExtra(OP_TICKET));
             mTicket.setState(Ticket.STATE_UNCHECKED_IN);
             mTicket.saveInBackground(new SaveCallback() {
                 @Override
@@ -121,7 +123,7 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
         if(mTicket == null){
             ParseQuery<Ticket> ticketQuery = ParseQuery.getQuery(Ticket.class);
             ticketQuery.whereEqualTo("partyID",mPartyID);
-            ticketQuery.whereEqualTo("receiverID",AppData.getUser().getObjectId());
+            ticketQuery.whereEqualTo("receiverID", App.getUser().getObjectId());
             ticketQuery.getFirstInBackground(new GetCallback<Ticket>() {
                 @Override
                 public void done(Ticket t, ParseException e) {
@@ -165,8 +167,8 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
                 Ticket t = new Ticket();
                 t.setPartyID(mParty.getObjectId());
                 t.setParty(mParty);
-                t.setReceiver(AppData.getUser());
-                t.setReceiverID(AppData.getUser().getObjectId());
+                t.setReceiver(App.getUser());
+                t.setReceiverID(App.getUser().getObjectId());
                 if(mParty.getAccessType() == 1){
                     t.setState(Ticket.STATE_REQUESTED);
                 }else {
@@ -202,8 +204,8 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
                 });
             }else if(mTicket.getState() == Ticket.STATE_UNCHECKED_IN){//check in
                 mTicket.setState(Ticket.STATE_CHECKED_IN);
-                AppData.getUser().setOngoingParty(mParty);
-                AppData.getUser().saveInBackground();
+                App.getUser().setOngoingParty(mParty);
+                App.getUser().saveInBackground();
                 mTicket.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -213,8 +215,8 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
                 });
             }else if(mTicket.getState() == Ticket.STATE_CHECKED_IN){//leave
                 mTicket.setState(Ticket.STATE_LEFT);
-                AppData.getUser().setOngoingParty(null);
-                AppData.getUser().saveInBackground();
+                App.getUser().setOngoingParty(null);
+                App.getUser().saveInBackground();
                 mTicket.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
@@ -267,7 +269,9 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
         if(id == R.id.menu_invite_friends){
             Intent in = new Intent(this,PeoplePickerActivity.class);
             startActivityForResult(in,REQUEST_PEOPLE_PICK);
-
+        }else if(id == R.id.menu_leave){
+            App.getUser().setOngoingParty(null);
+            App.getUser().saveEventually();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -277,30 +281,30 @@ public class PartyDetailScrollingActivity extends CloseableActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG,"requestCode"+requestCode+" resultCode:"+resultCode);
         if(requestCode == REQUEST_PEOPLE_PICK && resultCode == PeoplePickerActivity.RESULT_SUCCESS){
-            Log.d(TAG,"get selected people:"+AppData.selectedPeople.size());
+            Log.d(TAG,"get selected people:"+ App.selectedPeople.size());
             pushTicket();
         }
     }
     private void pushTicket(){
-        if(AppData.selectedPeople == null || AppData.selectedPeople.size() == 0){
+        if(App.selectedPeople == null || App.selectedPeople.size() == 0){
             return;
         }
-        for(final User u : AppData.selectedPeople){
+        for(final User u : App.selectedPeople){
             Ticket ticket = new Ticket();
-            ticket.setSender(AppData.getUser());
-            ticket.setSenderID(AppData.getUser().getObjectId());
+            ticket.setSender(App.getUser());
+            ticket.setSenderID(App.getUser().getObjectId());
             ticket.setReceiver(u);
             ticket.setReceiverID(u.getObjectId());
             ticket.setParty(mParty);
             ticket.setPartyID(mParty.getObjectId());
             ticket.setState(Ticket.STATE_INVITED);
             ticket.setMsgState(Ticket.STATE_MSG_UNNOTIFIED);
-            ticket.setMsg(AppData.getUser().getUsername()+" is inviting you to "+mParty.getName());
+            ticket.setMsg(App.getUser().getUsername()+" is inviting you to "+mParty.getName());
             ticket.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
-                    AppData.selectedPeople.remove(u);
-                    if(AppData.selectedPeople.size() == 0){
+                    App.selectedPeople.remove(u);
+                    if(App.selectedPeople.size() == 0){
                         Toast.makeText(PartyDetailScrollingActivity.this,
                                 "All invitations have been sent.", Toast.LENGTH_SHORT).show();
                     }

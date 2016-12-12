@@ -1,19 +1,14 @@
 package edu.sjsu.cmpe.partyon.activities;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ActionMode;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -23,17 +18,12 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.adapter.ContactListAdapter;
-import edu.sjsu.cmpe.partyon.config.AppData;
-import edu.sjsu.cmpe.partyon.entities.Ticket;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.User;
 import edu.sjsu.cmpe.partyon.holder.ContactItemViewHolder;
-
-import static edu.sjsu.cmpe.partyon.config.AppData.selectedPeople;
 //import edu.sjsu.cmpe.partyon.holder.ContactItemViewHolder;
 
 public class PeoplePickerActivity extends CloseableActivity {
@@ -63,7 +53,7 @@ public class PeoplePickerActivity extends CloseableActivity {
     private void initView() {
         mListView = (SwipeMenuListView)findViewById(R.id.people_picker_listView);
         mListView.setChoiceMode(mListView.CHOICE_MODE_MULTIPLE);
-        mPeopleList = new ArrayList<>(AppData.getUser().getFollows());
+        mPeopleList = new ArrayList<>(App.getUser().getFollows());
         if (mPeopleList == null) {
             mPeopleList = new ArrayList<User>();
         }
@@ -99,15 +89,7 @@ public class PeoplePickerActivity extends CloseableActivity {
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                switch (index) {
-                    case 0:
-                        // delete
-                        mPeopleList.remove(position);
-                        AppData.getUser().unFollow(index);
-                        AppData.getUser().saveInBackground();
-                        mAdapter.notifyDataSetChanged();
-                        break;
-                }
+
                 return false;
             }
         });
@@ -188,7 +170,7 @@ public class PeoplePickerActivity extends CloseableActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id == R.id.menu_invite_finish){
-            AppData.selectedPeople = new HashSet<>(mAdapter.getmSelectedSet());
+            App.selectedPeople = new HashSet<>(mAdapter.getmSelectedSet());
             setResult(RESULT_SUCCESS);
             finish();
         }

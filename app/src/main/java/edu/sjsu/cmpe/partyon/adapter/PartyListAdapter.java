@@ -1,27 +1,19 @@
 package edu.sjsu.cmpe.partyon.adapter;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.activities.PartyDetailActivity;
 import edu.sjsu.cmpe.partyon.activities.PartyDetailScrollingActivity;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.holder.PartyItemViewHolder;
 
@@ -57,16 +49,11 @@ public class PartyListAdapter extends RecyclerView.Adapter<PartyItemViewHolder>{
                             party.getName(),
                             Toast.LENGTH_SHORT).show();*/
 
-                /*Intent intent = new Intent(mContent, PartyDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(AppData.OBJ_PARTY_ID,party.getObjectId().toString());
-                bundle.putString(AppData.OBJ_PARTY_NAME,party.getName().toString());
-                intent.putExtras(bundle);
-                mContent.startActivity(intent);*/
+
                 Intent i = new Intent(mContent, PartyDetailScrollingActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(AppData.OBJ_PARTY_ID,party.getObjectId().toString());
-                bundle.putString(AppData.OBJ_PARTY_NAME,party.getName().toString());
+                bundle.putString(App.OBJ_PARTY_ID,party.getObjectId().toString());
+                bundle.putString(App.OBJ_PARTY_NAME,party.getName().toString());
                 i.putExtras(bundle);
                 mContent.startActivity(i);
                 //RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 100);

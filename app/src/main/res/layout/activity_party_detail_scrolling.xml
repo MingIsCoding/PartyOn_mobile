@@ -72,13 +72,18 @@
                     android:background="@color/cardview_light_background"
                     android:textColor="@color/colorPrimary" />
             </LinearLayout>
-               <fragment
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/party_post_list_fragment"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+<!--               <fragment
                 android:id="@+id/party_post_list_fragment"
                 android:name="edu.sjsu.cmpe.partyon.fragment.PostListFragment"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
-                tools:layout="@layout/fragment_map_party_list" />
+                tools:layout="@layout/fragment_map_party_list" />-->
         </LinearLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

@@ -23,6 +23,7 @@ import java.util.List;
 public class Post extends ParseObject {
     public final static String POST_ID = "post_id";
     private User author;
+    private String authorID;
     private Party party;
     private String partyID;
     private String textContent;
@@ -41,6 +42,14 @@ public class Post extends ParseObject {
 
     private ParseObject imageObject;
     private ParseObject imageFile;
+
+    public String getAuthorID() {
+        return getString("authorID");
+    }
+
+    public void setAuthorID(String authorID) {
+        put("authorID",authorID);
+    }
 
     public User getAuthor() {
         return (User)getParseUser("author");

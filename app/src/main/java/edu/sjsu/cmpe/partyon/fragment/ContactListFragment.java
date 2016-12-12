@@ -1,22 +1,16 @@
 package edu.sjsu.cmpe.partyon.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -24,17 +18,13 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
-import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.activities.ContactDetailActivity;
-import edu.sjsu.cmpe.partyon.adapter.BaseSwipListAdapter;
 import edu.sjsu.cmpe.partyon.adapter.ContactListAdapter;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.User;
 
 /**
@@ -99,7 +89,7 @@ public class ContactListFragment extends Fragment {
 
     }
     private void initView(){
-        mFollowList = new ArrayList<>(AppData.getUser().getFollows());
+        mFollowList = new ArrayList<>(App.getUser().getFollows());
         if(mFollowList == null){
             mFollowList = new ArrayList<User>();
         }
@@ -139,9 +129,8 @@ public class ContactListFragment extends Fragment {
                 switch (index) {
                     case 0:
                         // delete
+                        App.getUser().unFollow(mFollowList.get(position));
                         mFollowList.remove(position);
-                        AppData.getUser().unFollow(index);
-                        AppData.getUser().saveInBackground();
                         mAdapter.notifyDataSetChanged();
                         break;
                 }

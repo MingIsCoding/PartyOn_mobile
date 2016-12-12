@@ -1,7 +1,6 @@
 package edu.sjsu.cmpe.partyon.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleAdapter;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -22,7 +20,7 @@ import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.adapter.PartyListAdapter;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Party;
 
 
@@ -109,7 +107,7 @@ public class MapPartyListFragment extends Fragment {
 
     private void prepareData() {
        // mResultList = new ArrayList<Party>();
-        ParseQuery query = ParseQuery.getQuery(AppData.OBJ_NAME_PARTY);
+        ParseQuery query = ParseQuery.getQuery(App.OBJ_NAME_PARTY);
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Party>() {
             @Override

@@ -27,6 +27,7 @@ import java.util.List;
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.activities.StatusAdapter;
 import edu.sjsu.cmpe.partyon.adapter.PostListAdapter;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Post;
 
 /**
@@ -42,6 +43,7 @@ public class PostListFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String PARTY_ID = "party_id";
     private static final String LAYOUT_ID = "layout_id";
+    private static final String USER_ID = "user_id";
     private static final String TAG ="PostListFragment";
     private RecyclerView mPostListRecyclerView;
     private PostListAdapter mPostListAdapter;
@@ -49,7 +51,7 @@ public class PostListFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mPartyID;
-    private int mLayoutID;
+    private String mUserID;
 
     // private OnFragmentInteractionListener mListener;
 
@@ -62,15 +64,14 @@ public class PostListFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param partyId fetch posts for a specific party.
-     * @param layoutID a specific layout ID.
      * @return A new instance of fragment PostListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static PostListFragment newInstance(String partyId, int layoutID) {
+    public static PostListFragment newInstance(String partyId, String userId) {
         PostListFragment fragment = new PostListFragment();
         Bundle args = new Bundle();
         args.putString(PARTY_ID, partyId);
-        args.putInt(LAYOUT_ID, layoutID);
+        args.putString(USER_ID, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,7 +81,12 @@ public class PostListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mPartyID = getArguments().getString(PARTY_ID);
-            mLayoutID = getArguments().getInt(LAYOUT_ID);
+            mUserID = getArguments().getString(USER_ID);
+        }
+        try {
+            App.getUser().fetchIfNeeded();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
     @Override
@@ -95,15 +101,26 @@ public class PostListFragment extends Fragment {
         //mPostListRecyclerView.setNestedScrollingEnabled(false);
         mPostListAdapter = new PostListAdapter(getActivity(),postList);
         mPostListRecyclerView.setAdapter(mPostListAdapter);
-        fetchData();
+        fetchData(mPartyID,mUserID);
         Log.d(TAG,"onCreateView==========>");
-
         return view;
 
     }
-    private void fetchData(){
+    public void fetchDataPartyByUserID(String userID){
+        fetchData(null,userID);
+    }
+    public void fetchDataByPartyID(String partyID){
+        fetchData(partyID,null);
+    }
+    private void fetchData(String partyID, String userID){
+        Log.d(TAG,"start to load posts filtered by partyID:"+partyID + ", userID:"+userID);
 
         ParseQuery<Post> query = new ParseQuery<Post>("Post");
+        if(partyID != null && !partyID.equals("")){
+            query.whereEqualTo("partyID", partyID);
+        }else if(userID != null && !userID.equals("")){
+            query.whereEqualTo("authorID",userID);
+        }
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override

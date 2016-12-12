@@ -1,22 +1,26 @@
 package edu.sjsu.cmpe.partyon.config;
 
-import com.parse.GetCallback;
-import com.parse.ParseException;
+import android.app.Application;
+import android.content.res.Configuration;
+
+import com.parse.Parse;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
+import edu.sjsu.cmpe.partyon.entities.Like;
+import edu.sjsu.cmpe.partyon.entities.Location;
 import edu.sjsu.cmpe.partyon.entities.Party;
+import edu.sjsu.cmpe.partyon.entities.Post;
+import edu.sjsu.cmpe.partyon.entities.Reply;
 import edu.sjsu.cmpe.partyon.entities.Ticket;
+import edu.sjsu.cmpe.partyon.entities.Transaction;
 import edu.sjsu.cmpe.partyon.entities.User;
 
-public class AppData implements Serializable{
+public class App extends Application implements Serializable{
     public static boolean isDevMode = false;    // put true to get the dev mode(no login)
     public static boolean isParseAdapterInitiated = false;
     public static String backendServerURL = "https://partyonbackend.herokuapp.com/parse/";//http://10.50.0.21:1337/parse/";
@@ -41,7 +45,7 @@ public class AppData implements Serializable{
         return currentUser;
 
     }
-    public AppData(){
+    public App(){
 //        initObjectPersistNameMap();
 
     }
@@ -67,7 +71,7 @@ public class AppData implements Serializable{
     public final static int CREDIT_TAG_POST = 30;
 
 
-    public static void addPoints(final int points, final int credits){
+/*    public static void addPoints(final int points, final int credits){
         currentUser.fetchInBackground(new GetCallback<User>() {
             @Override
             public void done(User u, ParseException e) {
@@ -79,5 +83,44 @@ public class AppData implements Serializable{
                 }
             }
         });
+    }*/
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        initParseAdapter();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
+    private void initParseAdapter(){
+        if(!App.isParseAdapterInitiated){
+            //Log.v(TAG, "on Creating..................................");
+            ParseObject.registerSubclass(User.class);
+            ParseObject.registerSubclass(Party.class);
+            ParseObject.registerSubclass(User.class);
+            ParseObject.registerSubclass(Location.class);
+            ParseObject.registerSubclass(Post.class);
+            ParseObject.registerSubclass(Ticket.class);
+            ParseObject.registerSubclass(Reply.class);
+            ParseObject.registerSubclass(Like.class);
+            ParseObject.registerSubclass(Transaction.class);
+            Parse.enableLocalDatastore(this);
+            Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
+                    .applicationId(App.backendServerAppID)
+                    .clientKey("mobile_client")
+                    .server(App.backendServerURL).build());
+        }
     }
 }

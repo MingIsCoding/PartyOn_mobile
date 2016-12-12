@@ -1,10 +1,6 @@
 package edu.sjsu.cmpe.partyon.holder;
 
-import android.app.DownloadManager;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -14,16 +10,13 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
@@ -31,11 +24,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.activities.ImageTest;
-import edu.sjsu.cmpe.partyon.activities.NewPartyActivity;
-import edu.sjsu.cmpe.partyon.activities.PostDetailActivity;
-import edu.sjsu.cmpe.partyon.adapter.imageTestAdapter;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Like;
 import edu.sjsu.cmpe.partyon.entities.Post;
 import edu.sjsu.cmpe.partyon.entities.Reply;
@@ -99,13 +88,13 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
         }catch (ParseException e){
             e.printStackTrace();
         }
-        mAuthorProfilePic.setBorderColor(BadgeTool.getLevelColor(AppData.getUser().getPoints()));
+        mAuthorProfilePic.setBorderColor(BadgeTool.getLevelColor(App.getUser().getPoints()));
         Picasso.with(mContext).load(post.getAuthor().getProfilePicSmall()).into(mAuthorProfilePic);
         //follow
         try {
-            if(!AppData.getUser().getObjectId().equals(mPost.getAuthor().fetchIfNeeded().getObjectId())
-                    && AppData.getUser().getFollows() != null){
-                for(int i = 0; !isFollowed && i < AppData.getUser().getFollows().size(); i++){
+            if(!App.getUser().getObjectId().equals(mPost.getAuthor().fetchIfNeeded().getObjectId())
+                    && App.getUser().getFollows() != null){
+                for(int i = 0; !isFollowed && i < App.getUser().getFollows().size(); i++){
                     //try {
                         if(((ParseObject)ParseUser.getCurrentUser().getList("follows").get(i)
                         ).getObjectId().equals(mPost.getAuthor().getObjectId())){
@@ -119,7 +108,7 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        if(AppData.getUser().getObjectId().equals(mPost.getAuthor().getObjectId())){
+        if(App.getUser().getObjectId().equals(mPost.getAuthor().getObjectId())){
             isFollowed = true;
         }
         if(!isFollowed){
@@ -130,14 +119,14 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
 
         List<Like> likes = mPost.getLikes();
         if(likes != null){
-            /*ParseQuery<Like> likeQuery = ParseQuery.getQuery(AppData.OBJ_NAME_LIKE);
+            /*ParseQuery<Like> likeQuery = ParseQuery.getQuery(App.OBJ_NAME_LIKE);
             likeQuery.whereEqualTo("author",
-                    ParseObject.createWithoutData(AppData.getUser().getObjectId()));
+                    ParseObject.createWithoutData(App.getUser().getObjectId()));
             //if it is liked by current user
             List<ParseObject> likesAsPO = mPost.getLikesAsPObject();
             for(ParseObject p : likesAsPO){
                 System.out.println("like id");
-                if(p.getObjectId().equals(AppData.getUser().getObjectId())){
+                if(p.getObjectId().equals(App.getUser().getObjectId())){
                     System.out.println("liked before");
                 }
             }*/
@@ -148,7 +137,7 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
                 try {
                     Like l = likes.get(i).fetchIfNeeded();
                     Log.d(TAG,"like author id:"+l.getSender().getObjectId());
-                    if(!isLiked && l.getSender().getObjectId().equals(AppData.getUser().getObjectId())){
+                    if(!isLiked && l.getSender().getObjectId().equals(App.getUser().getObjectId())){
                         isLiked = true;
                     }
                     if(i<LIKE_NAMES_LIMIT){
@@ -193,7 +182,7 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
     public void onClick(View v) {
         if(v.getId() == R.id.post_like_btn && !isLiked){
             /*if(mPost.getLikes() != null){
-                mLikeView.setText(mContext.getString(R.string.post_like_format,AppData.getUser().getUsername()+","+
+                mLikeView.setText(mContext.getString(R.string.post_like_format,App.getUser().getUsername()+","+
                         mLikeView.getText().toString());
             }*/
             final Like like = new Like();
@@ -203,7 +192,7 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            like.setSender(AppData.getUser());
+            like.setSender(App.getUser());
             like.saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
@@ -217,7 +206,7 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
             String content = mCommentEditText.getText().toString();
             if(content != null && !content.equals("")){
                 final Reply r = new Reply();
-                r.setAuthor(AppData.getUser());
+                r.setAuthor(App.getUser());
                 r.setContent(content);
                 mPost.addReply(r);
                 r.saveInBackground(new SaveCallback() {
@@ -237,8 +226,8 @@ public class PostItemViewHolder extends RecyclerView.ViewHolder implements View.
                 //mCommentLayout.();
             }
         }else if(v.getId() == R.id.follow_btn){
-            AppData.getUser().addFollow(mPost.getAuthor());
-            AppData.getUser().saveInBackground(new SaveCallback() {
+            App.getUser().addFollow(mPost.getAuthor());
+            App.getUser().saveInBackground(new SaveCallback() {
                 @Override
                 public void done(ParseException e) {
                     Toast.makeText(mContext,

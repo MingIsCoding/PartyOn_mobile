@@ -2,14 +2,13 @@ package edu.sjsu.cmpe.partyon.activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Activity;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.utilities.BadgeTool;
 
 public class BadgeInfoActivity extends CloseableActivity {
@@ -51,25 +50,25 @@ public class BadgeInfoActivity extends CloseableActivity {
         Picasso.with(this).load(R.drawable.ic_account_circle_black_24dp).into(mLevel5Icon);
 
         mLevel5Icon.setBorderColor(Color.RED);
-        switch (BadgeTool.getLevelColor(AppData.getUser().getPoints())){
+        switch (BadgeTool.getLevelColor(App.getUser().getPoints())){
             case Color.WHITE:
-                Picasso.with(this).load(AppData.getUser().getProfilePicSmall()).into(mLevel1Icon);
+                Picasso.with(this).load(App.getUser().getProfilePicSmall()).into(mLevel1Icon);
                 break;
             case Color.GRAY:
-                Picasso.with(this).load(AppData.getUser().getProfilePicSmall()).into(mLevel2Icon);
+                Picasso.with(this).load(App.getUser().getProfilePicSmall()).into(mLevel2Icon);
                 break;
             case Color.GREEN:
-                Picasso.with(this).load(AppData.getUser().getProfilePicSmall()).into(mLevel3Icon);
+                Picasso.with(this).load(App.getUser().getProfilePicSmall()).into(mLevel3Icon);
                 break;
             case Color.BLUE:
-                Picasso.with(this).load(AppData.getUser().getProfilePicSmall()).into(mLevel4Icon);
+                Picasso.with(this).load(App.getUser().getProfilePicSmall()).into(mLevel4Icon);
                 break;
             case Color.RED:
-                Picasso.with(this).load(AppData.getUser().getProfilePicSmall()).into(mLevel5Icon);
+                Picasso.with(this).load(App.getUser().getProfilePicSmall()).into(mLevel5Icon);
                 break;
         }
         mPoints = (TextView)findViewById(R.id.points_view);
-        mPoints.setText(AppData.getUser().getPoints()+"");
+        mPoints.setText(App.getUser().getPoints()+"");
 
     }
 

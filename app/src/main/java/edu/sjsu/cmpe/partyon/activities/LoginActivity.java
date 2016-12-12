@@ -3,7 +3,6 @@ package edu.sjsu.cmpe.partyon.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -39,7 +38,6 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookRequestError;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
@@ -53,18 +51,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
-import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +68,7 @@ import java.util.Date;
 import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.User;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -199,7 +192,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                     e.printStackTrace();
                                 }
                                 //if there is a user who owns this facebook account
-                                ParseQuery<User> query = ParseQuery.getQuery(AppData.OBJ_NAME_USER);
+                                ParseQuery<User> query = ParseQuery.getQuery(App.OBJ_NAME_USER);
                                 query.whereEqualTo("email",attemptEmail);
                                 query.whereEqualTo("facebookID",Profile.getCurrentProfile().getId());
                                 Log.d(TAG,"looking for attemptEmail:"+attemptEmail+" facebookID:"+Profile.getCurrentProfile().getId());
@@ -216,9 +209,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                                 u.setBirthday(new Date(object.getString("birthday")));
                                                 u.setFacebookID(Profile.getCurrentProfile().getId());
                                                 if(object.getString("gender").equals("male"))
-                                                    u.setGender(AppData.GENDER_MALE);
+                                                    u.setGender(App.GENDER_MALE);
                                                 else if (object.getString("gender").equals("female"))
-                                                    u.setGender(AppData.GENDER_FEMALE);
+                                                    u.setGender(App.GENDER_FEMALE);
                                                 u.setProfilePicSmall(Profile.getCurrentProfile().getProfilePictureUri(100,100).toString());
                                                 Log.d(TAG,"start to save object:"+u.toString());
                                                 u.setPassword(Profile.getCurrentProfile().getId());
@@ -284,7 +277,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         delPermRequest.executeAsync();
     }
     private void finalizeLoginProcess() {
-        AppData.isUserLoggedin = true;
+        App.isUserLoggedin = true;
         Log.d(TAG,"login:"+ User.getCurrentUser().getUsername());
         Intent in = new Intent(this, MainActivity.class);
         startActivity(in);

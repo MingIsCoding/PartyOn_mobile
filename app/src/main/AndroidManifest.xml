@@ -37,6 +37,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/PurpleTheme"
+        android:name=".config.App"
         tools:replace="android:theme">
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -70,9 +71,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_place_api_key" />
 
-        <activity
-            android:name=".activities.PartyDetailActivity"
-            android:theme="@style/PurpleTheme.NoActionBar" />
         <activity android:name=".activities.ImageTest" />
         <activity
             android:name="com.facebook.FacebookActivity"

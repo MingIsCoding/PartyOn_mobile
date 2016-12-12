@@ -4,9 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,17 +14,15 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
-import com.parse.ParseUser;
+import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Post;
 import edu.sjsu.cmpe.partyon.entities.User;
 
@@ -38,13 +34,11 @@ public class NewPostActivity extends CloseableActivity {
     private Bitmap bitmap;
     private ParseFile imageFile;
     private ProgressBar spinner;
-    private static String TAG = "POST THINGY";
+    private static String TAG = "NewPostActivity";
 
     @Override
     public void onCreate(Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_new_post);
-        //setupToolBar();
 
         initView();
     }
@@ -64,31 +58,54 @@ public class NewPostActivity extends CloseableActivity {
     }
     private void updatePoints(){
         if(getIntent().getBooleanExtra("isTagged",false)){
-            AppData.addPoints(AppData.POINT_NEW_TAG_POST,AppData.CREDIT_TAG_POST);
+            App.getUser().addPoints(App.POINT_NEW_TAG_POST, App.CREDIT_TAG_POST);
         }else {
-            AppData.addPoints(AppData.POINT_NEW_POST,0);
+            App.getUser().addPoints(App.POINT_NEW_POST,0);
         }
     }
     private void savePost(){
         post = new Post();
         post.setTextContent(mPostTxtView.getText().toString());
         post.setAuthor((User)User.getCurrentUser());
-        //Added Content Navdeep
-        uploadImage();
-        //End Added Content
-        post.saveInBackground(new SaveCallback() {
+        post.setAuthorID(App.getUser().getObjectId());
+        post.setPartyID(App.getUser().getOngoingParty().getObjectId());
+        post.setParty(App.getUser().getOngoingParty());
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        //compress the bitmap, save as PNG(lossless) 100 is compression for quality, 0 is compression for size
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        imageFile = new ParseFile("image.png", stream.toByteArray());
+        imageFile.saveInBackground(new SaveCallback(){
             @Override
             public void done(ParseException e) {
-                if(e != null){
-                    e.printStackTrace();
-                }else {
+                post.put("Photo", imageFile);
+                post.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e != null){
+                            e.printStackTrace();
+                        }else {
+                            Log.d(TAG, "Object ID is " + post.getObjectId());
 
-                    Intent intent = new Intent(NewPostActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                            updatePoints();
+                            Intent intent = new Intent(NewPostActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });
+            }
+        } , new ProgressCallback() {
+            @Override
+            public void done(Integer percentDone) {
+                Log.d(TAG,"uploading:"+ percentDone);
             }
         });
+
+        /*Toast.makeText(this, "File Uploaded", Toast.LENGTH_LONG).show();
+        //String imageUrl = imageObject.getUrl();
+        String objectId = post.getObjectId();
+        Log.d(TAG, "Object ID is " + objectId);*/
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

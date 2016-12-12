@@ -19,7 +19,7 @@ import java.util.List;
 
 import edu.sjsu.cmpe.partyon.R;
 import edu.sjsu.cmpe.partyon.adapter.PartyListAdapter;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Party;
 
 /**
@@ -91,7 +91,7 @@ public class PartyListFragment extends Fragment {
     }
     private void prepareData() {
         partyList = new ArrayList<Party>();
-        ParseQuery query = ParseQuery.getQuery(AppData.OBJ_NAME_PARTY);
+        ParseQuery query = ParseQuery.getQuery(App.OBJ_NAME_PARTY);
         query.orderByDescending("createdAt");
         query.findInBackground(new FindCallback<Party>() {
             @Override

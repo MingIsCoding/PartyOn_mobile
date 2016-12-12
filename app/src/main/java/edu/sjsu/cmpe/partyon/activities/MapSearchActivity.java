@@ -6,11 +6,9 @@ import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,10 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
 
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
@@ -39,17 +35,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import edu.sjsu.cmpe.partyon.R;
-import edu.sjsu.cmpe.partyon.config.AppData;
+import edu.sjsu.cmpe.partyon.config.App;
 import edu.sjsu.cmpe.partyon.entities.Party;
 import edu.sjsu.cmpe.partyon.fragment.MapPartyListFragment;
 
@@ -147,10 +140,10 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
                         +marker.getPosition().longitude);*/
                 Party p = resultPartMap.get(marker.getId());
                 Log.d(TAG, "clicked:" + p.getName());
-                Intent intent = new Intent(MapSearchActivity.this, PartyDetailActivity.class);
+                Intent intent = new Intent(MapSearchActivity.this, PartyDetailScrollingActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putString(AppData.OBJ_PARTY_ID, p.getObjectId().toString());
-                bundle.putString(AppData.OBJ_PARTY_NAME, p.getName().toString());
+                bundle.putString(App.OBJ_PARTY_ID, p.getObjectId().toString());
+                bundle.putString(App.OBJ_PARTY_NAME, p.getName().toString());
                 intent.putExtras(bundle);
                 startActivity(intent);
                 return false;
@@ -414,7 +407,7 @@ public class MapSearchActivity extends AppCompatActivity implements OnMapReadyCa
     }
     private void searchPartiesInCurrentBounds(){
         LatLngBounds bounds = mMap.getProjection().getVisibleRegion().latLngBounds;
-        ParseQuery<Party> query = ParseQuery.getQuery(AppData.OBJ_NAME_PARTY);
+        ParseQuery<Party> query = ParseQuery.getQuery(App.OBJ_NAME_PARTY);
         query.whereWithinGeoBox("location",
                 new ParseGeoPoint(bounds.southwest.latitude, bounds.southwest.longitude),
                 new ParseGeoPoint(bounds.northeast.latitude, bounds.northeast.longitude));
